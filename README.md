@@ -21,4 +21,4 @@ http://admin.dreamlu.net
 
 ### 9. 开源推荐
 - Spring boot 高效开发之 **Mica** 工具集：[https://gitee.com/596392912/mica](https://gitee.com/596392912/mica)
-- Java mqtt
+- 简单易用的 Java mqtt 之 **Mica MQTT**：[https://gitee.com/dromara/mica-mqtt](https://gitee.com/dromara/mica-mqtt)
