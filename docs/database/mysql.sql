@@ -262,10 +262,12 @@ INSERT INTO `sys_menu` VALUES (1013, 102, '菜单查询', 'MenuQuery', 1, '', 's
 INSERT INTO `sys_menu` VALUES (1014, 102, '菜单新增', 'MenuAdd', 2, '', 'system:menu:add', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1015, 102, '菜单修改', 'MenuEdit', 3, '', 'system:menu:edit', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1016, 102, '菜单删除', 'MenuDelete', 4, '', 'system:menu:del', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
+INSERT INTO `sys_menu` VALUES (1049, 102, '菜单导出', 'MenuExport', 5, '', 'system:menu:export', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1017, 103, '部门查询', 'DeptQuery', 1, '', 'system:dept:query', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1018, 103, '部门新增', 'DeptAdd', 2, '', 'system:dept:add', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1019, 103, '部门修改', 'DeptEdit', 3, '', 'system:dept:edit', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1020, 103, '部门删除', 'DeptDelete', 4, '', 'system:dept:del', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
+INSERT INTO `sys_menu` VALUES (1050, 103, '部门导出', 'DeptExport', 5, '', 'system:dept:export', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1021, 104, '岗位查询', 'PostQuery', 1, '', 'system:post:query', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1022, 104, '岗位新增', 'PostAdd', 2, '', 'system:post:add', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1023, 104, '岗位修改', 'PostEdit', 3, '', 'system:post:edit', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
@@ -285,6 +287,7 @@ INSERT INTO `sys_menu` VALUES (1036, 107, '公告查询', 'NoticeQuery', 1, '#',
 INSERT INTO `sys_menu` VALUES (1037, 107, '公告新增', 'NoticeAdd', 2, '#', 'system:notice:add', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1038, 107, '公告修改', 'NoticeEdit', 3, '#', 'system:notice:edit', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1039, 107, '公告删除', 'NoticeDelete', 4, '#', 'system:notice:del', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
+INSERT INTO `sys_menu` VALUES (1051, 107, '公告导出', 'NoticeExport', 5, '#', 'system:notice:export', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1040, 500, '操作查询', 'LogQuery', 1, '#', 'system:logs:info:list', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1041, 500, '操作删除', 'LogDelete', 2, '#', 'system:logs:info:del', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 INSERT INTO `sys_menu` VALUES (1042, 500, '操作导出', 'LogExport', 4, '#', 'system:logs:info:export', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');

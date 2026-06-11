@@ -4,12 +4,16 @@ import type { DictItem, DictTypeItem } from '#/api/system/dict';
 import { addDict, deleteDict, editDict, getDictList, getDictItems, addDictItem, editDictItem, deleteDictItem, exportDictExcel, exportDictInfoExcel } from '#/api/system/dict';
 
 import { NButton, NCard, NDataTable, NForm, NFormItem, NInput, NInputNumber, NSpace, NPagination, NIcon } from 'naive-ui';
+import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben-core/popup-ui';
 import { h, onMounted, ref } from 'vue';
 import { dialog, notification } from '#/adapter/naive';
 import { Plus, Search, UserRoundPen as EditIcon, Eraser as DeleteIcon } from '@vben/icons';
 
 defineOptions({ name: 'DictManagement' });
+const { hasAccessByCodes } = useAccess();
+const canAccess = (codes: string | string[]) =>
+  hasAccessByCodes(Array.isArray(codes) ? codes : [codes]);
 
 const typesLoading = ref(false);
 const dataLoading = ref(false);
@@ -45,11 +49,20 @@ const dictColumns: DataTableColumns<DictItem> = [
     key: 'action',
     width: 160,
     align: 'center' as const,
-    render: (row: DictItem) =>
-      h(NSpace, { size: 'small' }, () => [
-        h(NButton, { size: 'small', type: 'primary', tertiary: true, onClick: () => handleEditDict(row) }, () => '编辑'),
-        h(NButton, { size: 'small', type: 'error', tertiary: true, onClick: () => handleDeleteDict(row.id) }, () => '删除'),
-      ]),
+    render: (row: DictItem) => {
+      const actions = [];
+      if (canAccess('system:dict:edit')) {
+        actions.push(
+          h(NButton, { size: 'small', type: 'primary', tertiary: true, onClick: () => handleEditDict(row) }, () => '编辑'),
+        );
+      }
+      if (canAccess('system:dict:del')) {
+        actions.push(
+          h(NButton, { size: 'small', type: 'error', tertiary: true, onClick: () => handleDeleteDict(row.id) }, () => '删除'),
+        );
+      }
+      return actions.length > 0 ? h(NSpace, { size: 'small' }, () => actions) : '-';
+    },
   },
 ];
 
@@ -327,11 +340,11 @@ async function handleExportItem() {
       </template>
       <template #header-extra>
         <NSpace size="small">
-          <NButton size="small" type="primary" @click="handleAddType">
+          <NButton v-access:code="'system:dict:add'" size="small" type="primary" @click="handleAddType">
             <template #icon><NIcon :size="16"><Plus /></NIcon></template>
             新增
           </NButton>
-          <NButton size="small" type="warning" :loading="exportingType" @click="handleExportType">
+          <NButton v-access:code="'system:dict:export'" size="small" type="warning" :loading="exportingType" @click="handleExportType">
             导出
           </NButton>
         </NSpace>
@@ -370,10 +383,10 @@ async function handleExportItem() {
             <p>{{ type.description }}</p>
           </div>
           <div class="card-actions">
-            <NButton size="tiny" tertiary @click.stop="handleEditType(type)">
+            <NButton v-access:code="'system:dict:edit'" size="tiny" tertiary @click.stop="handleEditType(type)">
               <template #icon><NIcon :size="14"><EditIcon /></NIcon></template>
             </NButton>
-            <NButton size="tiny" tertiary type="error" @click.stop="handleDeleteType(type.id)">
+            <NButton v-access:code="'system:dict:del'" size="tiny" tertiary type="error" @click.stop="handleDeleteType(type.id)">
               <template #icon><NIcon :size="14"><DeleteIcon /></NIcon></template>
             </NButton>
           </div>
@@ -400,11 +413,11 @@ async function handleExportItem() {
       </template>
       <template #header-extra>
         <NSpace size="small">
-          <NButton size="small" type="primary" :disabled="!selectedType" @click="handleAddDict">
+          <NButton v-access:code="'system:dict:add'" size="small" type="primary" :disabled="!selectedType" @click="handleAddDict">
             <template #icon><NIcon :size="16"><Plus /></NIcon></template>
             新增
           </NButton>
-          <NButton size="small" type="warning" :disabled="!selectedType" :loading="exportingItem" @click="handleExportItem">
+          <NButton v-access:code="'system:dict:export'" size="small" type="warning" :disabled="!selectedType" :loading="exportingItem" @click="handleExportItem">
             导出
           </NButton>
         </NSpace>

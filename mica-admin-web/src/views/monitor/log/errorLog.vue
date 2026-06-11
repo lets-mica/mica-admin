@@ -176,8 +176,8 @@ onMounted(() => loadData());
           @keyup.enter="handleSearch"
         />
         <NButton type="primary" @click="handleSearch">搜索</NButton>
-        <NButton type="error" :loading="loading" @click="handleClear">清空日志</NButton>
-        <NButton type="warning" :loading="exporting" @click="handleExport">导出</NButton>
+        <NButton v-access:code="'system:logs:error:del'" type="error" :loading="loading" @click="handleClear">清空日志</NButton>
+        <NButton v-access:code="'system:logs:error:export'" type="warning" :loading="exporting" @click="handleExport">导出</NButton>
       </div>
 
       <NDataTable

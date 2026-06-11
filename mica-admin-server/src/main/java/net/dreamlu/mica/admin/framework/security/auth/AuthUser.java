@@ -52,7 +52,15 @@ public class AuthUser extends User {
 		jwtUser.setPosts(this.getPostList());
 		jwtUser.setRoles(this.getRoleList());
 		jwtUser.setRoleList(this.getRoleList().stream().map(RoleInfo::getTitle).collect(Collectors.toList()));
+		jwtUser.setPermissions(this.getPermissions());
 		return jwtUser;
+	}
+
+	public List<String> getPermissions() {
+		return this.getAuthorities().stream()
+			.map(GrantedAuthority::getAuthority)
+			.filter(authority -> authority != null && !authority.startsWith("ROLE_"))
+			.collect(Collectors.toList());
 	}
 
 	public static AuthUser formMicaUser(AuthUser user, String newPassword) {

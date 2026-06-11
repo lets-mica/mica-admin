@@ -16,12 +16,16 @@ import {
   NSwitch,
   NTag,
 } from 'naive-ui';
+import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben-core/popup-ui';
 import { h, onMounted, reactive, ref } from 'vue';
 import { dialog, notification } from '#/adapter/naive';
 import { formatDateTime } from '#/utils/format-date';
 
 defineOptions({ name: 'NoticeManagement' });
+const { hasAccessByCodes } = useAccess();
+const canAccess = (codes: string | string[]) =>
+  hasAccessByCodes(Array.isArray(codes) ? codes : [codes]);
 
 const loading = ref(false);
 const data = ref<NoticeItem[]>([]);
@@ -90,11 +94,20 @@ const columns: DataTableColumns<NoticeItem> = [
     width: 140,
     fixed: 'right',
     align: 'center',
-    render: (row) =>
-      h(NSpace, { size: 'small' }, () => [
-        h(NButton, { size: 'small', type: 'primary', tertiary: true, onClick: () => handleEdit(row) }, () => '编辑'),
-        h(NButton, { size: 'small', type: 'error', tertiary: true, onClick: () => handleDelete(row.id) }, () => '删除'),
-      ]),
+    render: (row) => {
+      const actions = [];
+      if (canAccess('system:notice:edit')) {
+        actions.push(
+          h(NButton, { size: 'small', type: 'primary', tertiary: true, onClick: () => handleEdit(row) }, () => '编辑'),
+        );
+      }
+      if (canAccess('system:notice:del')) {
+        actions.push(
+          h(NButton, { size: 'small', type: 'error', tertiary: true, onClick: () => handleDelete(row.id) }, () => '删除'),
+        );
+      }
+      return actions.length > 0 ? h(NSpace, { size: 'small' }, () => actions) : '-';
+    },
   },
 ];
 
@@ -291,8 +304,9 @@ onMounted(() => loadData());
 
       <!-- 工具栏 -->
       <div class="mb-3 flex flex-wrap items-center gap-2">
-        <NButton type="primary" size="small" @click="handleAdd">新增</NButton>
+        <NButton v-access:code="'system:notice:add'" type="primary" size="small" @click="handleAdd">新增</NButton>
         <NButton
+          v-access:code="'system:notice:edit'"
           size="small"
           type="info"
           :disabled="selectedRowKeys.length !== 1"
@@ -301,6 +315,7 @@ onMounted(() => loadData());
           修改
         </NButton>
         <NButton
+          v-access:code="'system:notice:del'"
           size="small"
           type="error"
           :disabled="selectedRowKeys.length === 0"
@@ -309,6 +324,7 @@ onMounted(() => loadData());
           删除
         </NButton>
         <NButton
+          v-access:code="'system:notice:export'"
           size="small"
           type="warning"
           :loading="exporting"
