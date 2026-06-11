@@ -134,7 +134,7 @@ const columns: DataTableColumns<DeptItem> = [
     fixed: 'right',
     align: 'center',
     render: (row) => {
-      const actions = [];
+      const actions: ReturnType<typeof h>[] = [];
       if (canAccess('system:dept:edit')) {
         actions.push(
           h(

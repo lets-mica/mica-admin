@@ -79,7 +79,7 @@ const columns: DataTableColumns<ConfigItem> = [
     fixed: 'right',
     align: 'center',
     render: (row) => {
-      const actions = [];
+      const actions: ReturnType<typeof h>[] = [];
       if (canAccess('system:config:edit')) {
         actions.push(
           h(NButton, { size: 'small', type: 'primary', tertiary: true, onClick: () => handleEdit(row) }, () => '编辑'),

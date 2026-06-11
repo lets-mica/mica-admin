@@ -150,7 +150,7 @@ const columns: DataTableColumns<RoleItem> = [
     fixed: 'right',
     align: 'center',
     render: (row) => {
-      const actions = [];
+      const actions: ReturnType<typeof h>[] = [];
       if (canAccess('system:role:edit')) {
         actions.push(
           h(

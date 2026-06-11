@@ -50,7 +50,7 @@ const dictColumns: DataTableColumns<DictItem> = [
     width: 160,
     align: 'center' as const,
     render: (row: DictItem) => {
-      const actions = [];
+      const actions: ReturnType<typeof h>[] = [];
       if (canAccess('system:dict:edit')) {
         actions.push(
           h(NButton, { size: 'small', type: 'primary', tertiary: true, onClick: () => handleEditDict(row) }, () => '编辑'),

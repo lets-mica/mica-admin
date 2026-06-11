@@ -119,7 +119,7 @@ const columns: DataTableColumns<MenuItem> = [
     fixed: 'right',
     align: 'center',
     render: (row) => {
-      const actions = [];
+      const actions: ReturnType<typeof h>[] = [];
       if (canAccess('system:menu:add')) {
         actions.push(
           h(NButton, { size: 'small', type: 'primary', tertiary: true, onClick: () => handleAddChild(row) }, () => '新增'),

@@ -160,7 +160,7 @@ const columns: DataTableColumns<UserItem> = [
     fixed: 'right',
     align: 'center',
     render: (row) => {
-      const actions = [];
+      const actions: ReturnType<typeof h>[] = [];
       if (canAccess('system:user:edit')) {
         actions.push(
           h(
