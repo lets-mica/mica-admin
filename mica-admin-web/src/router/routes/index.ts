@@ -1,37 +1,36 @@
 import type { RouteRecordRaw } from 'vue-router';
 
-import { mergeRouteModules, traverseTreeValues } from '@vben/utils';
-
 import { coreRoutes, fallbackNotFoundRoute } from './core';
 
-const dynamicRouteFiles = import.meta.glob('./modules/**/*.ts', {
-  eager: true,
-});
-
-// 有需要可以自行打开注释，并创建文件夹
-// const externalRouteFiles = import.meta.glob('./external/**/*.ts', { eager: true });
-// const staticRouteFiles = import.meta.glob('./static/**/*.ts', { eager: true });
-
-/** 动态路由 */
-const dynamicRoutes: RouteRecordRaw[] = mergeRouteModules(dynamicRouteFiles);
-
-/** 外部路由列表，访问这些页面可以不需要Layout，可能用于内嵌在别的系统(不会显示在菜单中) */
-// const externalRoutes: RouteRecordRaw[] = mergeRouteModules(externalRouteFiles);
-// const staticRoutes: RouteRecordRaw[] = mergeRouteModules(staticRouteFiles);
+/**
+ * 后端动态路由模式下，不再扫描 ./modules/**.ts，
+ * 所有业务路由由 /api/auth/menus 返回后由 access.ts 拼装。
+ */
 const staticRoutes: RouteRecordRaw[] = [];
 const externalRoutes: RouteRecordRaw[] = [];
 
-/** 路由列表，由基本路由、外部路由和404兜底路由组成
- *  无需走权限验证（会一直显示在菜单中） */
+/** 根路由列表：核心路由（登录/404/root）+ 外部路由 + 404 兜底 */
 const routes: RouteRecordRaw[] = [
   ...coreRoutes,
   ...externalRoutes,
   fallbackNotFoundRoute,
 ];
 
-/** 基本路由列表，这些路由不需要进入权限拦截 */
-const coreRouteNames = traverseTreeValues(coreRoutes, (route) => route.name);
+/** 递归收集中文路由树中所有节点的 name */
+function collectNames(routes: RouteRecordRaw[], out: (string | symbol | undefined)[] = []) {
+  for (const r of routes) {
+    out.push(r.name);
+    if (r.children && r.children.length > 0) {
+      collectNames(r.children, out);
+    }
+  }
+  return out.filter((n) => n != null) as (string | symbol)[];
+}
 
-/** 有权限校验的路由列表，包含动态路由和静态路由 */
-const accessRoutes = [...dynamicRoutes, ...staticRoutes];
+/** 核心路由 name 集合：这些路由永远不需要走权限拦截 */
+const coreRouteNames = collectNames(coreRoutes);
+
+/** 权限路由（后端模式下留空） */
+const accessRoutes: RouteRecordRaw[] = [...staticRoutes];
+
 export { accessRoutes, coreRouteNames, routes };

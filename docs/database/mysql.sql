@@ -206,22 +206,22 @@ CREATE TABLE `sys_menu`  (
 -- Records of sys_menu
 -- ----------------------------
 -- 一级目录
-INSERT INTO `sys_menu` VALUES (1, NULL, '系统管理', 'System', 1, 'system', '', NULL, 'system', 0, 0, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '系统管理目录');
-INSERT INTO `sys_menu` VALUES (2, NULL, '系统监控', 'Monitor', 2, 'monitor', '', NULL, 'monitor', 0, 0, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '系统监控目录');
-INSERT INTO `sys_menu` VALUES (3, NULL, '系统工具', 'Tools', 3, 'tool', '', NULL, 'sys-tools', 0, 0, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '系统工具目录');
-INSERT INTO `sys_menu` VALUES (4, NULL, '如梦官网', 'DreamluSite', 4, 'https://www.dreamlu.net', '', NULL, 'international', 1, 0, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '若依官网地址');
+INSERT INTO `sys_menu` VALUES (1, NULL, '系统管理', 'System', 1, 'system', '', NULL, 'lucide:settings', 0, 0, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '系统管理目录');
+INSERT INTO `sys_menu` VALUES (2, NULL, '系统监控', 'Monitor', 2, 'monitor', '', NULL, 'lucide:monitor', 0, 0, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '系统监控目录');
+INSERT INTO `sys_menu` VALUES (3, NULL, '系统工具', 'Tools', 3, 'tool', '', NULL, 'lucide:wrench', 0, 0, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '系统工具目录');
+INSERT INTO `sys_menu` VALUES (4, NULL, '如梦官网', 'DreamluSite', 4, 'https://www.dreamlu.net', '', NULL, 'lucide:globe', 1, 0, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '若依官网地址');
 -- 一级目录（前端有，数据库补齐）
 INSERT INTO `sys_menu` VALUES (5, NULL, '仪表盘', 'Dashboard', 0, 'dashboard', '', NULL, 'lucide:layout-dashboard', 0, 0, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '仪表盘目录');
 INSERT INTO `sys_menu` VALUES (6, NULL, '公共组件', 'Components', 5, 'components', '', NULL, 'lucide:layout-grid', 0, 0, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '公共组件目录');
 -- 系统管理（parent_id=1）
-INSERT INTO `sys_menu` VALUES (100, 1, '用户管理', 'User', 1, 'user', 'system:user:list', 'system/user/index', 'user', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '用户管理菜单');
-INSERT INTO `sys_menu` VALUES (101, 1, '角色管理', 'Role', 2, 'role', 'system:role:list', 'system/role/index', 'peoples', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '角色管理菜单');
-INSERT INTO `sys_menu` VALUES (102, 1, '菜单管理', 'Menu', 3, 'menu', 'system:menu:list', 'system/menu/index', 'tree-table', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '菜单管理菜单');
-INSERT INTO `sys_menu` VALUES (103, 1, '部门管理', 'Dept', 4, 'dept', 'system:dept:list', 'system/dept/index', 'dept', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '部门管理菜单');
-INSERT INTO `sys_menu` VALUES (104, 1, '岗位管理', 'Post', 5, 'post', 'system:post:list', 'system/post/index', 'tree', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '岗位管理菜单');
-INSERT INTO `sys_menu` VALUES (105, 1, '字典管理', 'Dict', 6, 'dict', 'system:dict:list', 'system/dict/index', 'dictionary', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '字典管理菜单');
-INSERT INTO `sys_menu` VALUES (106, 1, '参数设置', 'Config', 7, 'config', 'system:config:list', 'system/config/index', 'edit', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '参数设置菜单');
-INSERT INTO `sys_menu` VALUES (107, 1, '通知公告', 'Notice', 8, 'notice', 'system:notice:list', 'system/notice/index', 'message', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '通知公告菜单');
+INSERT INTO `sys_menu` VALUES (100, 1, '用户管理', 'User', 1, 'user', 'system:user:list', 'system/user/index', 'lucide:users', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '用户管理菜单');
+INSERT INTO `sys_menu` VALUES (101, 1, '角色管理', 'Role', 2, 'role', 'system:role:list', 'system/role/index', 'lucide:shield-check', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '角色管理菜单');
+INSERT INTO `sys_menu` VALUES (102, 1, '菜单管理', 'Menu', 3, 'menu', 'system:menu:list', 'system/menu/index', 'lucide:menu', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '菜单管理菜单');
+INSERT INTO `sys_menu` VALUES (103, 1, '部门管理', 'Dept', 4, 'dept', 'system:dept:list', 'system/dept/index', 'lucide:git-branch', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '部门管理菜单');
+INSERT INTO `sys_menu` VALUES (104, 1, '岗位管理', 'Post', 5, 'post', 'system:post:list', 'system/post/index', 'lucide:briefcase', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '岗位管理菜单');
+INSERT INTO `sys_menu` VALUES (105, 1, '字典管理', 'Dict', 6, 'dict', 'system:dict:list', 'system/dict/index', 'lucide:bookmark', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '字典管理菜单');
+INSERT INTO `sys_menu` VALUES (106, 1, '参数设置', 'Config', 7, 'config', 'system:config:list', 'system/config/index', 'lucide:sliders-horizontal', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '参数设置菜单');
+INSERT INTO `sys_menu` VALUES (107, 1, '通知公告', 'Notice', 8, 'notice', 'system:notice:list', 'system/notice/index', 'lucide:bell', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '通知公告菜单');
 -- 系统管理 -> OSS存储（前端有，数据库补齐）
 INSERT INTO `sys_menu` VALUES (108, 1, 'OSS存储', 'Oss', 9, 'oss', 'system:oss:list', 'system/oss/index', 'lucide:folder-open', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', 'OSS存储菜单');
 -- 系统监控（parent_id=2）
@@ -235,12 +235,14 @@ INSERT INTO `sys_menu` VALUES (113, 2, 'Redis监控', 'Redis', 5, 'redis', 'moni
 INSERT INTO `sys_menu` VALUES (115, 3, '系统接口', 'Swagger', 1, 'swagger', 'tool:swagger:list', 'tools/swagger/index', 'lucide:book', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '系统接口菜单');
 -- 仪表盘子项（parent_id=5）
 INSERT INTO `sys_menu` VALUES (116, 5, '分析页', 'Analytics', 1, 'analytics', 'dashboard:analytics:list', 'dashboard/analytics/index', 'lucide:area-chart', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '分析页菜单');
-INSERT INTO `sys_menu` VALUES (117, 5, '工作台', 'Workspace', 2, 'workspace', 'dashboard:workspace:list', 'dashboard/workspace/index', 'lucide:layout-dashboard', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '工作台菜单');
+-- 工作台（id=117）前端暂无独立视图，暂不挂出
 -- 公共组件子项（parent_id=6）
 INSERT INTO `sys_menu` VALUES (118, 6, '图表组件', 'ECharts', 1, 'echarts', 'components:echarts:list', 'components/ECharts', 'lucide:pie-chart', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '图表组件');
 INSERT INTO `sys_menu` VALUES (119, 6, '富文本编辑器', 'Editor', 2, 'editor', 'components:editor:list', 'components/Editor', 'lucide:file-text', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '富文本编辑器');
 INSERT INTO `sys_menu` VALUES (120, 6, 'Markdown编辑器', 'Markdown', 3, 'markdown', 'components:markdown:list', 'components/MarkDown', 'lucide:file-code', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', 'Markdown编辑器');
-INSERT INTO `sys_menu` VALUES (121, 6, '图标选择器', 'Icons', 4, 'icons', 'components:icons:list', 'components/icons', 'lucide:smile', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '图标选择器');
+INSERT INTO `sys_menu` VALUES (121, 6, '图标选择器', 'Icons', 4, 'icons', 'components:icons:list', 'components/icons/index', 'lucide:smile', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '图标选择器');
+-- 系统管理 - 消息中心（前端 views/system/message/index.vue 已存在，补齐菜单节点）
+INSERT INTO `sys_menu` VALUES (122, 1, '消息中心', 'SystemMessage', 10, 'message', 'system:message:list', 'system/message/index', 'lucide:mail', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '消息中心菜单');
 -- 系统监控 - 日志（parent_id=2）
 INSERT INTO `sys_menu` VALUES (500, 2, '操作日志', 'Log', 6, 'log', 'monitor:operlog:list', 'monitor/log/index', 'lucide:file-text', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '操作日志菜单');
 INSERT INTO `sys_menu` VALUES (501, 2, '异常日志', 'ErrorLog', 7, 'log/error', 'monitor:logininfor:list', 'monitor/log/errorLog', 'lucide:triangle-alert', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '异常日志菜单');
@@ -455,14 +457,15 @@ INSERT INTO `sys_role_menu` VALUES (2, 112);
 INSERT INTO `sys_role_menu` VALUES (2, 113);
 -- 表单构建 (id=114) 已废弃，前端已删除
 INSERT INTO `sys_role_menu` VALUES (2, 115);
--- 补充的仪表盘子项
+-- 补充的仪表盘子项（工作台 id=117 前端暂无独立视图，未挂出，此处也不分配）
 INSERT INTO `sys_role_menu` VALUES (2, 116);
-INSERT INTO `sys_role_menu` VALUES (2, 117);
 -- 补充的公共组件子项
 INSERT INTO `sys_role_menu` VALUES (2, 118);
 INSERT INTO `sys_role_menu` VALUES (2, 119);
 INSERT INTO `sys_role_menu` VALUES (2, 120);
 INSERT INTO `sys_role_menu` VALUES (2, 121);
+-- 系统管理 - 消息中心
+INSERT INTO `sys_role_menu` VALUES (2, 122);
 INSERT INTO `sys_role_menu` VALUES (2, 500);
 INSERT INTO `sys_role_menu` VALUES (2, 501);
 INSERT INTO `sys_role_menu` VALUES (2, 1001);
