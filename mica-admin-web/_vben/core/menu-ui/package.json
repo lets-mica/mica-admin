@@ -1,0 +1,23 @@
+{
+    "version":  "0.0.1",
+    "dependencies":  {
+                         "qs":  "*",
+                         "@vben-core/composables":  "workspace:*",
+                         "@vben-core/typings":  "workspace:*",
+                         "@vueuse/core":  "*",
+                         "vue":  "*",
+                         "@vben-core/design":  "workspace:*",
+                         "@vben-core/shadcn-ui":  "workspace:*",
+                         "@vben-core/icons":  "workspace:*",
+                         "@vben-core/shared":  "workspace:*"
+                     },
+    "types":  "./src/index.ts",
+    "type":  "module",
+    "name":  "@vben-core/menu-ui",
+    "private":  true,
+    "exports":  {
+                    ".":  "./src/index.ts",
+                    "./*":  "./src/*"
+                },
+    "main":  "./src/index.ts"
+}

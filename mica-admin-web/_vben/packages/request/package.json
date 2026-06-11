@@ -1,0 +1,18 @@
+{
+    "version":  "0.0.1",
+    "dependencies":  {
+                         "axios":  "*",
+                         "@vben/utils":  "workspace:*",
+                         "qs":  "*",
+                         "@vben/locales":  "workspace:*"
+                     },
+    "types":  "./src/index.ts",
+    "type":  "module",
+    "name":  "@vben/request",
+    "private":  true,
+    "exports":  {
+                    ".":  "./src/index.ts",
+                    "./*":  "./src/*"
+                },
+    "main":  "./src/index.ts"
+}

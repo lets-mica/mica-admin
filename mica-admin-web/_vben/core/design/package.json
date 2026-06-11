@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "main": "./src/index.ts",
+  "name": "@vben-core/design",
+  "type": "module",
+  "types": "./src/index.ts",
+  "exports": {
+    "./*": "./src/*",
+    ".": "./src/index.ts"
+  },
+  "private": true
+}

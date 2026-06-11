@@ -1,0 +1,31 @@
+{
+    "version":  "0.0.1",
+    "dependencies":  {
+                         "@vben/preferences":  "workspace:*",
+                         "vxe-pc-ui":  "*",
+                         "@vben-core/shared":  "workspace:*",
+                         "@vueuse/core":  "*",
+                         "vxe-table":  "*",
+                         "@vben-core/form-ui":  "workspace:*",
+                         "echarts":  "*",
+                         "vue":  "*",
+                         "@vben/utils":  "workspace:*",
+                         "@vben-core/shadcn-ui":  "workspace:*",
+                         "@vueuse/motion":  "*",
+                         "@vben-core/design":  "workspace:*",
+                         "@vben/icons":  "workspace:*",
+                         "@vben/types":  "workspace:*",
+                         "@vben/hooks":  "workspace:*",
+                         "@vben/locales":  "workspace:*",
+                         "@vben-core/popup-ui":  "workspace:*"
+                     },
+    "types":  "./src/index.ts",
+    "type":  "module",
+    "name":  "@vben/plugins",
+    "private":  true,
+    "exports":  {
+                    ".":  "./src/index.ts",
+                    "./*":  "./src/*"
+                },
+    "main":  "./src/index.ts"
+}

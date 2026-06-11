@@ -1,0 +1,22 @@
+{
+    "version":  "0.0.1",
+    "dependencies":  {
+                         "vue":  "*",
+                         "@vben-core/composables":  "workspace:*",
+                         "@vben-core/typings":  "workspace:*",
+                         "@vueuse/core":  "*",
+                         "@vben-core/preferences":  "workspace:*",
+                         "@vben-core/shadcn-ui":  "workspace:*",
+                         "@vben-core/icons":  "workspace:*",
+                         "@vben-core/shared":  "workspace:*"
+                     },
+    "types":  "./src/index.ts",
+    "type":  "module",
+    "name":  "@vben-core/popup-ui",
+    "private":  true,
+    "exports":  {
+                    ".":  "./src/index.ts",
+                    "./*":  "./src/*"
+                },
+    "main":  "./src/index.ts"
+}

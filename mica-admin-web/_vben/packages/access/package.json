@@ -1,0 +1,19 @@
+{
+    "version":  "0.0.1",
+    "dependencies":  {
+                         "vue":  "*",
+                         "@vben/stores":  "workspace:*",
+                         "@vben/utils":  "workspace:*",
+                         "@vben/preferences":  "workspace:*",
+                         "@vben/types":  "workspace:*"
+                     },
+    "types":  "./src/index.ts",
+    "type":  "module",
+    "name":  "@vben/access",
+    "private":  true,
+    "exports":  {
+                    ".":  "./src/index.ts",
+                    "./*":  "./src/*"
+                },
+    "main":  "./src/index.ts"
+}

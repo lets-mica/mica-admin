@@ -1,0 +1,118 @@
+# 开发环境配置
+server:
+  # 服务器的HTTP端口，默认为8080
+  port: 8080
+# Spring配置
+spring:
+  application:
+    name: mica-admin
+  profiles:
+    active: "@activatedProfile@"
+  # 资源信息
+  messages:
+    # 国际化资源文件路径
+    basename: messages/messages
+    cache-duration: 1d
+  web:
+    locale: zh_CN
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  # 文件上传
+  servlet:
+    multipart:
+      # 单个文件大小
+      max-file-size: 10MB
+      # 设置总上传的文件大小
+      max-request-size: 20MB
+  # 数据库配置
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    druid:
+      filter:
+        stat:
+          # 开启 druid stat
+          enabled: true
+  # redis 配置
+  redis:
+    # 地址
+    host: localhost
+    # 端口，默认为6379
+    port: 6379
+    # 密码
+    password:
+    # 连接超时时间
+    timeout: 10s
+    lettuce:
+      pool:
+        # 连接池中的最小空闲连接
+        min-idle: 0
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池的最大数据库连接数
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+  mail:
+    host: smtp.exmail.qq.com
+    port: 465
+    username: admin@dreamlu.net
+    password: Lcm1030x
+    protocol: smtp
+    test-connection: false # 临时调整为 false
+    default-encoding: UTF-8
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+      mail.smtp.ssl.enable: true
+      mail.display.sendmail: mica-admin
+  freemarker:
+    enabled: false # 关闭 ViewResolver 仅仅做邮件模板
+    cache: true
+logging:
+  level:
+    net.dreamlu.mica: info
+## mybatis
+mybatis-plus:
+  configuration:
+    cache-enabled: false
+    map-underscore-to-camel-case: true
+  typeAliasesPackage: net.dreamlu.mica.admin.**.entity
+  mapper-locations: classpath:net/dreamlu/mica/admin/**/mapper/*Mapper.xml
+  global-config:
+    db-config:
+      id-type: auto
+      insert-strategy: not_empty
+      update-strategy: not_null
+      table-underline: true
+# oss 存储配置
+oss:
+  http:
+    enable: true
+    prefix: "/api"
+# mica 组件配置
+mica:
+  captcha:
+    captcha-type: math
+  xss:
+    enabled: true
+  # 文件存储已统一切换到 x-file-storage（见 dromara.x-file-storage），
+  # 不再使用 mica 自带的 upload，permit-all 中的 /api/upload/** 仍需保留以放行 x-file-storage 的本地文件直读路由
+  security:
+    permit-all:
+      - /favicon.ico
+      - /error
+      - /static/**
+      - /webjars*
+      - /webjars/**
+      - /api/auth/captcha
+      - /api/auth/public-key
+      - /api/upload/**
+      - /swagger-resources/**
+      - /v3/api-docs
+      - /v3/api-docs/swagger-config
+      - /doc.html
+      - /swagger-ui/**
+    jwt-token:
+      secret: 2874c8079512f189bfb715403603002acbc785da3e6778d7c1ac35ef44188f0a # 详见 JwtTokenTest

@@ -1,0 +1,8 @@
+packages:
+  - '_vben/packages/*'
+  - '_vben/core/*'
+  - '_vben/tailwind-config'
+allowBuilds:
+  '@parcel/watcher': false
+  esbuild: false
+  vue-demi: false

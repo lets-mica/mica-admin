@@ -1,0 +1,19 @@
+{
+    "version":  "0.0.1",
+    "dependencies":  {
+                         "sortablejs":  "*",
+                         "vue":  "*",
+                         "@vueuse/core":  "*",
+                         "@vben-core/shared":  "workspace:*",
+                         "reka-ui":  "*"
+                     },
+    "types":  "./src/index.ts",
+    "type":  "module",
+    "name":  "@vben-core/composables",
+    "private":  true,
+    "exports":  {
+                    ".":  "./src/index.ts",
+                    "./*":  "./src/*"
+                },
+    "main":  "./src/index.ts"
+}

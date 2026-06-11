@@ -1,0 +1,17 @@
+package net.dreamlu.mica.admin.test;
+
+import net.dreamlu.mica.core.tuple.KeyPair;
+import net.dreamlu.mica.core.utils.RsaUtil;
+
+public class RsaPwdTest {
+
+	public static void main(String[] args) {
+		KeyPair keyPair = RsaUtil.genKeyPair();
+		String privateBase64 = keyPair.getPrivateBase64();
+		String publicBase64 = keyPair.getPublicBase64();
+		System.out.println(privateBase64);
+		System.out.println(publicBase64);
+//		MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIeWxLigG8EbQFFCn9YIjW2j5nanmzTOyJcaJLI9Pi5mwIjY1Nn1H/AxW1gTBifvBceHctlYG4ycbONw1dM99kp9fJvjx3yNnl81FOVYc2OO8aaPCkkj5V76lXL0t+Ma3QoCHy9ra4QSL1ku5ezRVmjAXr9WUTq50ygDcBtctsrZAgMBAAECgYBf5KNwp9u5MRrF3cbJSvcrSbWeyV8dc/mt1BGL9YBatNUKc7/l/lT+PQoLOjkqWQPPX948FPI2+hKQsKapZbMfZ9d7x6iNmn9vSB7OVsRwY+e3EtYACYPa2mdbIASH5J4FAQ33SGJZGE7mJhCPSVRZ6CgaioQQOqWIaupOWBOy2QJBAMNua1S+Cr25T0SuCxrx3X8mJJuCr49LDqIAds5lOOpa+hDkXWtmZautRrVaZhUeV5FVsjno6OKoxL93Ipqo1E8CQQCxnG+jamcdBqT9i+ZIfijAP9Tq6yrPW+7Q6Lrvb3DuAmESc7JANmvxQwRRrLlqqmEc0d7js/u64Ilq0ZWaghxXAkAZ7nTfcbgLJKOYAWAH20AAtxb0a4rQAK2YYWdiS5wZvKihxSuALL4g4YUYWz5gXv5Pkodrl7QPH0W8AhrdWrmRAkA6cLrbDlu3VURcmPfAyqIl/9rTIWYIrLs7yhgYSJbj+axvIdp4/m8uB1sYdLjdvAoQLY4lZkdiChetKiELodwpAkEAp14//ghYtSpl+s2Db3RWT1DcC2JrspEP1lUbg/STk0snVIRHLt5uXS3vqHFqROgAGwa7VzoGCtfnO5ixl3ntow==
+//		MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCHlsS4oBvBG0BRQp/WCI1to+Z2p5s0zsiXGiSyPT4uZsCI2NTZ9R/wMVtYEwYn7wXHh3LZWBuMnGzjcNXTPfZKfXyb48d8jZ5fNRTlWHNjjvGmjwpJI+Ve+pVy9LfjGt0KAh8va2uEEi9ZLuXs0VZowF6/VlE6udMoA3AbXLbK2QIDAQAB
+	}
+}

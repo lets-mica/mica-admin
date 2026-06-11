@@ -1,0 +1,25 @@
+{
+  "version": "0.0.1",
+  "dependencies": {
+    "reka-ui": "*",
+    "@vben-core/composables": "workspace:*",
+    "@vben-core/typings": "workspace:*",
+    "class-variance-authority": "*",
+    "@vueuse/core": "*",
+    "vue": "*",
+    "@vben-core/design": "workspace:*",
+    "@vben-core/icons": "workspace:*",
+    "vee-validate": "*",
+    "@vben-core/shared": "workspace:*",
+    "@lucide/vue": "*"
+  },
+  "types": "./src/index.ts",
+  "type": "module",
+  "name": "@vben-core/shadcn-ui",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "main": "./src/index.ts"
+}

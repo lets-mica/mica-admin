@@ -1,0 +1,22 @@
+{
+    "version":  "0.0.1",
+    "dependencies":  {
+                         "vue-router":  "^4.5.0",
+                         "@vben-core/typings":  "workspace:*",
+                         "secure-ls":  "*",
+                         "pinia-plugin-persistedstate":  "*",
+                         "vue":  "*",
+                         "@vben-core/preferences":  "workspace:*",
+                         "pinia":  "*",
+                         "@vben-core/shared":  "workspace:*"
+                     },
+    "types":  "./src/index.ts",
+    "type":  "module",
+    "name":  "@vben/stores",
+    "private":  true,
+    "exports":  {
+                    ".":  "./src/index.ts",
+                    "./*":  "./src/*"
+                },
+    "main":  "./src/index.ts"
+}

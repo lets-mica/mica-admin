@@ -1,0 +1,18 @@
+{
+    "version":  "0.0.1",
+    "dependencies":  {
+                         "vue":  "*",
+                         "vue-i18n":  "*",
+                         "@vben-core/composables":  "workspace:*",
+                         "@intlify/core-base":  "*"
+                     },
+    "types":  "./src/index.ts",
+    "type":  "module",
+    "name":  "@vben/locales",
+    "private":  true,
+    "exports":  {
+                    ".":  "./src/index.ts",
+                    "./*":  "./src/*"
+                },
+    "main":  "./src/index.ts"
+}

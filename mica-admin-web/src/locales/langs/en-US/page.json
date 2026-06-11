@@ -1,0 +1,37 @@
+{
+  "auth": {
+    "login": "Login",
+    "profile": "Profile"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "analytics": "Analytics",
+    "workspace": "Workspace"
+  },
+  "system": {
+    "title": "System",
+    "user": "User Management",
+    "role": "Role Management",
+    "menu": "Menu Management",
+    "dept": "Dept Management",
+    "post": "Post Management",
+    "dict": "Dict Management",
+    "notice": "Notice",
+    "message": "Message",
+    "userMessage": "My Messages",
+    "config": "Config"
+  },
+  "monitor": {
+    "title": "Monitor",
+    "online": "Online Users",
+    "log": "Operation Log",
+    "server": "Server Monitor",
+    "redis": "Redis Monitor",
+    "druid": "Druid Monitor",
+    "token": "Token Management"
+  },
+  "tools": {
+    "title": "Tools",
+    "swagger": "API Docs"
+  }
+}

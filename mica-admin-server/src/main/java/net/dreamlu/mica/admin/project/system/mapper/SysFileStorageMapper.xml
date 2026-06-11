@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.dreamlu.mica.admin.project.system.mapper.SysFileStorageMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="net.dreamlu.mica.admin.project.system.entity.SysFileStorage">
+        <result column="id" property="id" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_at" property="createdAt" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="storage_type" property="storageType" />
+        <result column="bucket" property="bucket" />
+        <result column="endpoint" property="endpoint" />
+        <result column="file_key" property="fileKey" />
+        <result column="md5" property="md5" />
+        <result column="url" property="url" />
+        <result column="file_name" property="fileName" />
+        <result column="file_real_name" property="fileRealName" />
+        <result column="suffix" property="suffix" />
+        <result column="size" property="size" />
+        <result column="mime_type" property="mimeType" />
+        <result column="file_type" property="fileType" />
+        <result column="user_id" property="userId" />
+        <result column="is_private" property="isPrivate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        created_by,
+        created_at,
+        updated_by,
+        updated_at,
+        storage_type, bucket, endpoint, file_key, md5, url, file_name, file_real_name, suffix, size, mime_type, file_type, user_id, is_private
+    </sql>
+
+</mapper>

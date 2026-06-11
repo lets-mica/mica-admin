@@ -1,0 +1,25 @@
+{
+    "version":  "0.0.1",
+    "dependencies":  {
+                         "es-toolkit":  "*",
+                         "@vue/shared":  "*",
+                         "clsx":  "*",
+                         "dayjs":  "*",
+                         "theme-colors":  "*",
+                         "defu":  "*",
+                         "lodash.clonedeep":  "*",
+                         "@ctrl/tinycolor":  "*",
+                         "@tanstack/vue-store":  "*",
+                         "nprogress":  "*",
+                         "tailwind-merge":  "*"
+                     },
+    "types":  "./src/index.ts",
+    "type":  "module",
+    "name":  "@vben-core/shared",
+    "private":  true,
+    "exports":  {
+                    ".":  "./src/index.ts",
+                    "./*":  "./src/*"
+                },
+    "main":  "./src/index.ts"
+}

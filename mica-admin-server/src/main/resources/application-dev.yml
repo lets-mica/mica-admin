@@ -1,0 +1,32 @@
+# 数据源配置
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/mica_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    username: root
+    password: root
+mica:
+  swagger:
+    authorization:
+      enabled: true
+      key-name: Authorization
+# x-file-storage 统一文件存储：默认 local（本地）
+dromara:
+  x-file-storage:
+    default-platform: local-plus
+    thumbnail-suffix: ".min.jpg"
+    local-plus:
+      - platform: local-plus
+        # 存储路径，上传的文件都会存储在这个路径下面，默认"/"，注意"/"结尾
+        storagePath: E:/codes/ai/mica-admin/mica-admin-server/upload/
+        # 拼接访问 URL 的域名，结尾保留 /
+        domain: http://localhost:8080/api/upload/
+        # 本地文件访问（通过 spring mvc 直接读取文件） 的 URL 匹配规则
+        path-patterns: /api/upload/**
+        enable-storage: true
+        enable-access: true
+# springdoc 支持 knife4j
+springdoc:
+  swagger-ui:
+    urls:
+      - name: swagger
+        url: /v3/api-docs

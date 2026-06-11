@@ -1,0 +1,17 @@
+{
+    "version":  "0.0.1",
+    "dependencies":  {
+                         "vue":  "*",
+                         "vue-router":  "^4.5.0",
+                         "@vben-core/typings":  "workspace:*"
+                     },
+    "types":  "./src/index.ts",
+    "type":  "module",
+    "name":  "@vben/types",
+    "private":  true,
+    "exports":  {
+                    ".":  "./src/index.ts",
+                    "./*":  "./src/*"
+                },
+    "main":  "./src/index.ts"
+}

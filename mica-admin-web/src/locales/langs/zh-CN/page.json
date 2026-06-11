@@ -1,0 +1,37 @@
+{
+  "auth": {
+    "login": "登录",
+    "profile": "个人中心"
+  },
+  "dashboard": {
+    "title": "概览",
+    "analytics": "分析页",
+    "workspace": "工作台"
+  },
+  "system": {
+    "title": "系统管理",
+    "user": "用户管理",
+    "role": "角色管理",
+    "menu": "菜单管理",
+    "dept": "部门管理",
+    "post": "岗位管理",
+    "dict": "字典管理",
+    "notice": "通知公告",
+    "message": "消息管理",
+    "userMessage": "我的消息",
+    "config": "系统配置"
+  },
+  "monitor": {
+    "title": "系统监控",
+    "online": "在线用户",
+    "log": "操作日志",
+    "server": "服务监控",
+    "redis": "Redis监控",
+    "druid": "Druid监控",
+    "token": "Token管理"
+  },
+  "tools": {
+    "title": "系统工具",
+    "swagger": "接口文档"
+  }
+}
