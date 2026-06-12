@@ -21,6 +21,11 @@ export const useAuthStore = defineStore('auth', () => {
 
   const loginLoading = ref(false);
 
+  function applyUserInfo(userInfo: null | UserInfo, permissions: string[] = []) {
+    userStore.setUserInfo(userInfo);
+    accessStore.setAccessCodes(permissions);
+  }
+
   /**
    * mica-admin 后端登录流程
    * 1. 获取 RSA 公钥 2. 加密密码 3. 提交登录 4. 拉取用户信息
@@ -49,13 +54,20 @@ export const useAuthStore = defineStore('auth', () => {
         if (result.userInfo) {
           userInfo = {
             id: result.userInfo.id,
+            permissions: result.userInfo.permissions || [],
             username: result.userInfo.userName,
             realName: result.userInfo.nickName,
             avatar: result.userInfo.avatar,
             email: result.userInfo.email,
             roles: result.userInfo.roleList || [],
           } as UserInfo;
-          userStore.setUserInfo(userInfo);
+          applyUserInfo(userInfo, result.userInfo.permissions || []);
+        }
+
+        if (!result.userInfo) {
+          const fetchedUserInfo = await getUserInfoApi();
+          userInfo = fetchedUserInfo as UserInfo;
+          applyUserInfo(userInfo, fetchedUserInfo.permissions || []);
         }
 
         // 跳转到首页
@@ -98,8 +110,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function fetchUserInfo() {
     const userInfo = await getUserInfoApi();
-    userStore.setUserInfo(userInfo);
-    return userInfo;
+    applyUserInfo(userInfo as UserInfo, userInfo.permissions || []);
+    return userInfo as UserInfo;
   }
 
   function $reset() {

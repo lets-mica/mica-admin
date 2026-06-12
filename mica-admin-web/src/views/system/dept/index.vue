@@ -29,12 +29,16 @@ import {
   NSwitch,
   NTreeSelect,
 } from 'naive-ui';
+import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben-core/popup-ui';
 import { h, onMounted, ref } from 'vue';
 import { dialog, notification } from '#/adapter/naive';
 import { dayjs, formatDateTime } from '#/utils/format-date';
 
 defineOptions({ name: 'DeptManagement' });
+const { hasAccessByCodes } = useAccess();
+const canAccess = (codes: string | string[]) =>
+  hasAccessByCodes(Array.isArray(codes) ? codes : [codes]);
 
 const ENABLED_FILTER_OPTIONS = [
   { label: '启用', value: 1 },
@@ -113,7 +117,7 @@ const columns: DataTableColumns<DeptItem> = [
     render: (row) =>
       h(NSwitch, {
         value: isDeptEnabled(row),
-        disabled: isProtectedDept(row),
+        disabled: isProtectedDept(row) || !canAccess('system:dept:edit'),
         onUpdateValue: (val: boolean) => handleChangeEnabled(row, val),
       }),
   },
@@ -129,30 +133,39 @@ const columns: DataTableColumns<DeptItem> = [
     width: 130,
     fixed: 'right',
     align: 'center',
-    render: (row) =>
-      h(NSpace, { size: 'small' }, () => [
-        h(
-          NButton,
-          {
-            size: 'small',
-            type: 'primary',
-            tertiary: true,
-            onClick: () => handleEdit(row),
-          },
-          () => '编辑',
-        ),
-        h(
-          NButton,
-          {
-            size: 'small',
-            type: 'error',
-            tertiary: true,
-            disabled: isProtectedDept(row),
-            onClick: () => handleDelete(row.id),
-          },
-          () => '删除',
-        ),
-      ]),
+    render: (row) => {
+      const actions: ReturnType<typeof h>[] = [];
+      if (canAccess('system:dept:edit')) {
+        actions.push(
+          h(
+            NButton,
+            {
+              size: 'small',
+              type: 'primary',
+              tertiary: true,
+              onClick: () => handleEdit(row),
+            },
+            () => '编辑',
+          ),
+        );
+      }
+      if (canAccess('system:dept:del')) {
+        actions.push(
+          h(
+            NButton,
+            {
+              size: 'small',
+              type: 'error',
+              tertiary: true,
+              disabled: isProtectedDept(row),
+              onClick: () => handleDelete(row.id),
+            },
+            () => '删除',
+          ),
+        );
+      }
+      return actions.length > 0 ? h(NSpace, { size: 'small' }, () => actions) : '-';
+    },
   },
 ];
 
@@ -475,8 +488,9 @@ onMounted(() => {
       </div>
 
       <div class="mb-3 flex flex-wrap items-center gap-2">
-        <NButton type="primary" size="small" @click="handleAdd">新增</NButton>
+        <NButton v-access:code="'system:dept:add'" type="primary" size="small" @click="handleAdd">新增</NButton>
         <NButton
+          v-access:code="'system:dept:edit'"
           size="small"
           type="info"
           :disabled="selectedRowKeys.length !== 1"
@@ -485,6 +499,7 @@ onMounted(() => {
           修改
         </NButton>
         <NButton
+          v-access:code="'system:dept:del'"
           size="small"
           type="error"
           :disabled="selectedRowKeys.length === 0"
@@ -493,6 +508,7 @@ onMounted(() => {
           删除
         </NButton>
         <NButton
+          v-access:code="'system:dept:export'"
           size="small"
           type="warning"
           :loading="exporting"

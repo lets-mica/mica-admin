@@ -30,6 +30,7 @@ import {
   NTree,
   NTreeSelect,
 } from 'naive-ui';
+import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben-core/popup-ui';
 import { useUserStore } from '@vben/stores';
 import { computed, h, onMounted, reactive, ref, watch } from 'vue';
@@ -50,7 +51,10 @@ const ENABLED_FILTER_OPTIONS = [
 ];
 
 const userStore = useUserStore();
+const { hasAccessByCodes } = useAccess();
 const currentUserId = computed(() => Number(userStore.userInfo?.id) || 0);
+const canAccess = (codes: string | string[]) =>
+  hasAccessByCodes(Array.isArray(codes) ? codes : [codes]);
 
 const loading = ref(false);
 const data = ref<UserItem[]>([]);
@@ -139,7 +143,7 @@ const columns: DataTableColumns<UserItem> = [
     render: (row) =>
       h(NSwitch, {
         value: row.enabled !== false,
-        disabled: isCurrentUser(row),
+        disabled: isCurrentUser(row) || !canAccess('system:user:edit'),
         onUpdateValue: (val: boolean) => handleChangeEnabled(row, val),
       }),
   },
@@ -155,30 +159,39 @@ const columns: DataTableColumns<UserItem> = [
     width: 140,
     fixed: 'right',
     align: 'center',
-    render: (row) =>
-      h(NSpace, { size: 'small' }, () => [
-        h(
-          NButton,
-          {
-            size: 'small',
-            type: 'primary',
-            tertiary: true,
-            onClick: () => handleEdit(row),
-          },
-          () => '编辑',
-        ),
-        h(
-          NButton,
-          {
-            size: 'small',
-            type: 'error',
-            tertiary: true,
-            disabled: isCurrentUser(row),
-            onClick: () => handleDelete(row.id),
-          },
-          () => '删除',
-        ),
-      ]),
+    render: (row) => {
+      const actions: ReturnType<typeof h>[] = [];
+      if (canAccess('system:user:edit')) {
+        actions.push(
+          h(
+            NButton,
+            {
+              size: 'small',
+              type: 'primary',
+              tertiary: true,
+              onClick: () => handleEdit(row),
+            },
+            () => '编辑',
+          ),
+        );
+      }
+      if (canAccess('system:user:del')) {
+        actions.push(
+          h(
+            NButton,
+            {
+              size: 'small',
+              type: 'error',
+              tertiary: true,
+              disabled: isCurrentUser(row),
+              onClick: () => handleDelete(row.id),
+            },
+            () => '删除',
+          ),
+        );
+      }
+      return actions.length > 0 ? h(NSpace, { size: 'small' }, () => actions) : '-';
+    },
   },
 ];
 
@@ -610,8 +623,9 @@ onMounted(() => {
 
         <!-- 工具栏（对齐老版 crudOperation） -->
         <div class="user-page__toolbar mb-3 flex flex-wrap items-center gap-2">
-          <NButton type="primary" size="small" @click="handleAdd">新增</NButton>
+          <NButton v-access:code="'system:user:add'" type="primary" size="small" @click="handleAdd">新增</NButton>
           <NButton
+            v-access:code="'system:user:edit'"
             size="small"
             type="info"
             :disabled="selectedRowKeys.length !== 1"
@@ -620,6 +634,7 @@ onMounted(() => {
             修改
           </NButton>
           <NButton
+            v-access:code="'system:user:del'"
             size="small"
             type="error"
             :disabled="selectedRowKeys.length === 0"
@@ -628,6 +643,7 @@ onMounted(() => {
             删除
           </NButton>
           <NButton
+            v-access:code="'system:user:export'"
             size="small"
             type="warning"
             :loading="exporting"

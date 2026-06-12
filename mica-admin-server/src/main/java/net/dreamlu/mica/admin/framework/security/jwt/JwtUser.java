@@ -63,5 +63,9 @@ public class JwtUser {
 	 * 角色信息
 	 */
 	private List<String> roleList;
+	/**
+	 * 权限标识列表
+	 */
+	private List<String> permissions;
 
 }

@@ -4,11 +4,15 @@ import type { TokenItem } from '#/api/monitor/token';
 import { delToken, getTokenList } from '#/api/monitor/token';
 
 import { NButton, NCard, NDataTable, NInput, NPagination, NSpace } from 'naive-ui';
+import { useAccess } from '@vben/access';
 import { h, onMounted, reactive, ref } from 'vue';
 import { dialog, notification } from '#/adapter/naive';
 import { formatDateTime } from '#/utils/format-date';
 
 defineOptions({ name: 'OnlineUser' });
+const { hasAccessByCodes } = useAccess();
+const canAccess = (codes: string | string[]) =>
+  hasAccessByCodes(Array.isArray(codes) ? codes : [codes]);
 
 const loading = ref(false);
 const data = ref<TokenItem[]>([]);
@@ -38,11 +42,13 @@ const columns: DataTableColumns<TokenItem> = [
     fixed: 'right',
     align: 'center',
     render: (row) =>
-      h(
-        NButton,
-        { size: 'small', type: 'error', tertiary: true, onClick: () => handleKickOut(row.key) },
-        () => '强退',
-      ),
+      canAccess('monitor:online:forceLogout')
+        ? h(
+            NButton,
+            { size: 'small', type: 'error', tertiary: true, onClick: () => handleKickOut(row.key) },
+            () => '强退',
+          )
+        : '-',
   },
 ];
 
@@ -159,6 +165,7 @@ onMounted(() => loadData());
         />
         <NButton type="primary" size="small" @click="handleSearch">搜索</NButton>
         <NButton
+          v-access:code="'monitor:online:batchLogout'"
           size="small"
           type="error"
           :disabled="selectedRowKeys.length === 0"
