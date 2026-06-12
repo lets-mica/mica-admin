@@ -1,25 +1,25 @@
 {
-    "version":  "0.0.1",
-    "dependencies":  {
-                         "es-toolkit":  "catalog:",
-                         "@vue/shared":  "catalog:",
-                         "clsx":  "catalog:",
-                         "dayjs":  "catalog:",
-                         "theme-colors":  "catalog:",
-                         "defu":  "catalog:",
-                         "lodash.clonedeep":  "catalog:",
-                         "@ctrl/tinycolor":  "catalog:",
-                         "@tanstack/vue-store":  "catalog:",
-                         "nprogress":  "catalog:",
-                         "tailwind-merge":  "catalog:"
-                     },
-    "types":  "./src/index.ts",
-    "type":  "module",
-    "name":  "@vben-core/shared",
-    "private":  true,
-    "exports":  {
-                    ".":  "./src/index.ts",
-                    "./*":  "./src/*"
-                },
-    "main":  "./src/index.ts"
+  "version": "0.0.1",
+  "dependencies": {
+    "es-toolkit": "catalog:",
+    "@vue/shared": "catalog:",
+    "clsx": "catalog:",
+    "dayjs": "catalog:",
+    "theme-colors": "catalog:",
+    "defu": "catalog:",
+    "lodash.clonedeep": "catalog:",
+    "@ctrl/tinycolor": "catalog:",
+    "@tanstack/vue-store": "catalog:",
+    "nprogress": "catalog:",
+    "tailwind-merge": "catalog:"
+  },
+  "types": "./src/index.ts",
+  "type": "module",
+  "name": "@vben-core/shared",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "main": "./src/index.ts"
 }

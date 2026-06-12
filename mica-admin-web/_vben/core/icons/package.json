@@ -1,17 +1,17 @@
 {
-    "version":  "0.0.1",
-    "dependencies":  {
-                         "vue":  "catalog:",
-                         "@lucide/vue":  "catalog:",
-                         "@iconify/vue":  "catalog:"
-                     },
-    "types":  "./src/index.ts",
-    "type":  "module",
-    "name":  "@vben-core/icons",
-    "private":  true,
-    "exports":  {
-                    ".":  "./src/index.ts",
-                    "./*":  "./src/*"
-                },
-    "main":  "./src/index.ts"
+  "version": "0.0.1",
+  "dependencies": {
+    "vue": "catalog:",
+    "@lucide/vue": "catalog:",
+    "@iconify/vue": "catalog:"
+  },
+  "types": "./src/index.ts",
+  "type": "module",
+  "name": "@vben-core/icons",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "main": "./src/index.ts"
 }

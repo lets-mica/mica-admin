@@ -1,17 +1,17 @@
 {
-    "version":  "0.0.1",
-    "dependencies":  {
-                         "vue-router":  "catalog:",
-                         "@vben-core/shared":  "workspace:*",
-                         "@vben-core/typings":  "workspace:*"
-                     },
-    "types":  "./src/index.ts",
-    "type":  "module",
-    "name":  "@vben/utils",
-    "private":  true,
-    "exports":  {
-                    ".":  "./src/index.ts",
-                    "./*":  "./src/*"
-                },
-    "main":  "./src/index.ts"
+  "version": "0.0.1",
+  "dependencies": {
+    "vue-router": "catalog:",
+    "@vben-core/shared": "workspace:*",
+    "@vben-core/typings": "workspace:*"
+  },
+  "types": "./src/index.ts",
+  "type": "module",
+  "name": "@vben/utils",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "main": "./src/index.ts"
 }

@@ -1,18 +1,18 @@
 {
-    "version":  "0.0.1",
-    "dependencies":  {
-                         "vue":  "catalog:",
-                         "vue-i18n":  "catalog:",
-                         "@vben-core/composables":  "workspace:*",
-                         "@intlify/core-base":  "catalog:"
-                     },
-    "types":  "./src/index.ts",
-    "type":  "module",
-    "name":  "@vben/locales",
-    "private":  true,
-    "exports":  {
-                    ".":  "./src/index.ts",
-                    "./*":  "./src/*"
-                },
-    "main":  "./src/index.ts"
+  "version": "0.0.1",
+  "dependencies": {
+    "vue": "catalog:",
+    "vue-i18n": "catalog:",
+    "@vben-core/composables": "workspace:*",
+    "@intlify/core-base": "catalog:"
+  },
+  "types": "./src/index.ts",
+  "type": "module",
+  "name": "@vben/locales",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "main": "./src/index.ts"
 }

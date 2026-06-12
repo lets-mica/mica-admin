@@ -1,19 +1,19 @@
 {
-    "version":  "0.0.1",
-    "dependencies":  {
-                         "sortablejs":  "catalog:",
-                         "vue":  "catalog:",
-                         "@vueuse/core":  "catalog:",
-                         "@vben-core/shared":  "workspace:*",
-                         "reka-ui":  "catalog:"
-                     },
-    "types":  "./src/index.ts",
-    "type":  "module",
-    "name":  "@vben-core/composables",
-    "private":  true,
-    "exports":  {
-                    ".":  "./src/index.ts",
-                    "./*":  "./src/*"
-                },
-    "main":  "./src/index.ts"
+  "version": "0.0.1",
+  "dependencies": {
+    "sortablejs": "catalog:",
+    "vue": "catalog:",
+    "@vueuse/core": "catalog:",
+    "@vben-core/shared": "workspace:*",
+    "reka-ui": "catalog:"
+  },
+  "types": "./src/index.ts",
+  "type": "module",
+  "name": "@vben-core/composables",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "main": "./src/index.ts"
 }

@@ -1,34 +1,34 @@
 {
-    "version":  "0.0.1",
-    "dependencies":  {
-                         "@vben/preferences":  "workspace:*",
-                         "@vben/stores":  "workspace:*",
-                         "@vben-core/shared":  "workspace:*",
-                         "vue-router":  "catalog:",
-                         "@vueuse/core":  "catalog:",
-                         "@vben-core/layout-ui":  "workspace:*",
-                         "@vben-core/form-ui":  "workspace:*",
-                         "vue":  "catalog:",
-                         "@vben/constants":  "workspace:*",
-                         "@vben-core/tabs-ui":  "workspace:*",
-                         "@vben-core/shadcn-ui":  "workspace:*",
-                         "@vben/utils":  "workspace:*",
-                         "@vben-core/menu-ui":  "workspace:*",
-                         "@vben-core/design":  "workspace:*",
-                         "@vben/icons":  "workspace:*",
-                         "@vben/types":  "workspace:*",
-                         "@vben-core/composables":  "workspace:*",
-                         "@vben/hooks":  "workspace:*",
-                         "@vben/locales":  "workspace:*",
-                         "@vben-core/popup-ui":  "workspace:*"
-                     },
-    "types":  "./src/index.ts",
-    "type":  "module",
-    "name":  "@vben/layouts",
-    "private":  true,
-    "exports":  {
-                    ".":  "./src/index.ts",
-                    "./*":  "./src/*"
-                },
-    "main":  "./src/index.ts"
+  "version": "0.0.1",
+  "dependencies": {
+    "@vben/preferences": "workspace:*",
+    "@vben/stores": "workspace:*",
+    "@vben-core/shared": "workspace:*",
+    "vue-router": "catalog:",
+    "@vueuse/core": "catalog:",
+    "@vben-core/layout-ui": "workspace:*",
+    "@vben-core/form-ui": "workspace:*",
+    "vue": "catalog:",
+    "@vben/constants": "workspace:*",
+    "@vben-core/tabs-ui": "workspace:*",
+    "@vben-core/shadcn-ui": "workspace:*",
+    "@vben/utils": "workspace:*",
+    "@vben-core/menu-ui": "workspace:*",
+    "@vben-core/design": "workspace:*",
+    "@vben/icons": "workspace:*",
+    "@vben/types": "workspace:*",
+    "@vben-core/composables": "workspace:*",
+    "@vben/hooks": "workspace:*",
+    "@vben/locales": "workspace:*",
+    "@vben-core/popup-ui": "workspace:*"
+  },
+  "types": "./src/index.ts",
+  "type": "module",
+  "name": "@vben/layouts",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "main": "./src/index.ts"
 }

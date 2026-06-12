@@ -1,16 +1,16 @@
 {
-    "version":  "0.0.1",
-    "dependencies":  {
-                         "@vben-core/design":  "workspace:*"
-                     },
-    "types":  "./src/index.ts",
-    "type":  "module",
-    "name":  "@vben/styles",
-    "private":  true,
-    "exports":  {
-                    ".":  "./src/index.ts",
-                    "./*":  "./src/*",
-                    "./naive": "./src/naive/index.css"
-                },
-    "main":  "./src/index.ts"
+  "version": "0.0.1",
+  "dependencies": {
+    "@vben-core/design": "workspace:*"
+  },
+  "types": "./src/index.ts",
+  "type": "module",
+  "name": "@vben/styles",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*",
+    "./naive": "./src/naive/index.css"
+  },
+  "main": "./src/index.ts"
 }

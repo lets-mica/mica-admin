@@ -1,18 +1,18 @@
 {
-    "version":  "0.0.1",
-    "dependencies":  {
-                         "axios":  "catalog:",
-                         "@vben/utils":  "workspace:*",
-                         "qs":  "catalog:",
-                         "@vben/locales":  "workspace:*"
-                     },
-    "types":  "./src/index.ts",
-    "type":  "module",
-    "name":  "@vben/request",
-    "private":  true,
-    "exports":  {
-                    ".":  "./src/index.ts",
-                    "./*":  "./src/*"
-                },
-    "main":  "./src/index.ts"
+  "version": "0.0.1",
+  "dependencies": {
+    "axios": "catalog:",
+    "@vben/utils": "workspace:*",
+    "qs": "catalog:",
+    "@vben/locales": "workspace:*"
+  },
+  "types": "./src/index.ts",
+  "type": "module",
+  "name": "@vben/request",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "main": "./src/index.ts"
 }

@@ -1,31 +1,31 @@
 {
-    "version":  "0.0.1",
-    "dependencies":  {
-                         "@vben/preferences":  "workspace:*",
-                         "vxe-pc-ui":  "catalog:",
-                         "@vben-core/shared":  "workspace:*",
-                         "@vueuse/core":  "catalog:",
-                         "vxe-table":  "catalog:",
-                         "@vben-core/form-ui":  "workspace:*",
-                         "echarts":  "catalog:",
-                         "vue":  "catalog:",
-                         "@vben/utils":  "workspace:*",
-                         "@vben-core/shadcn-ui":  "workspace:*",
-                         "@vueuse/motion":  "catalog:",
-                         "@vben-core/design":  "workspace:*",
-                         "@vben/icons":  "workspace:*",
-                         "@vben/types":  "workspace:*",
-                         "@vben/hooks":  "workspace:*",
-                         "@vben/locales":  "workspace:*",
-                         "@vben-core/popup-ui":  "workspace:*"
-                     },
-    "types":  "./src/index.ts",
-    "type":  "module",
-    "name":  "@vben/plugins",
-    "private":  true,
-    "exports":  {
-                    ".":  "./src/index.ts",
-                    "./*":  "./src/*"
-                },
-    "main":  "./src/index.ts"
+  "version": "0.0.1",
+  "dependencies": {
+    "@vben/preferences": "workspace:*",
+    "vxe-pc-ui": "catalog:",
+    "@vben-core/shared": "workspace:*",
+    "@vueuse/core": "catalog:",
+    "vxe-table": "catalog:",
+    "@vben-core/form-ui": "workspace:*",
+    "echarts": "catalog:",
+    "vue": "catalog:",
+    "@vben/utils": "workspace:*",
+    "@vben-core/shadcn-ui": "workspace:*",
+    "@vueuse/motion": "catalog:",
+    "@vben-core/design": "workspace:*",
+    "@vben/icons": "workspace:*",
+    "@vben/types": "workspace:*",
+    "@vben/hooks": "workspace:*",
+    "@vben/locales": "workspace:*",
+    "@vben-core/popup-ui": "workspace:*"
+  },
+  "types": "./src/index.ts",
+  "type": "module",
+  "name": "@vben/plugins",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "main": "./src/index.ts"
 }

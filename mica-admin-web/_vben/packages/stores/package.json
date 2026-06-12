@@ -1,22 +1,22 @@
 {
-    "version":  "0.0.1",
-    "dependencies":  {
-                         "vue-router":  "catalog:",
-                         "@vben-core/typings":  "workspace:*",
-                         "secure-ls": "catalog:",
-                         "pinia-plugin-persistedstate":  "catalog:",
-                         "vue":  "catalog:",
-                         "@vben-core/preferences":  "workspace:*",
-                         "pinia":  "catalog:",
-                         "@vben-core/shared":  "workspace:*"
-                     },
-    "types":  "./src/index.ts",
-    "type":  "module",
-    "name":  "@vben/stores",
-    "private":  true,
-    "exports":  {
-                    ".":  "./src/index.ts",
-                    "./*":  "./src/*"
-                },
-    "main":  "./src/index.ts"
+  "version": "0.0.1",
+  "dependencies": {
+    "vue-router": "catalog:",
+    "@vben-core/typings": "workspace:*",
+    "secure-ls": "catalog:",
+    "pinia-plugin-persistedstate": "catalog:",
+    "vue": "catalog:",
+    "@vben-core/preferences": "workspace:*",
+    "pinia": "catalog:",
+    "@vben-core/shared": "workspace:*"
+  },
+  "types": "./src/index.ts",
+  "type": "module",
+  "name": "@vben/stores",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "main": "./src/index.ts"
 }
