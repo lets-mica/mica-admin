@@ -36,7 +36,7 @@ const builtInAccountRoutes: RouteRecordRaw[] = [
       title: $t('page.auth.profile'),
     },
     name: 'Profile',
-    path: '/profile',
+    path: '/user/profile',
   },
   {
     component: () => import('#/views/system/user/message.vue'),

@@ -50,18 +50,7 @@ function setupAccessGuard(router: Router) {
     const userStore = useUserStore();
     const authStore = useAuthStore();
 
-    // 基本路由，这些路由不需要进入权限拦截
-    if (coreRouteNames.includes(to.name as string)) {
-      if (to.path === LOGIN_PATH && accessStore.accessToken) {
-      return decodeURIComponent(
-        (to.query?.redirect as string) ||
-          preferences.app.defaultHomePath,
-      );
-    }
-      return true;
-    }
-
-    // accessToken 检查
+    // 1. accessToken 检查
     if (!accessStore.accessToken) {
       // 明确声明忽略权限访问权限，则可以访问
       if (to.meta.ignoreAccess) {
@@ -84,27 +73,37 @@ function setupAccessGuard(router: Router) {
       return to;
     }
 
-    // 是否已经生成过动态路由
-    if (accessStore.isAccessChecked) {
+    // 2. 已登录但还没生成动态路由 → 必先生成（不区分目标是 coreRouteNames 还是后端菜单）。
+    //    coreRouteNames 现在包含 Profile / UserMessage 这些挂在 Root 下的内建页面，
+    //    它们走 BasicLayout + 侧栏，必须保证 accessMenus / dynamic routes 已就位，
+    //    否则直访 /user/profile 或 /user/message 刷新后侧栏会消失。
+    if (!accessStore.isAccessChecked) {
+      const userInfo = userStore.userInfo || (await authStore.fetchUserInfo());
+      const userRoles = userInfo.roles ?? [];
+      const { accessibleMenus, accessibleRoutes } = await generateAccess({
+        roles: userRoles,
+        router,
+        routes: accessRoutes,
+      });
+      accessStore.setAccessMenus(accessibleMenus);
+      accessStore.setAccessRoutes(accessibleRoutes);
+      accessStore.setIsAccessChecked(true);
+    }
+
+    // 3. 基本路由（Login / Fallback* / Profile / UserMessage 等）放行
+    if (coreRouteNames.includes(to.name as string)) {
+      // 已登录用户访问 /login 时直接跳到首页（或 redirect query）
+      if (to.path === LOGIN_PATH && accessStore.accessToken) {
+        return decodeURIComponent(
+          (to.query?.redirect as string) ||
+            preferences.app.defaultHomePath,
+        );
+      }
       return true;
     }
-    // 生成路由表
-    // 当前登录用户拥有的角色标识列表
-    const userInfo = userStore.userInfo || (await authStore.fetchUserInfo());
-    const userRoles = userInfo.roles ?? [];
 
-    // 生成菜单和路由
-    const { accessibleMenus, accessibleRoutes } = await generateAccess({
-      roles: userRoles,
-      router,
-      // 则会在菜单中显示，但是访问会被重定向到403
-      routes: accessRoutes,
-    });
-
-    // 保存菜单信息和路由信息
-    accessStore.setAccessMenus(accessibleMenus);
-    accessStore.setAccessRoutes(accessibleRoutes);
-    accessStore.setIsAccessChecked(true);
+    // 4. 后端动态路由：用 router.resolve 强制重匹配（addRoute 后必须重新解析路径，
+    //    否则 vue-router 会拿着未注册前的 to.matched 继续导航，最终落到 404）
     const redirectPath = (from.query.redirect ??
       (to.path === preferences.app.defaultHomePath
         ? preferences.app.defaultHomePath
