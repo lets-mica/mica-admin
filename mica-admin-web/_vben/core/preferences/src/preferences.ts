@@ -30,7 +30,7 @@ const STORAGE_KEYS = {
 } as const;
 
 class PreferenceManager {
-  private cache: StorageManager;
+  private cache: null | StorageManager = null;
   private customPreferencesExtension: null | PreferencesExtension<any> = null;
   private customState = reactive<CustomPreferencesRecord>({});
   private debouncedSave: () => void;
@@ -40,9 +40,8 @@ class PreferenceManager {
   private state: Preferences;
 
   constructor() {
-    this.cache = new StorageManager();
-    // 构造函数不再同步读取缓存，使用默认值初始化
-    // 真正的缓存加载在 initPreferences 中完成（已经是 async）
+    // 缓存在 initPreferences 拿到 namespace 之后再创建，
+    // 避免在未带前缀的情况下落到 LocalStorageDriver 而污染全局命名空间。
     this.state = reactive<Preferences>({ ...defaultPreferences });
     this.debouncedSave = useDebounceFn(() => this.saveToCache(), 150);
   }
@@ -51,6 +50,7 @@ class PreferenceManager {
    * 清除所有缓存的偏好设置
    */
   clearCache = async () => {
+    if (!this.cache) return;
     await Promise.all(
       Object.values(STORAGE_KEYS).map((key) => this.cache.removeItem(key)),
     );
@@ -321,6 +321,7 @@ class PreferenceManager {
    * @returns 缓存的扩展偏好设置，如果不存在则返回 null
    */
   private async loadCustomFromCache(): Promise<CustomPreferencesRecord | null> {
+    if (!this.cache) return null;
     return this.cache.getItem<CustomPreferencesRecord>(STORAGE_KEYS.CUSTOM);
   }
 
@@ -329,6 +330,7 @@ class PreferenceManager {
    * @returns 缓存的偏好设置，如果不存在则返回 null
    */
   private async loadFromCache(): Promise<null | Preferences> {
+    if (!this.cache) return null;
     return this.cache.getItem<Preferences>(STORAGE_KEYS.MAIN);
   }
 
@@ -388,6 +390,7 @@ class PreferenceManager {
    * 保存偏好设置到缓存
    */
   private async saveToCache() {
+    if (!this.cache) return;
     try {
       await this.cache.setItem(STORAGE_KEYS.MAIN, this.state);
       await this.cache.setItem(STORAGE_KEYS.LOCALE, this.state.app.locale);
