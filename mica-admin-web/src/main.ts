@@ -18,12 +18,12 @@ async function initApplication() {
     overrides: overridesPreferences,
   });
 
-  // 启动应用并挂载（不等服务端，fire-and-forget）
+  // 启动应用并挂载（fire-and-forget；bootstrap 内部 initStores 后才装 pinia）
   const { bootstrap } = await import('./bootstrap');
-  bootstrap(namespace);
-
-  // 异步合并服务端系统默认偏好（失败静默降级）
-  loadServerPreferences();
+  bootstrap(namespace).then(() => {
+    // bootstrap 完成后再拉服务端偏好，此时 pinia、token 都已就绪
+    loadServerPreferences();
+  });
 
   // 移除并销毁loading
   unmountGlobalLoading();
