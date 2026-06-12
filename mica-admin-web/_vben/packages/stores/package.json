@@ -3,7 +3,7 @@
     "dependencies":  {
                          "vue-router":  "^4.5.0",
                          "@vben-core/typings":  "workspace:*",
-                         "secure-ls":  "*",
+                         "secure-ls": "^2.0.0",
                          "pinia-plugin-persistedstate":  "*",
                          "vue":  "*",
                          "@vben-core/preferences":  "workspace:*",

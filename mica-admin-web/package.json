@@ -41,7 +41,7 @@
     "qrcode": "^1.5.4",
     "qs": "^6.13.1",
     "reka-ui": "^2.9.8",
-    "secure-ls": "^1.2.6",
+    "secure-ls": "^2.0.0",
     "sortablejs": "^1.15.6",
     "tailwind-merge": "^3.6.0",
     "theme-colors": "^0.1.0",
