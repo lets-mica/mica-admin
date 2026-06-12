@@ -1,7 +1,7 @@
 /**
  * 动态路由生成器 —— 后端菜单驱动模式
  *
- * 直接复用 vben 的标准 generateAccessible('backend', ...) 流程：
+ * 复用 mica-admin 本地化的 @vben/access#generateAccessible('backend', ...)：
  *   1. fetchMenuListAsync() 拉取后端菜单（GET /api/auth/menus）
  *   2. convertRoutes: component === 'Layout' → layoutMap；其他 → pageMap
  *   3. accessible.ts 自动给顶级目录设 redirect、keep-alive 名字包装、404 fallback
@@ -26,7 +26,7 @@ import type {
   RouteRecordStringComponent,
 } from '@vben/types';
 
-import { generateAccessible } from '@vben/utils';
+import { generateAccessible } from '@vben/access';
 
 import type { MenuVo } from '#/api/core/menu';
 
@@ -59,6 +59,10 @@ function joinPath(parentFullPath: string, childPath: string): string {
   return `${parentFullPath.replace(/\/+$/, '')}/${cleanChild}`;
 }
 
+interface TreeNode extends MenuVo {
+  children: TreeNode[];
+}
+
 /** 后端 MenuVo 列表（扁平） -> 父子树 */
 function buildTree(menus: MenuVo[]): TreeNode[] {
   const map = new Map<number, TreeNode>();
@@ -74,10 +78,6 @@ function buildTree(menus: MenuVo[]): TreeNode[] {
     }
   }
   return roots;
-}
-
-interface TreeNode extends MenuVo {
-  children: TreeNode[];
 }
 
 /**
