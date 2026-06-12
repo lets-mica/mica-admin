@@ -8,6 +8,10 @@
  *   4. generateMenus 把路由转为菜单（菜单名读 meta.title，active 路径从
  *      router.getRoutes() 取规范化后的 path）
  *
+ * 重要：fetchMenuListAsync 必须返回**树**结构（每个节点含 children），
+ * vben 内部用 mapTree 对 children 递归；对扁平数组只做单层 transform，
+ * 会导致菜单拍平、目录无法展开。
+ *
  * 后端约定（与 vben RouteRecordStringComponent 对齐）：
  *   - 顶级菜单 component = 'Layout'（MenuVoUtil 自动填）
  *   - 叶子菜单 component = 'system/user/index' 等相对 views 路径
@@ -15,7 +19,7 @@
  *   - meta.noCache = true ↔ 关闭 keep-alive
  *   - meta.title / meta.icon 直接作为菜单显示名 / 图标
  *
- * 重要：mica-admin 后端 MenuVoUtil 只对顶级菜单 path 加前导 '/',
+ * path 处理：mica-admin 后端 MenuVoUtil 只对顶级菜单 path 加前导 '/',
  *   子菜单 path 仍是相对的 'user'、'role' 等。vben 在 accessible.ts 里
  *   对顶级目录设 redirect 的逻辑要求 firstChild.path.startsWith('/')，
  *   否则顶级目录访问时会渲染空白。所以这里把所有 path 拼成完整绝对路径
@@ -81,13 +85,14 @@ function buildTree(menus: MenuVo[]): TreeNode[] {
 }
 
 /**
- * 把菜单树摊平为 vben 期望的 RouteRecordStringComponent 数组，
- * 并把每个节点 path 升级为完整绝对路径。
+ * 把 MenuVo 树转为 vben 期望的 RouteRecordStringComponent 树。
+ * 在原地上升级每个节点的 path 为完整绝对路径，**保留 children 嵌套关系**。
  */
-function flattenWithFullPath(roots: TreeNode[]): RouteRecordStringComponent[] {
-  const result: RouteRecordStringComponent[] = [];
-
-  function visit(node: TreeNode, parentFullPath: string) {
+function upgradeTreePaths(
+  roots: TreeNode[],
+  parentFullPath = '',
+): RouteRecordStringComponent[] {
+  return roots.map((node) => {
     const title = node.meta?.title ?? node.name;
     const icon = node.meta?.icon ?? undefined;
     const noCache = node.meta?.noCache ?? false;
@@ -97,7 +102,13 @@ function flattenWithFullPath(roots: TreeNode[]): RouteRecordStringComponent[] {
       ? `${EXTERNAL_PATH_PREFIX}/${node.id}`
       : joinPath(parentFullPath, node.path ?? '');
 
-    result.push({
+    const routeChildren =
+      node.children.length > 0
+        ? upgradeTreePaths(node.children, finalPath)
+        : undefined;
+
+    return {
+      children: routeChildren,
       component: external ? undefined : node.component,
       meta: {
         hideInMenu: node.hidden,
@@ -109,25 +120,14 @@ function flattenWithFullPath(roots: TreeNode[]): RouteRecordStringComponent[] {
       name: node.name,
       path: finalPath,
       redirect: node.redirect,
-    } as unknown as RouteRecordStringComponent);
-
-    if (node.children.length > 0) {
-      for (const c of node.children) {
-        visit(c, finalPath);
-      }
-    }
-  }
-
-  for (const r of roots) {
-    visit(r, '');
-  }
-  return result;
+    } as unknown as RouteRecordStringComponent;
+  });
 }
 
 async function fetchMenuListAsync(): Promise<RouteRecordStringComponent[]> {
   const menus = (await getAllMenusApi()) ?? [];
   const tree = buildTree(menus);
-  return flattenWithFullPath(tree);
+  return upgradeTreePaths(tree);
 }
 
 async function generateAccess(options: GenerateMenuAndRoutesOptions) {

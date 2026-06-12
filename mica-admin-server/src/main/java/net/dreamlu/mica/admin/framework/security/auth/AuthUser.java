@@ -6,6 +6,7 @@ import net.dreamlu.mica.admin.framework.security.jwt.JwtUser;
 import net.dreamlu.mica.admin.framework.security.pojo.DeptInfo;
 import net.dreamlu.mica.admin.framework.security.pojo.PostInfo;
 import net.dreamlu.mica.admin.framework.security.pojo.RoleInfo;
+import net.dreamlu.mica.admin.framework.security.utils.SecurityUtil;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -59,7 +60,7 @@ public class AuthUser extends User {
 	public List<String> getPermissions() {
 		return this.getAuthorities().stream()
 			.map(GrantedAuthority::getAuthority)
-			.filter(authority -> authority != null && !authority.startsWith("ROLE_"))
+			.filter(authority -> authority != null && !authority.startsWith(SecurityUtil.SECURITY_ROLE_PREFIX))
 			.collect(Collectors.toList());
 	}
 
