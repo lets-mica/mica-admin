@@ -339,6 +339,7 @@ async function handleExport() {
       <div class="mb-3 flex flex-wrap items-center gap-2">
         <NButton v-access:code="'system:menu:add'" type="primary" size="small" @click="handleAdd">新增</NButton>
         <NButton
+          v-access:code="'system:menu:export'"
           size="small"
           type="warning"
           :loading="exporting"
