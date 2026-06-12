@@ -103,7 +103,13 @@ function setupAccessGuard(router: Router) {
     }
 
     // 4. 后端动态路由：用 router.resolve 强制重匹配（addRoute 后必须重新解析路径，
-    //    否则 vue-router 会拿着未注册前的 to.matched 继续导航，最终落到 404）
+    //    否则 vue-router 会拿着未注册前的 to.matched 继续导航，最终落到 404）。
+    //    仅当 to 没匹配到任何路由记录时才重新解析，否则会因为再次返回同一路径
+    //    而触发 vue-router 的 "Infinite redirect in navigation guard"。
+    if (to.matched.length > 0) {
+      return true;
+    }
+
     const redirectPath = (from.query.redirect ??
       (to.path === preferences.app.defaultHomePath
         ? preferences.app.defaultHomePath
