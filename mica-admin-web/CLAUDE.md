@@ -122,10 +122,10 @@ defaultResponseInterceptor({
 
 ### 4. 路由系统
 
-- **核心路由** (`src/router/routes/core.ts`)：根路由、auth/*、404、403、500
-- **模块路由** (`src/router/routes/modules/`)：dashboard, system, monitor, tools, components
-- **动态路由** (`src/router/access.ts`)：通过 `generateAccessible()` 基于用户角色 + 后端菜单动态生成，使用 `import.meta.glob('../views/**/*.vue')` 自动匹配页面组件
-- **路由守卫** (`src/router/guard.ts`)：`setupCommonGuard`（进度条）+ `setupAccessGuard`（认证 + 动态路由生成）
+- **核心路由** (`src/router/routes/core.ts`)：根路由 `Root`（挂载 `BasicLayout`）、auth/*、404、个人中心与我的消息（`Profile` / `UserMessage` 等不走权限的内建页面）
+- **后端动态路由** (`src/router/access.ts`)：`preferences.app.accessMode === 'backend'`，`generateAccessible('backend', ...)` 拉取 `GET /api/auth/menus` 后用 `import.meta.glob('../views/**/*.vue')` 匹配页面组件、生成菜单与可访问路由。`access.ts` 还负责把后端扁平列表 `buildTree` 拼成父子树、把所有节点 path 升级为完整绝对路径、给外链生成 `/__external__/<id>` 占位
+- **路由守卫** (`src/router/guard.ts`)：`setupCommonGuard`（进度条）+ `setupAccessGuard`（认证 + 触发动态路由生成）
+- **历史**：`src/router/routes/modules/` 目录已废弃（`accessMode` 切到 `backend` 后不再扫描），新增业务页面**不要**在该目录写静态路由
 
 ### 5. UI 组件使用约定
 
@@ -206,8 +206,8 @@ Vite dev server 默认将 `/api` 代理到 `http://localhost:8080`（在 `vite.c
 
 1. 在 `src/api/system/`（或对应模块）创建 API 文件
 2. 在 `src/views/<module>/<page>/index.vue` 创建页面（参考已有页面）
-3. 在 `src/router/routes/modules/<module>.ts` 注册路由
-4. 在 `src/locales/langs/zh-CN/` 和 `en-US/` 添加 i18n 翻译
+3. **不再写前端静态路由**：在 mica-admin 后端 `sys_menu` 表新增菜单项（`component` 填 `views/` 下的相对路径，如 `system/user/index`；`name` 全局唯一；`path` 填相对路径，顶级菜单由后端 `MenuVoUtil` 自动加前导 `/`；`parentId` 挂到对应父菜单），重新登录即可看到新菜单
+4. 在 `src/locales/langs/zh-CN/` 和 `en-US/` 添加 i18n 翻译（菜单 `title` 由后端直接返回字符串，但页面内的提示用 i18n）
 
 ### 新增 API 方法
 
