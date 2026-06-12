@@ -20,6 +20,37 @@ const fallbackNotFoundRoute: RouteRecordRaw = {
   path: '/:path(.*)*',
 };
 
+/**
+ * 个人中心与我的消息等"内建"页面：
+ *   - 不走权限，任何登录用户都必须可用
+ *   - 后端动态菜单不返回这两条，否则会出现重复 name
+ *   - 放这里保证 backend 模式下头像下拉 / 通知红点跳转能命中路由
+ */
+const builtInAccountRoutes: RouteRecordRaw[] = [
+  {
+    component: () => import('#/views/system/user/profile/index.vue'),
+    meta: {
+      hideInMenu: true,
+      hideInTab: false,
+      icon: 'lucide:user',
+      title: $t('page.auth.profile'),
+    },
+    name: 'Profile',
+    path: '/profile',
+  },
+  {
+    component: () => import('#/views/system/user/message.vue'),
+    meta: {
+      hideInMenu: true,
+      hideInTab: false,
+      icon: 'lucide:mail',
+      title: $t('page.system.userMessage'),
+    },
+    name: 'UserMessage',
+    path: '/user/message',
+  },
+];
+
 /** 基本路由，这些路由是必须存在的 */
 const coreRoutes: RouteRecordRaw[] = [
   /**
@@ -36,7 +67,7 @@ const coreRoutes: RouteRecordRaw[] = [
     name: 'Root',
     path: '/',
     redirect: preferences.app.defaultHomePath,
-    children: [],
+    children: [...builtInAccountRoutes],
   },
   {
     component: AuthPageLayout,
