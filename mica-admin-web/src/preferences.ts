@@ -9,6 +9,8 @@ export const overridesPreferences = defineOverridesPreferences({
   // overrides
   app: {
     accessMode: 'backend',
+    // 后端菜单仪表盘叶子路由为 /dashboard/analytics，非目录 /dashboard
+    defaultHomePath: '/dashboard/analytics',
     name: import.meta.env.VITE_APP_TITLE,
   },
   logo: {
