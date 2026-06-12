@@ -1,15 +1,15 @@
 {
   "version": "0.0.1",
   "dependencies": {
-    "vue": "*",
+    "vue": "catalog:",
     "@vben-core/composables": "workspace:*",
     "@vben-core/typings": "workspace:*",
-    "zod": "^3.25.76",
-    "@vueuse/core": "*",
-    "@vee-validate/zod": "^4.15.1",
+    "zod": "catalog:",
+    "@vueuse/core": "catalog:",
+    "@vee-validate/zod": "catalog:",
     "@vben-core/shadcn-ui": "workspace:*",
     "@vben-core/icons": "workspace:*",
-    "vee-validate": "*",
+    "vee-validate": "catalog:",
     "@vben-core/shared": "workspace:*"
   },
   "types": "./src/index.ts",

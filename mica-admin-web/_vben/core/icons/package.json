@@ -1,9 +1,9 @@
 {
     "version":  "0.0.1",
     "dependencies":  {
-                         "vue":  "*",
-                         "@lucide/vue":  "*",
-                         "@iconify/vue":  "*"
+                         "vue":  "catalog:",
+                         "@lucide/vue":  "catalog:",
+                         "@iconify/vue":  "catalog:"
                      },
     "types":  "./src/index.ts",
     "type":  "module",

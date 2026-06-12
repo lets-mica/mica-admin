@@ -2,12 +2,12 @@
     "version":  "0.0.1",
     "dependencies":  {
                          "@vben/stores":  "workspace:*",
-                         "vue-router":  "^4.5.0",
-                         "watermark-js-plus":  "*",
+                         "vue-router":  "catalog:",
+                         "watermark-js-plus":  "catalog:",
                          "@vben-core/composables":  "workspace:*",
-                         "@vueuse/core":  "*",
+                         "@vueuse/core":  "catalog:",
                          "@vben/preferences":  "workspace:*",
-                         "vue":  "*",
+                         "vue":  "catalog:",
                          "@vben/utils":  "workspace:*",
                          "@vben/types":  "workspace:*"
                      },

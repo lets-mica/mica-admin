@@ -1,7 +1,7 @@
 {
     "version":  "0.0.1",
     "dependencies":  {
-                         "vue":  "*",
+                         "vue":  "catalog:",
                          "@vben/stores":  "workspace:*",
                          "@vben/utils":  "workspace:*",
                          "@vben/preferences":  "workspace:*",

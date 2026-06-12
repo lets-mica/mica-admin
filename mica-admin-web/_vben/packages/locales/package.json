@@ -1,10 +1,10 @@
 {
     "version":  "0.0.1",
     "dependencies":  {
-                         "vue":  "*",
-                         "vue-i18n":  "*",
+                         "vue":  "catalog:",
+                         "vue-i18n":  "catalog:",
                          "@vben-core/composables":  "workspace:*",
-                         "@intlify/core-base":  "*"
+                         "@intlify/core-base":  "catalog:"
                      },
     "types":  "./src/index.ts",
     "type":  "module",

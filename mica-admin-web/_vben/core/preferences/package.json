@@ -1,9 +1,9 @@
 {
     "version":  "0.0.1",
     "dependencies":  {
-                         "vue":  "*",
+                         "vue":  "catalog:",
                          "@vben-core/typings":  "workspace:*",
-                         "@vueuse/core":  "*",
+                         "@vueuse/core":  "catalog:",
                          "@vben-core/shared":  "workspace:*"
                      },
     "types":  "./src/index.ts",

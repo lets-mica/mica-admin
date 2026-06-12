@@ -1,9 +1,9 @@
 {
     "version":  "0.0.1",
     "dependencies":  {
-                         "axios":  "*",
+                         "axios":  "catalog:",
                          "@vben/utils":  "workspace:*",
-                         "qs":  "*",
+                         "qs":  "catalog:",
                          "@vben/locales":  "workspace:*"
                      },
     "types":  "./src/index.ts",

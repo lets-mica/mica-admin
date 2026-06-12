@@ -1,13 +1,13 @@
 {
     "version":  "0.0.1",
     "dependencies":  {
-                         "vue-router":  "^4.5.0",
+                         "vue-router":  "catalog:",
                          "@vben-core/typings":  "workspace:*",
-                         "secure-ls": "^2.0.0",
-                         "pinia-plugin-persistedstate":  "*",
-                         "vue":  "*",
+                         "secure-ls": "catalog:",
+                         "pinia-plugin-persistedstate":  "catalog:",
+                         "vue":  "catalog:",
                          "@vben-core/preferences":  "workspace:*",
-                         "pinia":  "*",
+                         "pinia":  "catalog:",
                          "@vben-core/shared":  "workspace:*"
                      },
     "types":  "./src/index.ts",

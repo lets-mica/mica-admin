@@ -1,11 +1,11 @@
 {
     "version":  "0.0.1",
     "dependencies":  {
-                         "sortablejs":  "*",
-                         "vue":  "*",
-                         "@vueuse/core":  "*",
+                         "sortablejs":  "catalog:",
+                         "vue":  "catalog:",
+                         "@vueuse/core":  "catalog:",
                          "@vben-core/shared":  "workspace:*",
-                         "reka-ui":  "*"
+                         "reka-ui":  "catalog:"
                      },
     "types":  "./src/index.ts",
     "type":  "module",

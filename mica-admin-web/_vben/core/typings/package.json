@@ -1,8 +1,8 @@
 {
     "version":  "0.0.1",
     "dependencies":  {
-                         "vue-router":  "^4.5.0",
-                         "vue":  "*"
+                         "vue-router":  "catalog:",
+                         "vue":  "catalog:"
                      },
     "types":  "./src/index.ts",
     "type":  "module",

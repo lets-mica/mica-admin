@@ -1,10 +1,10 @@
 {
     "version":  "0.0.1",
     "dependencies":  {
-                         "vue":  "*",
+                         "vue":  "catalog:",
                          "@vben-core/composables":  "workspace:*",
                          "@vben-core/typings":  "workspace:*",
-                         "@vueuse/core":  "*",
+                         "@vueuse/core":  "catalog:",
                          "@vben-core/design":  "workspace:*",
                          "@vben-core/shadcn-ui":  "workspace:*",
                          "@vben-core/icons":  "workspace:*"
