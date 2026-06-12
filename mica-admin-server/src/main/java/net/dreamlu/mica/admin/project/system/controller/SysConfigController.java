@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -94,6 +95,20 @@ public class SysConfigController extends BaseController {
 	@PreAuthorize("@sec.hasPermission('system:config:remove')")
 	public void remove(@NotEmpty @RequestBody Set<Long> ids) {
 		configService.removeByIds(ids);
+	}
+
+	@Operation(summary = "获取系统默认偏好设置（扁平 KV）")
+	@GetMapping("preference/all")
+	public Map<String, String> listPreferences() {
+		return configService.listPreferenceDefaults();
+	}
+
+	@Operation(summary = "批量保存全局偏好设置")
+	@ApiLog("保存全局偏好")
+	@PutMapping("preference/batch")
+	@PreAuthorize("@sec.hasPermission('system:config:edit')")
+	public void savePreferences(@RequestBody Map<String, String> kv) {
+		configService.savePreferenceBatch(kv);
 	}
 
 }

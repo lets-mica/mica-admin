@@ -1,4 +1,7 @@
-import { defineOverridesPreferences } from '@vben/preferences';
+import { defineOverridesPreferences, preferences, updatePreferences } from '@vben/preferences';
+
+import { getPreferenceDefaultsApi } from '#/api/core';
+import { mergePreferences, unflattenPreferences } from '#/utils/preference-codec';
 
 /**
  * @description 项目配置文件
@@ -20,3 +23,20 @@ export const overridesPreferences = defineOverridesPreferences({
     sourceDark: '/logo-dark.svg',
   },
 });
+
+/**
+ * 拉取服务端系统默认偏好（sys_config.user_id IS NULL）并合并到本地 state。
+ * 失败时静默忽略，避免阻塞首屏。
+ */
+export async function loadServerPreferences(): Promise<void> {
+  try {
+    const kv = await getPreferenceDefaultsApi();
+    if (!kv || Object.keys(kv).length === 0) return;
+    const serverObj = unflattenPreferences(kv);
+    const merged = mergePreferences(preferences, serverObj);
+    updatePreferences(merged);
+  } catch (e) {
+    // 接口失败时静默降级（仍走 localStorage + 默认值）
+    console.warn('[preferences] load server defaults failed:', e);
+  }
+}

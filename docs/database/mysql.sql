@@ -13,8 +13,37 @@ CREATE TABLE `sys_config`  (
   `updated_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
   `updated_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_field`(`field`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '参数配置表' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- 偏好设置默认（全局共享，命名约定：field = preference.{block}.{leaf}）
+-- ----------------------------
+INSERT INTO `sys_config` (`name`, `field`, `value`, `is_system`, `remark`) VALUES
+('偏好-主题模式',           'preference.theme.mode',                'dark',         0, 'light/dark'),
+('偏好-内置主题',           'preference.theme.builtinType',         'default',      0, 'default/紫罗兰/樱花粉/柠檬黄/天蓝色/浅绿色/锌色灰/深绿色/深蓝色/橙黄色/玫瑰红/中性色/石板灰/中灰色'),
+('偏好-主题色',             'preference.theme.colorPrimary',        'hsl(212 100% 45%)', 0, '主题主色 HSL'),
+('偏好-成功色',             'preference.theme.colorSuccess',        'hsl(144 57% 58%)',  0, ''),
+('偏好-警告色',             'preference.theme.colorWarning',        'hsl(42 84% 61%)',   0, ''),
+('偏好-错误色',             'preference.theme.colorDestructive',    'hsl(348 100% 61%)', 0, ''),
+('偏好-圆角',               'preference.theme.radius',              '0.5',          0, '0/0.25/0.5/0.75/1'),
+('偏好-字体大小',           'preference.theme.fontSize',            '16',           0, 'px'),
+('偏好-半深色 header',      'preference.theme.semiDarkHeader',      'false',        0, ''),
+('偏好-半深色 sidebar',     'preference.theme.semiDarkSidebar',     'false',        0, ''),
+('偏好-半深色 sidebar 子',  'preference.theme.semiDarkSidebarSub',  'false',        0, ''),
+('偏好-布局',               'preference.app.layout',                'sidebar-nav', 0, 'sidebar-nav/header-nav/...'),
+('偏好-色弱模式',           'preference.app.colorWeakMode',         'false',        0, ''),
+('偏好-灰色模式',           'preference.app.colorGrayMode',         'false',        0, ''),
+('偏好-水印',               'preference.app.watermark',             'false',        0, ''),
+('偏好-水印内容',           'preference.app.watermarkContent',      '',             0, ''),
+('偏好-动态标题',           'preference.app.dynamicTitle',          'true',         0, ''),
+('偏好-侧边栏折叠',         'preference.sidebar.collapsed',         'false',        0, ''),
+('偏好-Tab 风格',           'preference.tabbar.styleType',          'chrome',       0, ''),
+('偏好-Tab 启用',           'preference.tabbar.enable',             'true',         0, ''),
+('偏好-面包屑启用',         'preference.breadcrumb.enable',         'true',         0, ''),
+('偏好-快捷键全局搜索',     'preference.shortcutKeys.globalSearch', 'true',         0, ''),
+('偏好-快捷键全局注销',     'preference.shortcutKeys.globalLogout', 'true',         0, '');
 
 -- ----------------------------
 -- Records of sys_config
