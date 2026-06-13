@@ -269,6 +269,14 @@ async function initComponentAdapter() {
         duration: 0,
       });
     },
+    // 通用成功提示
+    success: (content) => {
+      message.success(content);
+    },
+    // 通用失败提示
+    error: (content) => {
+      message.error(content);
+    },
   });
 }
 
