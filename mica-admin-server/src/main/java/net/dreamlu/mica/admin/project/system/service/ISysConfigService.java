@@ -42,18 +42,4 @@ public interface ISysConfigService extends IService<SysConfig> {
 		return key == null ? null : getByField(key.getField());
 	}
 
-	/**
-	 * 获取系统默认偏好（整存 JSON 字符串）
-	 *
-	 * @return 偏好 JSON 字符串，无配置时返回空对象 "{}"
-	 */
-	String getPreferenceJson();
-
-	/**
-	 * 保存系统默认偏好（整存 JSON 字符串，需管理员权限，由 Controller 控制）
-	 *
-	 * @param json 偏好 JSON 字符串
-	 */
-	void savePreferenceJson(String json);
-
 }

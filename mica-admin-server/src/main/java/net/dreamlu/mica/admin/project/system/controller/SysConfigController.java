@@ -9,11 +9,13 @@ import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import net.dreamlu.mica.admin.common.enums.ConfigKeyEnum;
 import net.dreamlu.mica.admin.framework.annotation.ApiLog;
 import net.dreamlu.mica.admin.framework.base.BaseController;
 import net.dreamlu.mica.admin.project.system.entity.SysConfig;
 import net.dreamlu.mica.admin.project.system.pojo.ConfigQuery;
 import net.dreamlu.mica.admin.project.system.service.ISysConfigService;
+import net.dreamlu.mica.core.utils.JsonUtil;
 import net.dreamlu.mica.core.validation.CreateGroup;
 import net.dreamlu.mica.core.validation.UpdateGroup;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -100,17 +103,40 @@ public class SysConfigController extends BaseController {
 
 	@Operation(summary = "获取系统默认偏好设置（整存 JSON）")
 	@GetMapping("preference/default")
-	public Map<String, Object> getPreferences() throws IOException {
-		String json = configService.getPreferenceJson();
-		return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
+	public Map<String, Object> getPreferences() {
+		// 读取数据库中的配置
+		SysConfig sysConfig = configService.getByField(ConfigKeyEnum.PREFERENCE_DEFAULT);
+		if (sysConfig == null) {
+			return Collections.emptyMap();
+		}
+		return JsonUtil.readMap(sysConfig.getValue());
 	}
 
 	@Operation(summary = "保存系统默认偏好设置（整存 JSON）")
 	@ApiLog("保存系统默认偏好")
 	@PutMapping("preference/default")
 	@PreAuthorize("@sec.hasPermission('system:config:edit')")
-	public void savePreferences(@RequestBody Map<String, Object> json) throws IOException {
-		configService.savePreferenceJson(objectMapper.writeValueAsString(json));
+	public void savePreferences(@RequestBody Map<String, Object> json) {
+		// 避免 null
+		if (json == null) {
+			json = Collections.emptyMap();
+		}
+		// 偏好设置 json
+		String preferenceJson = JsonUtil.toJson(json);
+		// 读取数据库中的配置
+		ConfigKeyEnum configKeyEnum = ConfigKeyEnum.PREFERENCE_DEFAULT;
+		SysConfig sysConfig = configService.getByField(configKeyEnum);
+		if (sysConfig == null) {
+			sysConfig = new SysConfig();
+			sysConfig.setField(configKeyEnum.getField());
+			sysConfig.setName(configKeyEnum.getDesc());
+			sysConfig.setIsSystem(true);
+			sysConfig.setRemark("全局默认偏好，整 JSON 存储");
+			sysConfig.setValue(preferenceJson);
+		} else {
+			sysConfig.setValue(preferenceJson);
+		}
+		configService.saveOrUpdate(sysConfig);
 	}
 
 }

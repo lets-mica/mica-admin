@@ -4,14 +4,12 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.dreamlu.mica.admin.common.enums.ConfigKeyEnum;
-import net.dreamlu.mica.core.utils.StringUtil;
-import net.dreamlu.mica.admin.project.system.mapper.SysConfigMapper;
 import net.dreamlu.mica.admin.project.system.entity.SysConfig;
+import net.dreamlu.mica.admin.project.system.mapper.SysConfigMapper;
 import net.dreamlu.mica.admin.project.system.pojo.ConfigQuery;
 import net.dreamlu.mica.admin.project.system.service.ISysConfigService;
+import net.dreamlu.mica.core.utils.StringUtil;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -45,38 +43,8 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 		if (StrUtil.isBlank(field)) {
 			return null;
 		}
-		return this.getOne(new LambdaQueryWrapper<SysConfig>().eq(SysConfig::getField, field), false);
+		LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
+		wrapper.eq(SysConfig::getField, field);
+		return super.getOne(wrapper, false);
 	}
-
-	@Override
-	public String getPreferenceJson() {
-		SysConfig cfg = this.getByField(ConfigKeyEnum.PREFERENCE_DEFAULT);
-		if (cfg == null) {
-			return "{}";
-		}
-		String value = cfg.getValue();
-		return StrUtil.isBlank(value) ? "{}" : value;
-	}
-
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void savePreferenceJson(String json) {
-		if (StrUtil.isBlank(json)) {
-			json = "{}";
-		}
-		SysConfig cfg = this.getByField(ConfigKeyEnum.PREFERENCE_DEFAULT);
-		if (cfg == null) {
-			cfg = new SysConfig();
-			cfg.setField(ConfigKeyEnum.PREFERENCE_DEFAULT.getField());
-			cfg.setName(ConfigKeyEnum.PREFERENCE_DEFAULT.getDesc());
-			cfg.setIsSystem(false);
-			cfg.setRemark("全局默认偏好，整 JSON 存储");
-			cfg.setValue(json);
-			this.save(cfg);
-		} else {
-			cfg.setValue(json);
-			this.updateById(cfg);
-		}
-	}
-
 }
