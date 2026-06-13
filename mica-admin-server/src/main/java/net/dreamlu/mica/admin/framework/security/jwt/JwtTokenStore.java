@@ -1,7 +1,6 @@
 package net.dreamlu.mica.admin.framework.security.jwt;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import eu.bitwalker.useragentutils.UserAgent;
 import net.dreamlu.mica.admin.framework.config.MicaAdminSecurityProperties;
 import net.dreamlu.mica.admin.framework.config.MicaAdminSecurityProperties.JwtToken;
 import net.dreamlu.mica.admin.framework.security.auth.AuthUser;
@@ -10,6 +9,8 @@ import net.dreamlu.mica.core.utils.*;
 import net.dreamlu.mica.ip2region.core.Ip2regionSearcher;
 import net.dreamlu.mica.ip2region.core.IpInfo;
 import net.dreamlu.mica.redis.cache.MicaRedisCache;
+import nl.basjes.parse.useragent.UserAgent;
+import nl.basjes.parse.useragent.UserAgentAnalyzer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -32,14 +33,17 @@ public class JwtTokenStore {
 	private final MicaRedisCache redisCache;
 	private final JwtToken jwtTokenProperties;
 	private final Ip2regionSearcher searcher;
+	private final UserAgentAnalyzer userAgentAnalyzer;
 
 	@Autowired
 	public JwtTokenStore(MicaRedisCache redisCache,
 						 MicaAdminSecurityProperties properties,
-						 Ip2regionSearcher searcher) {
+						 Ip2regionSearcher searcher,
+						 UserAgentAnalyzer userAgentAnalyzer) {
 		this.redisCache = redisCache;
 		this.jwtTokenProperties = properties.getJwtToken();
 		this.searcher = searcher;
+		this.userAgentAnalyzer = userAgentAnalyzer;
 	}
 
 	/**
@@ -61,21 +65,26 @@ public class JwtTokenStore {
 	 * @param expireTime expireTime
 	 */
 	public void save(HttpServletRequest request, AuthUser authUser, String token, Duration expireTime) {
-		String storePrefix = jwtTokenProperties.getStorePrefix();
-		// key md5 避免太长，aes 后特别长
-		String key = DigestUtil.md5Hex(token);
-		String ip = WebUtil.getIP(request);
-		UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader(HttpHeaders.USER_AGENT));
-		String browser = userAgent.getBrowser().getName();
 		TokenVo tokenVo = new TokenVo();
 		tokenVo.setUserName(authUser.getUsername());
 		tokenVo.setNickName(authUser.getNickName());
 		tokenVo.setDept(authUser.getDept().getName());
-		tokenVo.setBrowser(browser);
+		// token 前缀
+		String storePrefix = jwtTokenProperties.getStorePrefix();
+		// key md5 避免太长，aes 后特别长
+		String key = DigestUtil.md5Hex(token);
+		String ip = WebUtil.getIP(request);
 		tokenVo.setIp(ip);
 		IpInfo ipInfo = searcher.memorySearch(ip);
 		if (ipInfo != null) {
 			tokenVo.setAddress(ipInfo.getAddress());
+		}
+		// 解析浏览器信息
+		String userAgentString = request.getHeader(HttpHeaders.USER_AGENT);
+		if (StringUtil.isNotBlank(userAgentString)) {
+			UserAgent.ImmutableUserAgent userAgent = userAgentAnalyzer.parse(userAgentString);
+			String browser = userAgent.getValue(UserAgent.AGENT_NAME_VERSION_MAJOR);
+			tokenVo.setBrowser(browser);
 		}
 		// token 摘要，前6后8，中间4位占位符
 		tokenVo.setSummary(DesensitizationUtil.sensitive(token, 8, 8, CharPool.DOT, 4));

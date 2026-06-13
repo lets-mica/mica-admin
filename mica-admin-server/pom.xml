@@ -95,8 +95,8 @@
         </dependency>
         <!-- 解析客户端操作系统、浏览器等 -->
         <dependency>
-            <groupId>eu.bitwalker</groupId>
-            <artifactId>UserAgentUtils</artifactId>
+            <groupId>nl.basjes.parse.useragent</groupId>
+            <artifactId>yauaa</artifactId>
         </dependency>
         <!-- jwt Token 生成与解析-->
         <dependency>

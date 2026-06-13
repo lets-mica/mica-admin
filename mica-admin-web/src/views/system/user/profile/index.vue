@@ -79,8 +79,8 @@ const logPagination = reactive({ page: 1, pageSize: 10, total: 0 });
 const logColumns: DataTableColumns<LogItem> = [
   { title: '行为', key: 'description', ellipsis: { tooltip: true } },
   { title: 'IP', key: 'requestIp', width: 160 },
-  { title: 'IP来源', key: 'address', width: 200, ellipsis: { tooltip: true } },
-  { title: '操作系统', key: 'os', width: 120 },
+  { title: 'IP来源', key: 'address', width: 180, ellipsis: { tooltip: true } },
+  { title: '操作系统', key: 'os', width: 160 },
   { title: '浏览器', key: 'browser', width: 120 },
   {
     title: '请求耗时',

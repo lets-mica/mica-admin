@@ -23,7 +23,7 @@
         <spring-boot.version>2.7.18</spring-boot.version>
         <mybatis-plus.version>3.5.9</mybatis-plus.version>
         <undertow.version>2.2.39.Final</undertow.version>
-        <bitwalker.version>1.21</bitwalker.version>
+        <yauaa.version>7.32.0</yauaa.version>
         <oshi.version>6.1.6</oshi.version>
         <excel-spring-boot-starter.version>1.2.8</excel-spring-boot-starter.version>
         <freemarker.version>2.3.31</freemarker.version>
@@ -190,9 +190,9 @@
             </dependency>
             <!-- 解析客户端操作系统、浏览器等 -->
             <dependency>
-                <groupId>eu.bitwalker</groupId>
-                <artifactId>UserAgentUtils</artifactId>
-                <version>${bitwalker.version}</version>
+                <groupId>nl.basjes.parse.useragent</groupId>
+                <artifactId>yauaa</artifactId>
+                <version>${yauaa.version}</version>
             </dependency>
             <!-- 邮件模板 -->
             <dependency>

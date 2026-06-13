@@ -16,15 +16,14 @@
 
 package net.dreamlu.mica.admin.framework.syslog;
 
-import eu.bitwalker.useragentutils.Browser;
-import eu.bitwalker.useragentutils.OperatingSystem;
-import eu.bitwalker.useragentutils.UserAgent;
 import lombok.RequiredArgsConstructor;
 import net.dreamlu.mica.admin.project.system.entity.SysLog;
 import net.dreamlu.mica.admin.project.system.service.ISysLogService;
 import net.dreamlu.mica.core.utils.BeanUtil;
 import net.dreamlu.mica.core.utils.StringUtil;
 import net.dreamlu.mica.ip2region.core.Ip2regionSearcher;
+import nl.basjes.parse.useragent.UserAgent;
+import nl.basjes.parse.useragent.UserAgentAnalyzer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -40,6 +39,7 @@ import org.springframework.scheduling.annotation.Async;
 public class SysLogListener {
 	private final ISysLogService sysLogService;
 	private final Ip2regionSearcher searcher;
+	private final UserAgentAnalyzer userAgentAnalyzer;
 
 	@Async
 	@Order
@@ -48,11 +48,15 @@ public class SysLogListener {
 		SysLog sysLog = new SysLog();
 		BeanUtil.copy(event, sysLog);
 		// 获取操作系统和浏览器信息
-		UserAgent userAgent = UserAgent.parseUserAgentString(event.getUserAgent());
-		OperatingSystem system = userAgent.getOperatingSystem();
-		sysLog.setOs(system.getName());
-		Browser browser = userAgent.getBrowser();
-		sysLog.setBrowser(browser.getName());
+		String userAgentString = event.getUserAgent();
+		if (StringUtil.isNotBlank(userAgentString)) {
+			UserAgent.ImmutableUserAgent userAgent = userAgentAnalyzer.parse(userAgentString);
+			String browser = userAgent.getValue(nl.basjes.parse.useragent.UserAgent.AGENT_NAME_VERSION_MAJOR);
+			String os = userAgent.getValue(nl.basjes.parse.useragent.UserAgent.OPERATING_SYSTEM_NAME_VERSION);
+			sysLog.setOs(os);
+			sysLog.setBrowser(browser);
+		}
+		// ip 信息
 		String requestIp = event.getRequestIp();
 		// ip 不为空，查找 ip 的地理信息
 		if (StringUtil.isNotBlank(requestIp)) {

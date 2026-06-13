@@ -20,8 +20,8 @@ const columns: DataTableColumns<LogItem> = [
   { title: 'IP', key: 'requestIp', width: 130 },
   { title: 'IP来源', key: 'address', width: 180, ellipsis: { tooltip: true } },
   { title: '描述', key: 'description', ellipsis: { tooltip: true } },
-  { title: '操作系统', key: 'os', width: 120 },
-  { title: '浏览器', key: 'browser', width: 110 },
+  { title: '操作系统', key: 'os', width: 160 },
+  { title: '浏览器', key: 'browser', width: 120 },
   {
     title: '请求耗时',
     key: 'requestTime',
