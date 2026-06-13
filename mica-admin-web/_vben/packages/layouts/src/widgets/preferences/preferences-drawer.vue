@@ -207,7 +207,7 @@ const { hasAccessByCodes } = useAccess();
 const canSaveAsDefault = computed(() => hasAccessByCodes(['system:config:edit']));
 const savingDefault = ref(false);
 
-const [Drawer] = useVbenDrawer();
+const [Drawer, drawerApi] = useVbenDrawer();
 
 const activeTab = ref('appearance');
 
@@ -316,7 +316,7 @@ async function handleSaveAsDefault() {
   savingDefault.value = true;
   try {
     await savePreferenceDefaultApi(preferences);
-    message.success?.('已保存为系统默认偏好');
+    drawerApi.close();
   } catch (e) {
     message.error?.(`保存失败：${(e as Error)?.message ?? '未知错误'}`);
   } finally {
