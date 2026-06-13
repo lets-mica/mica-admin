@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import net.dreamlu.mica.admin.common.enums.ConfigKeyEnum;
 import net.dreamlu.mica.core.utils.StringUtil;
 import net.dreamlu.mica.admin.project.system.mapper.SysConfigMapper;
 import net.dreamlu.mica.admin.project.system.entity.SysConfig;
@@ -26,8 +27,6 @@ import java.util.List;
 @Service
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig> implements ISysConfigService {
 
-	private static final String PREFERENCE_FIELD = "preference.default";
-
 	@Override
 	public Wrapper<SysConfig> getQueryWrapper(ConfigQuery query) {
 		LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
@@ -42,8 +41,16 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 	}
 
 	@Override
+	public SysConfig getByField(String field) {
+		if (StrUtil.isBlank(field)) {
+			return null;
+		}
+		return this.getOne(new LambdaQueryWrapper<SysConfig>().eq(SysConfig::getField, field), false);
+	}
+
+	@Override
 	public String getPreferenceJson() {
-		SysConfig cfg = this.getOne(buildPreferenceWrapper(), false);
+		SysConfig cfg = this.getByField(ConfigKeyEnum.PREFERENCE_DEFAULT);
 		if (cfg == null) {
 			return "{}";
 		}
@@ -57,11 +64,11 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 		if (StrUtil.isBlank(json)) {
 			json = "{}";
 		}
-		SysConfig cfg = this.getOne(buildPreferenceWrapper(), false);
+		SysConfig cfg = this.getByField(ConfigKeyEnum.PREFERENCE_DEFAULT);
 		if (cfg == null) {
 			cfg = new SysConfig();
-			cfg.setField(PREFERENCE_FIELD);
-			cfg.setName("偏好-系统默认");
+			cfg.setField(ConfigKeyEnum.PREFERENCE_DEFAULT.getField());
+			cfg.setName(ConfigKeyEnum.PREFERENCE_DEFAULT.getDesc());
 			cfg.setIsSystem(false);
 			cfg.setRemark("全局默认偏好，整 JSON 存储");
 			cfg.setValue(json);
@@ -70,10 +77,6 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
 			cfg.setValue(json);
 			this.updateById(cfg);
 		}
-	}
-
-	private LambdaQueryWrapper<SysConfig> buildPreferenceWrapper() {
-		return new LambdaQueryWrapper<SysConfig>().eq(SysConfig::getField, PREFERENCE_FIELD);
 	}
 
 }

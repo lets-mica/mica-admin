@@ -2,7 +2,6 @@ package net.dreamlu.mica.admin.project.system.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -72,9 +71,7 @@ public class SysConfigController extends BaseController {
 	@Operation(summary = "参数值查询")
 	@GetMapping("configKey/{field}")
 	public SysConfig getConfigKey(@PathVariable String field) {
-		LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
-		wrapper.eq(SysConfig::getField, field);
-		return configService.getOne(wrapper);
+		return configService.getByField(field);
 	}
 
 	@Operation(summary = "新增参数配置")
