@@ -19,7 +19,7 @@ dromara:
         # 存储路径，上传的文件都会存储在这个路径下面，默认"/"，注意"/"结尾
         storagePath: E:/codes/ai/mica-admin/mica-admin-server/upload/
         # 拼接访问 URL 的域名，结尾保留 /
-        domain: http://localhost:8080/api/upload/
+        domain: http://localhost:${server.port}/api/upload/
         # 本地文件访问（通过 spring mvc 直接读取文件） 的 URL 匹配规则
         path-patterns: /api/upload/**
         enable-storage: true
