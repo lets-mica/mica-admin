@@ -64,3 +64,7 @@ Servers
 upload
 gen_code
 rocksdb
+
+# Flattened pom
+.flattened-pom.xml
+/**/.flattened-pom.xml

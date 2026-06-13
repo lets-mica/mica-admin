@@ -9,7 +9,7 @@
     <parent>
         <groupId>net.dreamlu</groupId>
         <artifactId>mica-admin</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <dependencies>
@@ -157,7 +157,7 @@
     </dependencies>
 
     <build>
-        <finalName>mica-admin</finalName>
+        <finalName>${project.artifactId}-${jar.version}</finalName>
         <resources>
             <resource>
                 <directory>src/main/java</directory>
@@ -204,7 +204,6 @@
                 <dependency>
                     <groupId>net.dreamlu</groupId>
                     <artifactId>mica-admin-web</artifactId>
-                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>

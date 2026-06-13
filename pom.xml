@@ -4,16 +4,22 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.dreamlu</groupId>
     <artifactId>mica-admin</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
     <name>mica-admin</name>
     <description>mica-admin 低代码管理平台</description>
 
     <properties>
+        <!-- 项目版本 -->
+        <revision>1.0-SNAPSHOT</revision>
+        <!-- 部署服务 jar 包版本 -->
+        <jar.version>1.0</jar.version>
+        <!-- java 版本 -->
         <java.version>1.8</java.version>
+        <maven-flatten.version>1.7.3</maven-flatten.version>
         <mica.version>2.7.18.7</mica.version>
         <jjwt.version>0.11.5</jjwt.version>
-        <spring.boot.version>2.7.18</spring.boot.version>
+        <spring-boot.version>2.7.18</spring-boot.version>
         <mybatis-plus.version>3.5.9</mybatis-plus.version>
         <undertow.version>2.2.39.Final</undertow.version>
         <bitwalker.version>1.21</bitwalker.version>
@@ -49,7 +55,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring.boot.version}</version>
+                <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -57,7 +63,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
-                <version>${spring.boot.version}</version>
+                <version>${spring-boot.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.springframework.boot</groupId>
@@ -69,7 +75,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter</artifactId>
-                <version>${spring.boot.version}</version>
+                <version>${spring-boot.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.springframework.boot</groupId>
@@ -81,7 +87,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
-                <version>${spring.boot.version}</version>
+                <version>${spring-boot.version}</version>
                 <scope>test</scope>
                 <exclusions>
                     <exclusion>
@@ -197,6 +203,12 @@
                 <artifactId>freemarker</artifactId>
                 <version>${freemarker.version}</version>
             </dependency>
+            <!-- web -->
+            <dependency>
+                <groupId>net.dreamlu</groupId>
+                <artifactId>mica-admin-web</artifactId>
+                <version>${revision}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -225,6 +237,76 @@
             </properties>
         </profile>
     </profiles>
+
+    <build>
+        <plugins>
+            <!-- 版本优化处理 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>${maven-flatten.version}</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>oss</flattenMode>
+                    <pomElements>
+                        <url>remove</url>
+                        <scm>remove</scm>
+                        <developers>remove</developers>
+                        <properties>remove</properties>
+                        <repositories>remove</repositories>
+                        <distributionManagement>remove</distributionManagement>
+                    </pomElements>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>build-info</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>repackage</id>
+                            <goals>
+                                <goal>repackage</goal> <!-- 这个目标会创建可执行的fat jar -->
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <excludes>
+                            <!-- 打包成额 jar 中排除 lombok -->
+                            <exclude>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                            </exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
     <repositories>
         <!--阿里云加速-->
