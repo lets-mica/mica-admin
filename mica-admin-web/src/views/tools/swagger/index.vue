@@ -5,7 +5,7 @@ import { ExternalLink as LinkIcon, RotateCw as ReloadIcon } from '@vben/icons';
 
 defineOptions({ name: 'SwaggerIndex' });
 
-const swaggerUrl = ref('http://localhost:8080/doc.html');
+const swaggerUrl = ref(import.meta.env.VITE_GLOB_SWAGGER_URL || '');
 const loading = ref(false);
 
 const iframeUrl = computed(() => swaggerUrl.value);
@@ -34,8 +34,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="p-4">
-    <NCard title="接口文档">
+  <div class="h-full p-4">
+    <NCard title="接口文档" class="h-full" :body-style="{ padding: 0 }">
       <template #header-extra>
         <NSpace>
           <NInput
@@ -55,7 +55,7 @@ onMounted(() => {
         </NSpace>
       </template>
 
-      <div v-if="loading" class="flex items-center justify-center h-[600px]">
+      <div v-if="loading" class="flex h-[600px] items-center justify-center">
         <span class="text-gray-500">加载中...</span>
       </div>
       <iframe
@@ -64,8 +64,7 @@ onMounted(() => {
         :src="iframeUrl"
         frameborder="0"
         width="100%"
-        height="600"
-        style="border-radius: 6px;"
+        style="display: block; height: calc(100vh - 200px); min-height: 600px;"
       />
     </NCard>
   </div>

@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
 import VueDevtools from 'vite-plugin-vue-devtools'
@@ -82,68 +82,71 @@ function vbenResolver(): import('vite').Plugin {
   }
 }
 
-export default defineConfig({
-  plugins: [
-    vbenResolver(),
-    Vue({
-      include: [/\.vue$/],
-      template: {
-        compilerOptions: {
-          preserveWhitespace: true,
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, root, '')
+  return {
+    plugins: [
+      vbenResolver(),
+      Vue({
+        include: [/\.vue$/],
+        template: {
+          compilerOptions: {
+            preserveWhitespace: true,
+          },
         },
-      },
-    }),
-    VueJsx(),
-    VueDevtools(),
-    Tailwindcss(),
-    AutoImport({
-      imports: [
-        'vue',
-        'vue-router',
-        'pinia',
-        {
-          'naive-ui': [
-            'useDialog',
-            'useMessage',
-            'useNotification',
-            'useLoadingBar',
-          ],
-        },
-      ],
-      dts: 'src/auto-imports.d.ts',
-      dirs: [],
-    }),
-    Components({
-      resolvers: [NaiveUiResolver()],
-      dts: 'src/components.d.ts',
-    }),
-  ],
-  resolve: {
-    alias: {
-      '#': resolve(root, 'src'),
-      '@': resolve(root, 'src'),
-    },
-  },
-  server: {
-    host: true,
-    port: 5888,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:18080',
-        changeOrigin: true,
-        ws: true,
+      }),
+      VueJsx(),
+      VueDevtools(),
+      Tailwindcss(),
+      AutoImport({
+        imports: [
+          'vue',
+          'vue-router',
+          'pinia',
+          {
+            'naive-ui': [
+              'useDialog',
+              'useMessage',
+              'useNotification',
+              'useLoadingBar',
+            ],
+          },
+        ],
+        dts: 'src/auto-imports.d.ts',
+        dirs: [],
+      }),
+      Components({
+        resolvers: [NaiveUiResolver()],
+        dts: 'src/components.d.ts',
+      }),
+    ],
+    resolve: {
+      alias: {
+        '#': resolve(root, 'src'),
+        '@': resolve(root, 'src'),
       },
     },
-  },
-  build: {
-    outDir: 'dist',
-    sourcemap: false,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          'naive-ui': ['naive-ui'],
+    server: {
+      host: true,
+      port: 5888,
+      proxy: {
+        '/api': {
+          target: env.VITE_PROXY_TARGET,
+          changeOrigin: true,
+          ws: true,
         },
       },
     },
-  },
+    build: {
+      outDir: 'dist',
+      sourcemap: false,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'naive-ui': ['naive-ui'],
+          },
+        },
+      },
+    },
+  }
 })
