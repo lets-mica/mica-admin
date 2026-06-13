@@ -586,15 +586,6 @@ async function handleSaveAsDefault() {
           <Copy class="mr-2 size-3" />
           {{ $t('preferences.copyPreferences') }}
         </VbenButton>
-        <VbenButton
-          :disabled="!mergedDiffPreference"
-          class="mr-4 w-full"
-          size="sm"
-          variant="ghost"
-          @click="handleClearCache"
-        >
-          {{ $t('preferences.clearAndLogout') }}
-        </VbenButton>
       </template>
     </Drawer>
   </div>
