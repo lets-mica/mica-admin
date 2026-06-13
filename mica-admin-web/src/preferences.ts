@@ -40,10 +40,8 @@ export async function loadServerPreferences(): Promise<void> {
     return;
   }
   try {
-    const json = await getPreferenceDefaultApi();
-    if (!json || json === '{}') return;
-    const serverObj = JSON.parse(json);
-    if (!serverObj || typeof serverObj !== 'object') return;
+    const serverObj = await getPreferenceDefaultApi();
+    if (!serverObj || typeof serverObj !== 'object' || Object.keys(serverObj).length === 0) return;
     updatePreferences({ ...preferences, ...serverObj });
   } catch (e) {
     // 接口失败时静默降级（仍走 localStorage + 默认值）

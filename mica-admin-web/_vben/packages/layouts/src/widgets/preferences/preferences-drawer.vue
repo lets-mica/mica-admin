@@ -315,7 +315,7 @@ async function handleSaveAsDefault() {
   if (savingDefault.value) return;
   savingDefault.value = true;
   try {
-    await savePreferenceDefaultApi(JSON.stringify(preferences));
+    await savePreferenceDefaultApi(preferences);
     message.success?.('已保存为系统默认偏好');
   } catch (e) {
     message.error?.(`保存失败：${(e as Error)?.message ?? '未知错误'}`);

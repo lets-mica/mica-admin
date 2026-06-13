@@ -4,6 +4,8 @@ package net.dreamlu.mica.admin.project.system.controller;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,7 +22,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -38,6 +42,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class SysConfigController extends BaseController {
 	private final ISysConfigService configService;
+	private final ObjectMapper objectMapper;
 
 	@Operation(summary = "参数导出")
 	@ApiLog("参数导出")
@@ -98,16 +103,17 @@ public class SysConfigController extends BaseController {
 
 	@Operation(summary = "获取系统默认偏好设置（整存 JSON）")
 	@GetMapping("preference/default")
-	public String getPreferences() {
-		return configService.getPreferenceJson();
+	public Map<String, Object> getPreferences() throws IOException {
+		String json = configService.getPreferenceJson();
+		return objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
 	}
 
 	@Operation(summary = "保存系统默认偏好设置（整存 JSON）")
 	@ApiLog("保存系统默认偏好")
 	@PutMapping("preference/default")
 	@PreAuthorize("@sec.hasPermission('system:config:edit')")
-	public void savePreferences(@RequestBody String json) {
-		configService.savePreferenceJson(json);
+	public void savePreferences(@RequestBody Map<String, Object> json) throws IOException {
+		configService.savePreferenceJson(objectMapper.writeValueAsString(json));
 	}
 
 }

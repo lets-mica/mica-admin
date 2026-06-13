@@ -5,18 +5,16 @@ import { api } from '#/api/request';
  */
 
 /**
- * 获取系统默认偏好（返回 JSON 字符串）
+ * 获取系统默认偏好（后端直接返回 JSON 对象，axios 拿到时已是对象）
  */
-export async function getPreferenceDefaultApi(): Promise<string> {
-  return api.get<string>('/api/system/config/preference/default');
+export async function getPreferenceDefaultApi(): Promise<Record<string, any>> {
+  return api.get<Record<string, any>>('/api/system/config/preference/default');
 }
 
 /**
  * 保存系统默认偏好（需 system:config:edit 权限）
- * @param json 完整的偏好 JSON 字符串
+ * @param json 完整的偏好对象
  */
-export async function savePreferenceDefaultApi(json: string): Promise<void> {
-  return api.put<void>('/api/system/config/preference/default', json, {
-    headers: { 'Content-Type': 'application/json' },
-  });
+export async function savePreferenceDefaultApi(json: Record<string, any>): Promise<void> {
+  return api.put<void>('/api/system/config/preference/default', json);
 }
