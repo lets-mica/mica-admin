@@ -70,7 +70,9 @@ function setupAccessGuard(router: Router) {
           replace: true,
         };
       }
-      return to;
+      // 已经在登录页了，直接放行（返回 true 而不是 to，
+      // 避免 to.redirectedFrom 把当前导航当成新一轮重定向）
+      return true;
     }
 
     // 2. 已登录但还没生成动态路由 → 必先生成（不区分目标是 coreRouteNames 还是后端菜单）。
