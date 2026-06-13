@@ -1,10 +1,10 @@
 package net.dreamlu.mica.admin.project.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.extension.service.IService;
 import net.dreamlu.mica.admin.framework.security.auth.AuthUser;
 import net.dreamlu.mica.admin.project.system.entity.SysFileStorage;
 import net.dreamlu.mica.admin.project.system.pojo.FileStorageQuery;
-import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

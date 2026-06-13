@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.dreamlu.mica.admin.project.system.mapper.SysRoleDeptMapper;
 import net.dreamlu.mica.admin.project.system.entity.SysRoleDept;
+import net.dreamlu.mica.admin.project.system.mapper.SysRoleDeptMapper;
 import net.dreamlu.mica.admin.project.system.service.ISysRoleDeptService;
 import org.springframework.stereotype.Service;
 

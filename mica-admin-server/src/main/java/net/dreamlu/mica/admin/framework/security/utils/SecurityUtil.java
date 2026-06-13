@@ -1,7 +1,7 @@
 package net.dreamlu.mica.admin.framework.security.utils;
 
-import net.dreamlu.mica.core.utils.WebUtil;
 import net.dreamlu.mica.admin.framework.security.auth.AuthUser;
+import net.dreamlu.mica.core.utils.WebUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;

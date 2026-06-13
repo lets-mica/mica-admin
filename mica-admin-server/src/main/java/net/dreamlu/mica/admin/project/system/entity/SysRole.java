@@ -6,11 +6,11 @@ import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import net.dreamlu.mica.admin.common.enums.DataScopeEnum;
 import net.dreamlu.mica.admin.common.enums.StatusEnum;
 import net.dreamlu.mica.admin.framework.base.BaseModel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * <p>

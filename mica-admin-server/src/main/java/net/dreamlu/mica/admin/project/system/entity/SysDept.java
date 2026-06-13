@@ -4,10 +4,10 @@ import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.baomidou.mybatisplus.annotation.TableLogic;
-import net.dreamlu.mica.admin.common.enums.EnabledEnum;
-import net.dreamlu.mica.admin.framework.base.BaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import net.dreamlu.mica.admin.common.enums.EnabledEnum;
+import net.dreamlu.mica.admin.framework.base.BaseModel;
 
 /**
  * <p>

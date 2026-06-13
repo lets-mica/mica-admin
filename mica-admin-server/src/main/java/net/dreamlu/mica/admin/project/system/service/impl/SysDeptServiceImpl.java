@@ -3,11 +3,11 @@ package net.dreamlu.mica.admin.project.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.dreamlu.mica.core.utils.StringUtil;
 import net.dreamlu.mica.admin.project.system.entity.SysDept;
 import net.dreamlu.mica.admin.project.system.mapper.SysDeptMapper;
 import net.dreamlu.mica.admin.project.system.pojo.DeptQuery;
 import net.dreamlu.mica.admin.project.system.service.ISysDeptService;
+import net.dreamlu.mica.core.utils.StringUtil;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

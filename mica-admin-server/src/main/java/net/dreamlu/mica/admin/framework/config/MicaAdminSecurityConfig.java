@@ -1,12 +1,12 @@
 package net.dreamlu.mica.admin.framework.config;
 
 import lombok.RequiredArgsConstructor;
-import net.dreamlu.mica.captcha.service.ICaptchaService;
 import net.dreamlu.mica.admin.framework.security.auth.SecAuthHandler;
 import net.dreamlu.mica.admin.framework.security.auth.SecAuthenticationProvider;
 import net.dreamlu.mica.admin.framework.security.auth.SecWebAuthDetailsSource;
 import net.dreamlu.mica.admin.framework.security.jwt.JwtAuthenticationTokenFilter;
 import net.dreamlu.mica.admin.framework.security.service.SecUserDetailsService;
+import net.dreamlu.mica.captcha.service.ICaptchaService;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;

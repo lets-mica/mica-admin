@@ -1,7 +1,7 @@
 package net.dreamlu.mica.admin.project.system.service;
 
-import net.dreamlu.mica.admin.project.system.entity.SysUserRole;
 import com.baomidou.mybatisplus.extension.service.IService;
+import net.dreamlu.mica.admin.project.system.entity.SysUserRole;
 
 import java.util.Collection;
 import java.util.List;

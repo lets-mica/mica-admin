@@ -2,8 +2,6 @@ package net.dreamlu.mica.admin.framework.security.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.dreamlu.mica.core.utils.BeanUtil;
-import net.dreamlu.mica.core.utils.StringUtil;
 import net.dreamlu.mica.admin.framework.security.auth.AuthUser;
 import net.dreamlu.mica.admin.framework.security.pojo.DeptInfo;
 import net.dreamlu.mica.admin.framework.security.pojo.PostInfo;
@@ -11,6 +9,8 @@ import net.dreamlu.mica.admin.framework.security.pojo.RoleInfo;
 import net.dreamlu.mica.admin.framework.security.utils.SecurityUtil;
 import net.dreamlu.mica.admin.project.system.entity.*;
 import net.dreamlu.mica.admin.project.system.service.*;
+import net.dreamlu.mica.core.utils.BeanUtil;
+import net.dreamlu.mica.core.utils.StringUtil;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;

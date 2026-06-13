@@ -3,8 +3,6 @@ package net.dreamlu.mica.admin.project.system.controller;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +21,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +41,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class SysConfigController extends BaseController {
 	private final ISysConfigService configService;
-	private final ObjectMapper objectMapper;
 
 	@Operation(summary = "参数导出")
 	@ApiLog("参数导出")

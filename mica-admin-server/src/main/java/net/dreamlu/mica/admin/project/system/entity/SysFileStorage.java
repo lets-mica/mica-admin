@@ -1,9 +1,9 @@
 package net.dreamlu.mica.admin.project.system.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import net.dreamlu.mica.admin.framework.base.BaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import net.dreamlu.mica.admin.framework.base.BaseModel;
 
 /**
  * <p>

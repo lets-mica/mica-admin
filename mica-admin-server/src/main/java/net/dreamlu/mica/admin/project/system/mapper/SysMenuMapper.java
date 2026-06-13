@@ -1,8 +1,8 @@
 package net.dreamlu.mica.admin.project.system.mapper;
 
 import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
-import net.dreamlu.mica.admin.project.system.entity.SysMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import net.dreamlu.mica.admin.project.system.entity.SysMenu;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

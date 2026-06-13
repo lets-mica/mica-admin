@@ -1,8 +1,8 @@
 package net.dreamlu.mica.admin.framework.mybatis;
 
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
-import net.dreamlu.mica.core.exception.ServiceException;
 import net.dreamlu.mica.admin.common.code.ApiCode;
+import net.dreamlu.mica.core.exception.ServiceException;
 
 /**
  * 演示环境数据禁止删除

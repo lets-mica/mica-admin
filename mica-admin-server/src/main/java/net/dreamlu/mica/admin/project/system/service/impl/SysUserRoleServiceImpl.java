@@ -3,8 +3,8 @@ package net.dreamlu.mica.admin.project.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.dreamlu.mica.admin.project.system.mapper.SysUserRoleMapper;
 import net.dreamlu.mica.admin.project.system.entity.SysUserRole;
+import net.dreamlu.mica.admin.project.system.mapper.SysUserRoleMapper;
 import net.dreamlu.mica.admin.project.system.service.ISysUserRoleService;
 import org.springframework.stereotype.Service;
 
