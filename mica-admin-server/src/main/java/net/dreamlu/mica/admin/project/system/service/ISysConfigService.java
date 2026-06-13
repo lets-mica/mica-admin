@@ -26,17 +26,17 @@ public interface ISysConfigService extends IService<SysConfig> {
 	Wrapper<SysConfig> getQueryWrapper(ConfigQuery query);
 
 	/**
-	 * 获取全局默认偏好（field LIKE 'preference.%'）
+	 * 获取系统默认偏好（整存 JSON 字符串）
 	 *
-	 * @return field -> value 映射
+	 * @return 偏好 JSON 字符串，无配置时返回空对象 "{}"
 	 */
-	Map<String, String> listPreferenceDefaults();
+	String getPreferenceJson();
 
 	/**
-	 * 批量保存全局默认偏好（需管理员权限，由 Controller 控制）
+	 * 保存系统默认偏好（整存 JSON 字符串，需管理员权限，由 Controller 控制）
 	 *
-	 * @param kv 字段 -> 值
+	 * @param json 偏好 JSON 字符串
 	 */
-	void savePreferenceBatch(Map<String, String> kv);
+	void savePreferenceJson(String json);
 
 }

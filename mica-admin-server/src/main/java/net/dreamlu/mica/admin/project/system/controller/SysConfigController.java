@@ -8,20 +8,19 @@ import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import net.dreamlu.mica.core.validation.CreateGroup;
-import net.dreamlu.mica.core.validation.UpdateGroup;
 import net.dreamlu.mica.admin.framework.annotation.ApiLog;
 import net.dreamlu.mica.admin.framework.base.BaseController;
 import net.dreamlu.mica.admin.project.system.entity.SysConfig;
 import net.dreamlu.mica.admin.project.system.pojo.ConfigQuery;
 import net.dreamlu.mica.admin.project.system.service.ISysConfigService;
+import net.dreamlu.mica.core.validation.CreateGroup;
+import net.dreamlu.mica.core.validation.UpdateGroup;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -97,18 +96,18 @@ public class SysConfigController extends BaseController {
 		configService.removeByIds(ids);
 	}
 
-	@Operation(summary = "获取系统默认偏好设置（扁平 KV）")
-	@GetMapping("preference/all")
-	public Map<String, String> listPreferences() {
-		return configService.listPreferenceDefaults();
+	@Operation(summary = "获取系统默认偏好设置（整存 JSON）")
+	@GetMapping("preference/default")
+	public String getPreferences() {
+		return configService.getPreferenceJson();
 	}
 
-	@Operation(summary = "批量保存全局偏好设置")
-	@ApiLog("保存全局偏好")
-	@PutMapping("preference/batch")
+	@Operation(summary = "保存系统默认偏好设置（整存 JSON）")
+	@ApiLog("保存系统默认偏好")
+	@PutMapping("preference/default")
 	@PreAuthorize("@sec.hasPermission('system:config:edit')")
-	public void savePreferences(@RequestBody Map<String, String> kv) {
-		configService.savePreferenceBatch(kv);
+	public void savePreferences(@RequestBody String json) {
+		configService.savePreferenceJson(json);
 	}
 
 }

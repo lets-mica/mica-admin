@@ -38,8 +38,7 @@ import { globalShareState } from '@vben-core/shared/global-state';
 
 import { useClipboard } from '@vueuse/core';
 
-import { savePreferenceDefaultsApi } from '#/api/core/preference';
-import { flattenPreferences } from '#/utils/preference-codec';
+import { savePreferenceDefaultApi } from '#/api/core/preference';
 
 import {
   Animation,
@@ -316,11 +315,7 @@ async function handleSaveAsDefault() {
   if (savingDefault.value) return;
   savingDefault.value = true;
   try {
-    const kv: Record<string, string> = {};
-    for (const { field, value } of flattenPreferences(preferences)) {
-      kv[field] = value;
-    }
-    await savePreferenceDefaultsApi(kv);
+    await savePreferenceDefaultApi(JSON.stringify(preferences));
     message.success?.('已保存为系统默认偏好');
   } catch (e) {
     message.error?.(`保存失败：${(e as Error)?.message ?? '未知错误'}`);

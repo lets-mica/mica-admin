@@ -1,8 +1,7 @@
 import { defineOverridesPreferences, preferences, updatePreferences } from '@vben/preferences';
 import { useAccessStore } from '@vben/stores';
 
-import { getPreferenceDefaultsApi } from '#/api/core';
-import { mergePreferences, unflattenPreferences } from '#/utils/preference-codec';
+import { getPreferenceDefaultApi } from '#/api/core';
 
 /**
  * @description 项目配置文件
@@ -26,7 +25,7 @@ export const overridesPreferences = defineOverridesPreferences({
 });
 
 /**
- * 拉取服务端系统默认偏好（sys_config）并合并到本地 state。
+ * 拉取服务端系统默认偏好（整 JSON）并合并到本地 state。
  * 失败时静默忽略，避免阻塞首屏。
  *
  * 调用前置条件：必须在 pinia 已安装且 token 已写入之后调用
@@ -41,11 +40,11 @@ export async function loadServerPreferences(): Promise<void> {
     return;
   }
   try {
-    const kv = await getPreferenceDefaultsApi();
-    if (!kv || Object.keys(kv).length === 0) return;
-    const serverObj = unflattenPreferences(kv);
-    const merged = mergePreferences(preferences, serverObj);
-    updatePreferences(merged);
+    const json = await getPreferenceDefaultApi();
+    if (!json || json === '{}') return;
+    const serverObj = JSON.parse(json);
+    if (!serverObj || typeof serverObj !== 'object') return;
+    updatePreferences({ ...preferences, ...serverObj });
   } catch (e) {
     // 接口失败时静默降级（仍走 localStorage + 默认值）
     console.warn('[preferences] load server defaults failed:', e);
