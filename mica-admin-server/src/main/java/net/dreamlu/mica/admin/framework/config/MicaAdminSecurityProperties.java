@@ -1,6 +1,5 @@
 package net.dreamlu.mica.admin.framework.config;
 
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
 import lombok.Setter;
 import net.dreamlu.mica.core.tuple.KeyPair;
@@ -76,9 +75,9 @@ public class MicaAdminSecurityProperties {
 		@NotBlank
 		private String secret;
 		/**
-		 * 秘钥的签名算法
+		 * 秘钥的签名算法，支持：HS256、HS384、HS512
 		 */
-		private SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+		private String signatureAlgorithm = "HS256";
 		/**
 		 * jwt token 接受者
 		 */

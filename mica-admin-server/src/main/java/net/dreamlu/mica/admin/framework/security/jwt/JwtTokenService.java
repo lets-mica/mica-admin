@@ -1,18 +1,19 @@
 package net.dreamlu.mica.admin.framework.security.jwt;
 
-import io.jsonwebtoken.*;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
-import net.dreamlu.mica.core.utils.Charsets;
-import net.dreamlu.mica.core.utils.DateUtil;
-import net.dreamlu.mica.core.utils.StringUtil;
 import net.dreamlu.mica.admin.framework.config.MicaAdminSecurityProperties;
 import net.dreamlu.mica.admin.framework.security.auth.AuthUser;
+import net.dreamlu.mica.core.utils.StringUtil;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.context.annotation.Configuration;
 
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
-import java.security.Key;
 import java.time.Duration;
 import java.util.Date;
 
@@ -29,7 +30,8 @@ public class JwtTokenService implements SmartInitializingSingleton {
 	 */
 	public static final String TOKEN_PREFIX = "Bearer ";
 	private final MicaAdminSecurityProperties properties;
-	private JwtParser jwtParser;
+	private Algorithm algorithm;
+	private JWTVerifier verifier;
 
 	/**
 	 * 获取 token
@@ -77,12 +79,12 @@ public class JwtTokenService implements SmartInitializingSingleton {
 			return null;
 		}
 		// 注意此处 有几个异常需要处理
-		Jws<Claims> claimsJws = jwtParser.parseClaimsJws(token);
-		Claims body = claimsJws.getBody();
-		if (body == null) {
+		DecodedJWT decodedJWT = verifier.verify(token);
+		String subject = decodedJWT.getSubject();
+		if (StringUtil.isBlank(subject)) {
 			return null;
 		}
-		return body.getSubject();
+		return subject;
 	}
 
 	/**
@@ -96,20 +98,16 @@ public class JwtTokenService implements SmartInitializingSingleton {
 	public String createToken(AuthUser authUser, Date now, Duration expireTime) {
 		// jwt token 配置信息
 		MicaAdminSecurityProperties.JwtToken jwtToken = properties.getJwtToken();
-		String secret = jwtToken.getSecret();
-		SignatureAlgorithm algorithm = jwtToken.getSignatureAlgorithm();
-		// 加密 key
-		Key keySpec = new SecretKeySpec(secret.getBytes(Charsets.UTF_8), algorithm.getJcaName());
-		return Jwts.builder()
-			.setId(StringUtil.getUUID())
-			.setAudience(jwtToken.getAudience())
-			.setIssuer(jwtToken.getIssuer())
-			.setIssuedAt(now)
-			.setSubject(authUser.getUsername())
-			.setNotBefore(now)
-			.setExpiration(DateUtil.plus(now, expireTime))
-			.signWith(keySpec, algorithm)
-			.compact();
+		Date expiresAt = new Date(now.getTime() + expireTime.toMillis());
+		JWTCreator.Builder builder = JWT.create()
+			.withJWTId(StringUtil.getUUID())
+			.withAudience(jwtToken.getAudience())
+			.withIssuer(jwtToken.getIssuer())
+			.withIssuedAt(now)
+			.withSubject(authUser.getUsername())
+			.withNotBefore(now)
+			.withExpiresAt(expiresAt);
+		return builder.sign(algorithm);
 	}
 
 	@Override
@@ -117,13 +115,45 @@ public class JwtTokenService implements SmartInitializingSingleton {
 		// jwt token 配置信息
 		MicaAdminSecurityProperties.JwtToken jwtToken = properties.getJwtToken();
 		String secret = jwtToken.getSecret();
-		SignatureAlgorithm algorithm = jwtToken.getSignatureAlgorithm();
-		// 加密 key
-		Key keySpec = new SecretKeySpec(secret.getBytes(Charsets.UTF_8), algorithm.getJcaName());
-		// jwtParser
-		jwtParser = Jwts.parserBuilder()
-			.setSigningKey(keySpec)
+		// 根据配置的算法名称构造对应的 auth0 Algorithm
+		algorithm = createAlgorithm(jwtToken.getSignatureAlgorithm(), secret);
+		// verifier：校验签名 + issuer + audience
+		verifier = JWT.require(algorithm)
+			.withIssuer(jwtToken.getIssuer())
+			.withAudience(jwtToken.getAudience())
 			.build();
+	}
+
+	/**
+	 * 将字符串算法名（HS256 / HS384 / HS512）转换为 auth0 Algorithm 实例
+	 *
+	 * @param name   算法名
+	 * @param secret 秘钥
+	 * @return Algorithm
+	 */
+	private static Algorithm createAlgorithm(String name, String secret) {
+		if (StringUtil.isBlank(name)) {
+			name = "HS256";
+		}
+		switch (name.toUpperCase()) {
+			case "HS384":
+				return Algorithm.HMAC384(secret);
+			case "HS512":
+				return Algorithm.HMAC512(secret);
+			case "HS256":
+			default:
+				return Algorithm.HMAC256(secret);
+		}
+	}
+
+	/**
+	 * 暴露给过滤器判断是否是 jwt 验证异常
+	 *
+	 * @param t 异常
+	 * @return 是否为 JWT 验证异常
+	 */
+	public static boolean isJwtException(Throwable t) {
+		return t instanceof JWTVerificationException;
 	}
 
 }

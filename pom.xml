@@ -18,7 +18,8 @@
         <java.version>1.8</java.version>
         <maven-flatten.version>1.7.3</maven-flatten.version>
         <mica.version>2.7.18.7</mica.version>
-        <jjwt.version>0.11.5</jjwt.version>
+        <jackson.version>2.22.0</jackson.version>
+        <java-jwt.version>4.5.2</java-jwt.version>
         <spring-boot.version>2.7.18</spring-boot.version>
         <mybatis-plus.version>3.5.9</mybatis-plus.version>
         <undertow.version>2.2.39.Final</undertow.version>
@@ -44,7 +45,14 @@
     <!-- bom -->
     <dependencyManagement>
         <dependencies>
-            <!-- 注意，maven 是按先后顺序的，所以按 mica、spring boot、spring cloud -->
+            <!-- 注意，maven 是按先后顺序的，所以按 jackson、mica、spring boot、spring cloud -->
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>net.dreamlu</groupId>
                 <artifactId>mica-bom</artifactId>
@@ -136,20 +144,9 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt-impl</artifactId>
-                <version>${jjwt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt-jackson</artifactId>
-                <version>${jjwt.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-databind</artifactId>
-                    </exclusion>
-                </exclusions>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${java-jwt.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>

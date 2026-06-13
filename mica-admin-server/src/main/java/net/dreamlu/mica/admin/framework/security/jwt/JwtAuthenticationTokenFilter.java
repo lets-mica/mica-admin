@@ -1,6 +1,6 @@
 package net.dreamlu.mica.admin.framework.security.jwt;
 
-import io.jsonwebtoken.JwtException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import lombok.RequiredArgsConstructor;
 import net.dreamlu.mica.core.result.R;
 import net.dreamlu.mica.core.utils.StringUtil;
@@ -53,7 +53,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 		String subject;
 		try {
 			subject = jwtTokenService.getSubject(token);
-		} catch (JwtException | IllegalArgumentException e) {
+		} catch (JWTVerificationException | IllegalArgumentException e) {
 			// jwt token 解析错误 401
 			response.setStatus(HttpStatus.UNAUTHORIZED.value());
 			WebUtil.renderJson(response, R.fail("请重新登录"));
