@@ -8,9 +8,6 @@ import { isDarkTheme } from './update-css-variables';
 function usePreferences() {
   const preferences = preferencesManager.getPreferences();
   const customPreferences = preferencesManager.getCustomPreferences();
-  const initialPreferences = preferencesManager.getInitialPreferences();
-  const initialCustomPreferences =
-    preferencesManager.getInitialCustomPreferences();
   const preferencesExtension = computed(() =>
     preferencesManager.getPreferencesExtension(),
   );
@@ -18,11 +15,17 @@ function usePreferences() {
    * @zh_CN 计算偏好设置的变化
    */
   const diffPreference = computed(() => {
-    return diff(initialPreferences, preferences);
+    return diff(
+      preferencesManager.getInitialPreferences(),
+      preferences,
+    );
   });
 
   const diffCustomPreference = computed(() => {
-    return diff(initialCustomPreferences, customPreferences);
+    return diff(
+      preferencesManager.getInitialCustomPreferences(),
+      customPreferences,
+    );
   });
 
   const appPreferences = computed(() => preferences.app);

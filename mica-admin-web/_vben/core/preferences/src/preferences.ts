@@ -35,7 +35,9 @@ class PreferenceManager {
   private customState = reactive<CustomPreferencesRecord>({});
   private debouncedSave: () => void;
   private initialCustomPreferences: CustomPreferencesRecord = {};
-  private initialPreferences: Preferences = defaultPreferences;
+  private initialPreferences = reactive<Preferences>({
+    ...defaultPreferences,
+  });
   private isInitialized = false;
   private state: Preferences;
 
@@ -125,7 +127,10 @@ class PreferenceManager {
     this.cache = new StorageManager({ prefix: namespace });
 
     // 合并初始偏好设置：前面的对象优先，后面的对象仅补齐缺失字段
-    this.initialPreferences = merge({}, overrides, defaultPreferences);
+    Object.assign(
+      this.initialPreferences,
+      merge({}, overrides, defaultPreferences),
+    );
     this.customPreferencesExtension = extension ?? null;
     this.initialCustomPreferences = this.resolveCustomPreferencesDefaults(
       this.customPreferencesExtension,
@@ -159,6 +164,21 @@ class PreferenceManager {
     this.initPlatform();
 
     this.isInitialized = true;
+  };
+
+  /**
+   * 将当前偏好设置同步为 diff / 重置的基准线。
+   * 在服务端默认偏好加载或保存成功后调用，避免与静态 overrides 误判为未保存变更。
+   */
+  syncInitialPreferences = () => {
+    Object.assign(
+      this.initialPreferences,
+      this.cloneValue(this.state),
+    );
+    Object.assign(
+      this.initialCustomPreferences,
+      this.cloneValue(this.customState),
+    );
   };
 
   /**

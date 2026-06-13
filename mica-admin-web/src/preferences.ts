@@ -1,4 +1,9 @@
-import { defineOverridesPreferences, preferences, updatePreferences } from '@vben/preferences';
+import {
+  defineOverridesPreferences,
+  preferences,
+  syncInitialPreferences,
+  updatePreferences,
+} from '@vben/preferences';
 import { useAccessStore } from '@vben/stores';
 
 import { getPreferenceDefaultApi } from '#/api/core';
@@ -43,6 +48,8 @@ export async function loadServerPreferences(): Promise<void> {
     const serverObj = await getPreferenceDefaultApi();
     if (!serverObj || typeof serverObj !== 'object' || Object.keys(serverObj).length === 0) return;
     updatePreferences({ ...preferences, ...serverObj });
+    // 服务端默认即新的 diff 基准，避免刷新后仍提示「数据有变化」
+    syncInitialPreferences();
   } catch (e) {
     // 接口失败时静默降级（仍走 localStorage + 默认值）
     console.warn('[preferences] load server defaults failed:', e);

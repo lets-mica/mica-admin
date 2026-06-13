@@ -10,6 +10,7 @@ export const {
   updatePreferences,
   updateCustomPreferences,
   resetPreferences,
+  syncInitialPreferences,
   clearCache,
   initPreferences,
 } = preferencesManager;

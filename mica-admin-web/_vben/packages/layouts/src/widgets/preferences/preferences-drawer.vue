@@ -23,6 +23,7 @@ import {
   clearCache,
   preferences,
   resetPreferences,
+  syncInitialPreferences,
   updateCustomPreferences,
   usePreferences,
 } from '@vben/preferences';
@@ -316,6 +317,7 @@ async function handleSaveAsDefault() {
   savingDefault.value = true;
   try {
     await savePreferenceDefaultApi(preferences);
+    syncInitialPreferences();
     drawerApi.close();
   } catch (e) {
     message.error?.(`保存失败：${(e as Error)?.message ?? '未知错误'}`);
