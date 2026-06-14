@@ -26,13 +26,13 @@ function vbenResolver(): import('vite').Plugin {
 
       // @vben/styles/naive → css file
       if (id === '@vben/styles/naive') {
-        return resolve(root, '_vben/packages/styles/src/naive/index.css')
+        return resolve(root, 'vben/packages/styles/src/naive/index.css')
       }
 
       // @vben/common-ui/es/* → components subdir
       const esMatch = id.match(/^@vben\/common-ui\/es\/(.+)$/)
       if (esMatch) {
-        const p = resolve(root, `_vben/packages/common-ui/src/components/${esMatch[1]}`)
+        const p = resolve(root, `vben/packages/common-ui/src/components/${esMatch[1]}`)
         const resolved = tryResolve(p)
         if (resolved) return resolved
       }
@@ -40,7 +40,7 @@ function vbenResolver(): import('vite').Plugin {
       // @vben/plugins/* → plugin subdir
       const pluginMatch = id.match(/^@vben\/plugins\/(.+)$/)
       if (pluginMatch && pluginMatch[1] !== 'plugins') {
-        const p = resolve(root, `_vben/packages/plugins/src/${pluginMatch[1]}`)
+        const p = resolve(root, `vben/packages/plugins/src/${pluginMatch[1]}`)
         const resolved = tryResolve(p)
         if (resolved) return resolved
       }
@@ -48,9 +48,9 @@ function vbenResolver(): import('vite').Plugin {
       // @vben/xxx → package
       const vbenMatch = id.match(/^@vben\/([^/]+)(?:\/(.+))?$/)
       if (vbenMatch) {
-        // tailwind-config is in _vben/tailwind-config, not _vben/packages
+        // tailwind-config is in vben/tailwind-config, not vben/packages
         if (vbenMatch[1] === 'tailwind-config') {
-          const pkgDir = resolve(root, `_vben/tailwind-config`)
+          const pkgDir = resolve(root, `vben/tailwind-config`)
           if (vbenMatch[2]) {
             const resolved = tryResolve(resolve(pkgDir, `src/${vbenMatch[2]}`))
             if (resolved) return resolved
@@ -58,7 +58,7 @@ function vbenResolver(): import('vite').Plugin {
           const resolved = tryResolve(resolve(pkgDir, 'src/index'))
           if (resolved) return resolved
         }
-        const pkgDir = resolve(root, `_vben/packages/${vbenMatch[1]}`)
+        const pkgDir = resolve(root, `vben/packages/${vbenMatch[1]}`)
         if (vbenMatch[2]) {
           const resolved = tryResolve(resolve(pkgDir, `src/${vbenMatch[2]}`))
           if (resolved) return resolved
@@ -70,7 +70,7 @@ function vbenResolver(): import('vite').Plugin {
       // @vben-core/xxx/subpath → package
       const coreMatch = id.match(/^@vben-core\/([^/]+)(?:\/(.+))?$/)
       if (coreMatch) {
-        const pkgDir = resolve(root, `_vben/core/${coreMatch[1]}`)
+        const pkgDir = resolve(root, `vben/core/${coreMatch[1]}`)
         if (coreMatch[2]) {
           const resolved = tryResolve(resolve(pkgDir, `src/${coreMatch[2]}`))
           if (resolved) return resolved

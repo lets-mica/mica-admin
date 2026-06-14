@@ -46,7 +46,7 @@ const pageMap: Record<string, () => Promise<unknown>> = import.meta.glob(
 );
 
 const forbiddenComponent = () =>
-  import('#/views/_core/fallback/forbidden.vue');
+  import('#/views/error/forbidden.vue');
 
 const EXTERNAL_PATH_PREFIX = '/__external__';
 

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Fallback } from '@vben/common-ui';
 
-defineOptions({ name: 'Fallback403Demo' });
+defineOptions({ name: 'Forbidden' });
 </script>
 
 <template>

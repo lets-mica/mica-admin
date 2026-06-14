@@ -365,7 +365,7 @@ importers:
         specifier: catalog:tooling
         version: 2.2.12(typescript@5.7.3)
 
-  _vben/core/composables:
+  vben/core/composables:
     dependencies:
       '@vben-core/shared':
         specifier: workspace:*
@@ -383,9 +383,9 @@ importers:
         specifier: 'catalog:'
         version: 3.5.35(typescript@5.7.3)
 
-  _vben/core/design: {}
+  vben/core/design: {}
 
-  _vben/core/form-ui:
+  vben/core/form-ui:
     dependencies:
       '@vben-core/composables':
         specifier: workspace:*
@@ -418,7 +418,7 @@ importers:
         specifier: 'catalog:'
         version: 3.25.76
 
-  _vben/core/icons:
+  vben/core/icons:
     dependencies:
       '@iconify/vue':
         specifier: 'catalog:'
@@ -430,7 +430,7 @@ importers:
         specifier: 'catalog:'
         version: 3.5.35(typescript@5.7.3)
 
-  _vben/core/layout-ui:
+  vben/core/layout-ui:
     dependencies:
       '@vben-core/composables':
         specifier: workspace:*
@@ -454,7 +454,7 @@ importers:
         specifier: 'catalog:'
         version: 3.5.35(typescript@5.7.3)
 
-  _vben/core/menu-ui:
+  vben/core/menu-ui:
     dependencies:
       '@vben-core/composables':
         specifier: workspace:*
@@ -484,7 +484,7 @@ importers:
         specifier: 'catalog:'
         version: 3.5.35(typescript@5.7.3)
 
-  _vben/core/popup-ui:
+  vben/core/popup-ui:
     dependencies:
       '@vben-core/composables':
         specifier: workspace:*
@@ -511,7 +511,7 @@ importers:
         specifier: 'catalog:'
         version: 3.5.35(typescript@5.7.3)
 
-  _vben/core/preferences:
+  vben/core/preferences:
     dependencies:
       '@vben-core/shared':
         specifier: workspace:*
@@ -526,7 +526,7 @@ importers:
         specifier: 'catalog:'
         version: 3.5.35(typescript@5.7.3)
 
-  _vben/core/shadcn-ui:
+  vben/core/shadcn-ui:
     dependencies:
       '@lucide/vue':
         specifier: 'catalog:'
@@ -562,7 +562,7 @@ importers:
         specifier: 'catalog:'
         version: 3.5.35(typescript@5.7.3)
 
-  _vben/core/shared:
+  vben/core/shared:
     dependencies:
       '@ctrl/tinycolor':
         specifier: 'catalog:'
@@ -598,7 +598,7 @@ importers:
         specifier: 'catalog:'
         version: 0.1.0
 
-  _vben/core/tabs-ui:
+  vben/core/tabs-ui:
     dependencies:
       '@vben-core/composables':
         specifier: workspace:*
@@ -622,7 +622,7 @@ importers:
         specifier: 'catalog:'
         version: 3.5.35(typescript@5.7.3)
 
-  _vben/core/typings:
+  vben/core/typings:
     dependencies:
       vue:
         specifier: 'catalog:'
@@ -631,7 +631,7 @@ importers:
         specifier: 'catalog:'
         version: 4.5.0(vue@3.5.35(typescript@5.7.3))
 
-  _vben/packages/access:
+  vben/packages/access:
     dependencies:
       '@vben/preferences':
         specifier: workspace:*
@@ -649,7 +649,7 @@ importers:
         specifier: 'catalog:'
         version: 3.5.35(typescript@5.7.3)
 
-  _vben/packages/common-ui:
+  vben/packages/common-ui:
     dependencies:
       '@vben-core/design':
         specifier: workspace:*
@@ -712,13 +712,13 @@ importers:
         specifier: 'catalog:'
         version: 6.7.1(vue@3.5.35(typescript@5.7.3))
 
-  _vben/packages/constants:
+  vben/packages/constants:
     dependencies:
       '@vben-core/shared':
         specifier: workspace:*
         version: link:../../core/shared
 
-  _vben/packages/hooks:
+  vben/packages/hooks:
     dependencies:
       '@vben-core/composables':
         specifier: workspace:*
@@ -748,13 +748,13 @@ importers:
         specifier: 'catalog:'
         version: 1.6.3
 
-  _vben/packages/icons:
+  vben/packages/icons:
     dependencies:
       '@vben-core/icons':
         specifier: workspace:*
         version: link:../../core/icons
 
-  _vben/packages/layouts:
+  vben/packages/layouts:
     dependencies:
       '@vben-core/composables':
         specifier: workspace:*
@@ -817,7 +817,7 @@ importers:
         specifier: 'catalog:'
         version: 4.5.0(vue@3.5.35(typescript@5.7.3))
 
-  _vben/packages/locales:
+  vben/packages/locales:
     dependencies:
       '@intlify/core-base':
         specifier: 'catalog:'
@@ -832,7 +832,7 @@ importers:
         specifier: 'catalog:'
         version: 11.4.4(vue@3.5.35(typescript@5.7.3))
 
-  _vben/packages/plugins:
+  vben/packages/plugins:
     dependencies:
       '@vben-core/design':
         specifier: workspace:*
@@ -886,7 +886,7 @@ importers:
         specifier: 'catalog:'
         version: 4.19.4(vue@3.5.35(typescript@5.7.3))
 
-  _vben/packages/preferences:
+  vben/packages/preferences:
     dependencies:
       '@vben-core/preferences':
         specifier: workspace:*
@@ -895,7 +895,7 @@ importers:
         specifier: workspace:*
         version: link:../../core/typings
 
-  _vben/packages/request:
+  vben/packages/request:
     dependencies:
       '@vben/locales':
         specifier: workspace:*
@@ -910,7 +910,7 @@ importers:
         specifier: 'catalog:'
         version: 6.15.2
 
-  _vben/packages/stores:
+  vben/packages/stores:
     dependencies:
       '@vben-core/preferences':
         specifier: workspace:*
@@ -937,13 +937,13 @@ importers:
         specifier: 'catalog:'
         version: 4.5.0(vue@3.5.35(typescript@5.7.3))
 
-  _vben/packages/styles:
+  vben/packages/styles:
     dependencies:
       '@vben-core/design':
         specifier: workspace:*
         version: link:../../core/design
 
-  _vben/packages/types:
+  vben/packages/types:
     dependencies:
       '@vben-core/typings':
         specifier: workspace:*
@@ -955,7 +955,7 @@ importers:
         specifier: 'catalog:'
         version: 4.5.0(vue@3.5.35(typescript@5.7.3))
 
-  _vben/packages/utils:
+  vben/packages/utils:
     dependencies:
       '@vben-core/shared':
         specifier: workspace:*
@@ -967,7 +967,7 @@ importers:
         specifier: 'catalog:'
         version: 4.5.0(vue@3.5.35(typescript@5.7.3))
 
-  _vben/tailwind-config:
+  vben/tailwind-config:
     dependencies:
       '@iconify/tailwind4':
         specifier: 'catalog:'

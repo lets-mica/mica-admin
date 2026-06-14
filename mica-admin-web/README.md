@@ -5,28 +5,21 @@
 ## 架构
 
 ```
-new-ui/
-├── package.json          # 独立项目，pnpm 管理
-├── vite.config.ts        # Vite 8 构建配置
-├── tsconfig.json         # TypeScript 6
-├── index.html
-├── src/
-│   ├── main.ts           # 入口
-│   ├── bootstrap.ts      # 应用启动
-│   ├── app.vue           # 根组件 (NConfigProvider)
-│   ├── adapter/          # UI 适配层 (参考 web-naive/adapter)
-│   ├── api/              # API 接口层
-│   ├── layouts/          # 布局组件
-│   ├── locales/          # i18n
-│   ├── router/           # 路由
-│   ├── store/            # Pinia stores
-│   ├── views/            # 页面
-│   └── _vben/            # 从 monorepo 提取的 @vben/* 和 @vben-core/* 源码
-│       ├── packages/     # @vben/* (14 个包)
-│       └── core/         # @vben-core/* (12 个包)
-└── internal/
-    ├── vite-config/      # @vben/vite-config
-    └── tsconfig/         # @vben/tsconfig
+mica-admin-web/
+├── package.json
+├── vite.config.ts
+├── pnpm-workspace.yaml
+├── src/                    # mica-admin 业务代码
+│   ├── adapter/
+│   ├── api/
+│   ├── layouts/
+│   ├── router/
+│   ├── store/
+│   └── views/
+└── vben/                   # 本地化的 Vben Admin 框架源码
+    ├── packages/           # @vben/* (14 个包)
+    ├── core/               # @vben-core/* (12 个包)
+    └── tailwind-config/
 ```
 
 ## 源项目
@@ -35,21 +28,21 @@ Vben Admin monorepo: `E:\codes\ai\vue-vben-admin`
 
 ```
 apps/web-naive/          → 目标 app（照搬入口、路由、页面、store）
-packages/effects/access  → _vben/packages/access
-packages/effects/common-ui → _vben/packages/common-ui
-packages/constants       → _vben/packages/constants
-packages/effects/hooks   → _vben/packages/hooks
-packages/icons           → _vben/packages/icons
-packages/effects/layouts → _vben/packages/layouts
-packages/locales         → _vben/packages/locales
-packages/effects/plugins → _vben/packages/plugins
-packages/preferences     → _vben/packages/preferences
-packages/effects/request → _vben/packages/request
-packages/stores          → _vben/packages/stores
-packages/styles          → _vben/packages/styles
-packages/types           → _vben/packages/types
-packages/utils           → _vben/packages/utils
-packages/@core/*         → _vben/core/*
+packages/effects/access  → vben/packages/access
+packages/effects/common-ui → vben/packages/common-ui
+packages/constants       → vben/packages/constants
+packages/effects/hooks   → vben/packages/hooks
+packages/icons           → vben/packages/icons
+packages/effects/layouts → vben/packages/layouts
+packages/locales         → vben/packages/locales
+packages/effects/plugins → vben/packages/plugins
+packages/preferences     → vben/packages/preferences
+packages/effects/request → vben/packages/request
+packages/stores          → vben/packages/stores
+packages/styles          → vben/packages/styles
+packages/types           → vben/packages/types
+packages/utils           → vben/packages/utils
+packages/@core/*         → vben/core/*
 ```
 
 ## 计划步骤

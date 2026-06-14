@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-`new-ui` 是 mica-admin 项目的前端工程，从 `mica-admin-web`（Vue 2 + Element UI）改造为 **Vben Admin 5.x**（Vue 3 + Naive UI + Vite）。这是独立的 Vite 项目（非 monorepo），不通过 `@vben/*` npm 包安装，而是将源码完整提取到 `_vben/` 目录作为 workspace package，通过本地别名解析。
+`new-ui` 是 mica-admin 项目的前端工程，从 `mica-admin-web`（Vue 2 + Element UI）改造为 **Vben Admin 5.x**（Vue 3 + Naive UI + Vite）。这是独立的 Vite 项目（非 monorepo），不通过 `@vben/*` npm 包安装，而是将源码完整提取到 `vben/` 目录作为 workspace package，通过本地别名解析。
 
 源项目参考：`E:\codes\ai\vue-vben-admin`（完整 pnpm monorepo）。
 
@@ -38,7 +38,7 @@ mvn package -Pprod             # 自动执行 pnpm install + pnpm build:prod，�
 ```
 new-ui/
 ├── package.json                 # 名称: mica-admin-web
-├── pnpm-workspace.yaml          # 指向 _vben/packages/*, _vben/core/*, _vben/tailwind-config
+├── pnpm-workspace.yaml          # 指向 vben/packages/*, vben/core/*, vben/tailwind-config
 ├── vite.config.ts               # 自定义 vbenResolver 处理 @vben/* 和 @vben-core/* 别名
 ├── tsconfig.json
 ├── pom.xml                      # Maven 集成（new-ui 产物打入 META-INF/resources）
@@ -69,7 +69,7 @@ new-ui/
 │   ├── utils/                   # 工具函数
 │   │   └── rsa.ts               # RSA 加密
 │   └── views/                   # 业务页面
-├── _vben/                       # 本地化的 Vben 源码
+├── vben/                       # 本地化的 Vben 源码
 │   ├── packages/                # 14 个 @vben/* 包
 │   ├── core/                    # 12 个 @vben-core/* 包
 │   └── tailwind-config/         # tailwind 主题配置
@@ -80,16 +80,16 @@ new-ui/
 
 ### 1. 包解析机制（重要）
 
-**不要**直接修改 `_vben/` 内包的导入路径。Vite 配置中的 `vbenResolver()` 插件负责将：
+**不要**直接修改 `vben/` 内包的导入路径。Vite 配置中的 `vbenResolver()` 插件负责将：
 
-- `@vben/xxx` -> `_vben/packages/xxx/src/...`
-- `@vben-core/xxx` -> `_vben/core/xxx/src/...`
-- `@vben/styles/naive` -> `_vben/packages/styles/src/naive/index.css`
-- `@vben/common-ui/es/xxx` -> `_vben/packages/common-ui/src/components/xxx/...`
-- `@vben/plugins/xxx` -> `_vben/packages/plugins/src/xxx/...`
-- `@vben/tailwind-config` -> `_vben/tailwind-config/src/...`
+- `@vben/xxx` -> `vben/packages/xxx/src/...`
+- `@vben-core/xxx` -> `vben/core/xxx/src/...`
+- `@vben/styles/naive` -> `vben/packages/styles/src/naive/index.css`
+- `@vben/common-ui/es/xxx` -> `vben/packages/common-ui/src/components/xxx/...`
+- `@vben/plugins/xxx` -> `vben/packages/plugins/src/xxx/...`
+- `@vben/tailwind-config` -> `vben/tailwind-config/src/...`
 
-所有 `_vben/` 内的包通过 pnpm workspace 协议连接。
+所有 `vben/` 内的包通过 pnpm workspace 协议连接。
 
 ### 2. 认证流程（mica-admin 特有）
 
@@ -149,7 +149,7 @@ defaultResponseInterceptor({
 ### 6. 状态管理
 
 - **业务 store** (`src/store/`)：使用 Pinia 定义，**单文件**直接 export（如 `useAuthStore`）。
-- **共享 store** (`_vben/packages/stores/`)：`useAccessStore`（token, 权限码, 菜单）、`useUserStore`、`useTabbarStore`、`useTimezoneStore`。
+- **共享 store** (`vben/packages/stores/`)：`useAccessStore`（token, 权限码, 菜单）、`useUserStore`、`useTabbarStore`、`useTimezoneStore`。
 - **持久化**：通过 `pinia-plugin-persistedstate`，namespace 由 `import.meta.env.VITE_APP_NAMESPACE` 决定。
 
 ### 7. i18n
@@ -163,7 +163,7 @@ defaultResponseInterceptor({
 - **Tailwind CSS 4** + **Naive UI** 主题系统
 - 全局样式：`src/styles/global.css` + `src/styles/theme.css`
 - CSS 变量：通过 `--foreground`, `--primary`, `--accent` 等 HSL 值定义
-- **不要**在 `_vben/` 包内使用 `@apply`（已通过 `scripts/fix-apply.mjs` 批量转换为纯 CSS）
+- **不要**在 `vben/` 包内使用 `@apply`（已通过 `scripts/fix-apply.mjs` 批量转换为纯 CSS）
 
 ### 9. 关键文件清单
 

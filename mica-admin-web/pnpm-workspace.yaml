@@ -1,7 +1,7 @@
 packages:
-  - '_vben/packages/*'
-  - '_vben/core/*'
-  - '_vben/tailwind-config'
+  - 'vben/packages/*'
+  - 'vben/core/*'
+  - 'vben/tailwind-config'
 
 # 单一来源：所有 workspace 包通过 "catalog:" / "catalog:<name>:" 引用。
 # 业务运行时依赖默认走 catalog（无名）；构建工具链走命名 catalog tooling。

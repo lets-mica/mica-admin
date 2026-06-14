@@ -20,7 +20,7 @@ import { getUnreadMessages, markAllAsRead, markAsRead } from '#/api/system/user-
 import { $t } from '#/locales';
 import { useAuthStore } from '#/store';
 import { formatDateTime } from '#/utils/format-date';
-import LoginForm from '#/views/_core/authentication/login.vue';
+import LoginForm from '#/views/auth/login.vue';
 
 const DEFAULT_AVATAR = '/logo.svg';
 

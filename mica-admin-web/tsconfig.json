@@ -25,8 +25,8 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "_vben/**/*.ts",
-    "_vben/**/*.vue",
+    "vben/**/*.ts",
+    "vben/**/*.vue",
     "vite.config.ts"
   ]
 }

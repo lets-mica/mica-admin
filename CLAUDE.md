@@ -9,7 +9,7 @@ mica-admin 是基于 [mica](https://gitee.com/596392912/mica) 工具集的低代
 Maven multi-module 结构：
 
 - `mica-admin-server/` — Spring Boot 后端（Java 8+）
-- `mica-admin-web/` — 前端工程（Vite + Vue 3 + Naive UI）。这是 Vben Admin 5.x 的**本地化**版本，源码提取到 `mica-admin-web/_vben/`，由 pnpm workspace 协议引用。完整前端说明见 `mica-admin-web/CLAUDE.md`。
+- `mica-admin-web/` — 前端工程（Vite + Vue 3 + Naive UI）。这是 Vben Admin 5.x 的**本地化**版本，源码提取到 `mica-admin-web/vben/`，由 pnpm workspace 协议引用。完整前端说明见 `mica-admin-web/CLAUDE.md`。
 
 ## 构建命令
 
@@ -89,7 +89,7 @@ pnpm api               # 从 http://127.0.0.1:8080/v3/api-docs 生成 swagger �
 完整说明见 `mica-admin-web/CLAUDE.md`。摘要要点：
 
 - 框架：Vue 3.5 + Naive UI 2.44 + Vite 6 + TypeScript 5.7 + Tailwind CSS 4 + Pinia 3。
-- **包管理**：pnpm workspace，Vben 源码本地化到 `_vben/packages/*`、`_vben/core/*`、`_vben/tailwind-config/`。`vite.config.ts` 中的 `vbenResolver()` 插件负责解析 `@vben/*`、`@vben-core/*`、`@vben/common-ui/es/*`、`@vben/plugins/*` 等别名到本地路径。
+- **包管理**：pnpm workspace，Vben 源码本地化到 `vben/packages/*`、`vben/core/*`、`vben/tailwind-config/`。`vite.config.ts` 中的 `vbenResolver()` 插件负责解析 `@vben/*`、`@vben-core/*`、`@vben/common-ui/es/*`、`@vben/plugins/*` 等别名到本地路径。
 - **后端联调**：dev server 通过 `/api` 代理到 `http://localhost:8080`。
 - **认证流程已针对 mica-admin 后端定制**：
   - `src/store/auth-mica-admin.ts` + `src/api/core/auth-mica-admin.ts`
@@ -137,8 +137,8 @@ pnpm api               # 从 http://127.0.0.1:8080/v3/api-docs 生成 swagger �
 
 ## 注意事项
 
-- 前端工作**不要**直接改 `_vben/` 内的"包对包"导入路径（别名由 `vbenResolver()` 接管，改了反而破坏解析）。
-- `_vben/` 内**不要**使用 Tailwind `@apply`（已通过 `scripts/fix-apply.mjs` 批量转纯 CSS）。
+- 前端工作**不要**直接改 `vben/` 内的"包对包"导入路径（别名由 `vbenResolver()` 接管，改了反而破坏解析）。
+- `vben/` 内**不要**使用 Tailwind `@apply`（已通过 `scripts/fix-apply.mjs` 批量转纯 CSS）。
 - 业务侧 RBAC：路由/菜单/按钮权限通过后端 `sys_menu` + `sys_role_menu` 控制，前端通过 `v-permission` 自定义指令与动态路由消费。
 - README 中 TODO 列表（数据权限）尚未实现，新增需求前先确认是否落在该 TODO。
 - 后端成功响应 `code = 0`（非 200），前端拦截器已适配；新写接口时保持一致。
