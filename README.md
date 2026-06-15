@@ -2,6 +2,8 @@
 
 基于开源版 [**mica**](https://gitee.com/596392912/mica) 工具集，采用 maven、spring boot、spring security、vue 的低代码管理后台。
 
+[✨✨✨推广：**BladeX 物联网平台**✨✨✨iot.bladex.cn](https://iot.bladex.cn?from=mica-mqtt)
+
 ### 1. 文档
 1. 导入 `docs/database/mysql.sql` 到 mysql。
 2. 更改后端 `mica-admin-server/src/main/resources` 服务下的配置文件。
