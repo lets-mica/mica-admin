@@ -1,6 +1,8 @@
 package net.dreamlu.mica.admin.framework.base;
 
-import com.alibaba.excel.annotation.ExcelIgnore;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
+import org.apache.fesod.sheet.annotation.ExcelIgnore;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -10,8 +12,6 @@ import lombok.Setter;
 import net.dreamlu.mica.core.validation.CreateGroup;
 import net.dreamlu.mica.core.validation.UpdateGroup;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 

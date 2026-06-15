@@ -1,7 +1,7 @@
 package net.dreamlu.mica.admin.project.system.entity;
 
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.alibaba.excel.annotation.write.style.ColumnWidth;
+import org.apache.fesod.sheet.annotation.ExcelProperty;
+import org.apache.fesod.sheet.annotation.write.style.ColumnWidth;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.dreamlu.mica.admin.common.enums.EnabledEnum;

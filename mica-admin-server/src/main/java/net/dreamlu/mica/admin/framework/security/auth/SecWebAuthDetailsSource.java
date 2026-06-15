@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * 授权详情 添加验证码

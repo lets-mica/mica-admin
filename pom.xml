@@ -15,17 +15,16 @@
         <!-- 部署服务 jar 包版本 -->
         <jar.version>1.0</jar.version>
         <!-- java 版本 -->
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <maven-flatten.version>1.7.3</maven-flatten.version>
-        <mica.version>2.7.18.7</mica.version>
-        <jackson.version>2.22.0</jackson.version>
+        <mica.version>4.1.0</mica.version>
+        <spring-boot.version>4.1.0</spring-boot.version>
+        <mybatis-plus.version>3.5.16</mybatis-plus.version>
+        <druid.version>1.2.28</druid.version>
         <java-jwt.version>4.5.2</java-jwt.version>
-        <spring-boot.version>2.7.18</spring-boot.version>
-        <mybatis-plus.version>3.5.9</mybatis-plus.version>
-        <undertow.version>2.2.39.Final</undertow.version>
         <yauaa.version>7.32.0</yauaa.version>
-        <oshi.version>6.1.6</oshi.version>
-        <excel-spring-boot-starter.version>1.2.8</excel-spring-boot-starter.version>
+        <oshi.version>7.3.1</oshi.version>
+        <excel-spring-boot-starter.version>4.0.0</excel-spring-boot-starter.version>
         <freemarker.version>2.3.31</freemarker.version>
         <x-file-storage.version>2.3.0</x-file-storage.version>
     </properties>
@@ -33,7 +32,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.18</version>
+        <version>4.1.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -45,14 +44,7 @@
     <!-- bom -->
     <dependencyManagement>
         <dependencies>
-            <!-- 注意，maven 是按先后顺序的，所以按 jackson、mica、spring boot、spring cloud -->
-            <dependency>
-                <groupId>com.fasterxml.jackson</groupId>
-                <artifactId>jackson-bom</artifactId>
-                <version>${jackson.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+            <!-- 注意，maven 是按先后顺序的，所以按 mica、spring boot、spring cloud -->
             <dependency>
                 <groupId>net.dreamlu</groupId>
                 <artifactId>mica-bom</artifactId>
@@ -67,90 +59,20 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- 强制排查依赖 tomcat -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-web</artifactId>
-                <version>${spring-boot.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-tomcat</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <!-- 强制排查依赖 logging -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter</artifactId>
-                <version>${spring-boot.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <!-- test 排查 vintage -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-test</artifactId>
-                <version>${spring-boot.version}</version>
-                <scope>test</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.junit.vintage</groupId>
-                        <artifactId>junit-vintage-engine</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>io.undertow</groupId>
-                <artifactId>undertow-core</artifactId>
-                <version>${undertow.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.undertow</groupId>
-                <artifactId>undertow-servlet</artifactId>
-                <version>${undertow.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>jboss-servlet-api_4.0_spec</artifactId>
-                        <groupId>org.jboss.spec.javax.servlet</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>jboss-annotations-api_1.3_spec</artifactId>
-                        <groupId>org.jboss.spec.javax.annotation</groupId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>io.undertow</groupId>
-                <artifactId>undertow-websockets-jsr</artifactId>
-                <version>${undertow.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>jboss-websocket-api_1.1_spec</artifactId>
-                        <groupId>org.jboss.spec.javax.websocket</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>jboss-servlet-api_4.0_spec</artifactId>
-                        <groupId>org.jboss.spec.javax.servlet</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>jboss-annotations-api_1.3_spec</artifactId>
-                        <groupId>org.jboss.spec.javax.annotation</groupId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
             <dependency>
                 <groupId>com.auth0</groupId>
                 <artifactId>java-jwt</artifactId>
                 <version>${java-jwt.version}</version>
             </dependency>
+            <!-- druid 连接池 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-4-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <artifactId>mybatis-plus-spring-boot4-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
                 <exclusions>
                     <exclusion>
@@ -161,7 +83,7 @@
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-jsqlparser-4.9</artifactId>
+                <artifactId>mybatis-plus-jsqlparser</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
             <!-- mybatis-plus 代码生成 -->

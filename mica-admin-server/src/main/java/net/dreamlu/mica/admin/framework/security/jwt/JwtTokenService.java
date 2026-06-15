@@ -13,7 +13,7 @@ import net.dreamlu.mica.core.utils.StringUtil;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.util.Date;
 

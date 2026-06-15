@@ -4,8 +4,8 @@ import lombok.Data;
 import net.dreamlu.mica.core.validation.UpdateGroup;
 import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**

@@ -21,7 +21,7 @@ import net.dreamlu.mica.admin.framework.security.utils.SecurityUtil;
 import net.dreamlu.mica.core.utils.*;
 import org.springframework.http.HttpHeaders;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**

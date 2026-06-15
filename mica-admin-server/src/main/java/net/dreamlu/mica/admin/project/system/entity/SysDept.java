@@ -1,8 +1,8 @@
 package net.dreamlu.mica.admin.project.system.entity;
 
-import com.alibaba.excel.annotation.ExcelIgnore;
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.alibaba.excel.annotation.write.style.ColumnWidth;
+import org.apache.fesod.sheet.annotation.ExcelIgnore;
+import org.apache.fesod.sheet.annotation.ExcelProperty;
+import org.apache.fesod.sheet.annotation.write.style.ColumnWidth;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

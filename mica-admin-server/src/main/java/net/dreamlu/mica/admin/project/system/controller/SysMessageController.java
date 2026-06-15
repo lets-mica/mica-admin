@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import net.dreamlu.mica.admin.framework.annotation.ApiLog;
 import net.dreamlu.mica.admin.framework.base.BaseController;
@@ -17,7 +18,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;

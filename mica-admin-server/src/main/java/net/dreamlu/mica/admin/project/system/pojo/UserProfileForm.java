@@ -2,8 +2,8 @@ package net.dreamlu.mica.admin.project.system.pojo;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 个人用户信息，编辑模型

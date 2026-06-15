@@ -3,7 +3,7 @@ package net.dreamlu.mica.admin.project.system.pojo;
 import lombok.Data;
 import net.dreamlu.mica.core.validation.UpdateGroup;
 
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 import java.util.List;
 
 /**

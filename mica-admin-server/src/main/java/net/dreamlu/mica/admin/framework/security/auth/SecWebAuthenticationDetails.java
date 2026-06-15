@@ -5,7 +5,7 @@ import net.dreamlu.mica.core.utils.StringPool;
 import net.dreamlu.mica.core.utils.StringUtil;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * 添加 验证码字段

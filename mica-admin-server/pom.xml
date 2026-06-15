@@ -52,15 +52,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!-- undertow 比 tomcat 更加稳定，性能更好 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-undertow</artifactId>
-        </dependency>
         <!-- aop -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
+            <artifactId>spring-boot-starter-aspectj</artifactId>
         </dependency>
         <!-- spring security 安全认证 -->
         <dependency>
@@ -74,15 +69,15 @@
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <artifactId>mybatis-plus-spring-boot4-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-jsqlparser-4.9</artifactId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
+            <artifactId>druid-spring-boot-4-starter</artifactId>
         </dependency>
         <!-- Mysql驱动包 -->
         <dependency>
@@ -143,11 +138,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
