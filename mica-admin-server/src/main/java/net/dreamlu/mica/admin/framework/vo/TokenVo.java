@@ -1,5 +1,6 @@
 package net.dreamlu.mica.admin.framework.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import net.dreamlu.mica.core.utils.JsonUtil;
@@ -51,6 +52,7 @@ public class TokenVo implements Serializable {
 	/**
 	 * 登录时间
 	 */
+	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS")
 	private LocalDateTime loginTime;
 
 	@Override

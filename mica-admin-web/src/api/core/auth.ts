@@ -33,8 +33,8 @@ export async function getPublicKeyApi(): Promise<string> {
   try {
     const data = await preAuthApi.get<any>('/api/auth/public-key');
 
-    if (typeof data === 'string' && data.startsWith('MIG')) {
-      cachedPublicKey = data;
+    if (typeof data === 'string') {
+        cachedPublicKey = data;
       return data;
     }
     if (data && typeof data === 'object' && data.publicKey) {
