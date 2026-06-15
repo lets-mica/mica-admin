@@ -1,7 +1,5 @@
 package net.dreamlu.mica.admin.framework.security.auth;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.dreamlu.mica.admin.framework.config.MicaAdminSecurityProperties;
 import net.dreamlu.mica.admin.framework.security.service.SecUserDetailsService;
 import net.dreamlu.mica.admin.framework.security.service.UserLockService;
@@ -12,7 +10,6 @@ import net.dreamlu.mica.core.utils.RsaUtil;
 import net.dreamlu.mica.core.utils.StringUtil;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -29,16 +26,20 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author L.cm
  */
 public class SecAuthenticationProvider extends DaoAuthenticationProvider {
-	@Getter
-	@Setter
-	private MicaAdminSecurityProperties micaSecurityProperties;
-	@Getter
-	@Setter
-	private ICaptchaService captchaService;
-	@Getter
-	@Setter
-	private CacheManager cacheManager;
+	private final MicaAdminSecurityProperties micaSecurityProperties;
+	private final ICaptchaService captchaService;
+	private final CacheManager cacheManager;
 	private Cache passwordRetryCache;
+
+	public SecAuthenticationProvider(UserDetailsService userDetailsService,
+	                                 MicaAdminSecurityProperties micaSecurityProperties,
+	                                 ICaptchaService captchaService,
+	                                 CacheManager cacheManager) {
+		super(userDetailsService);
+		this.micaSecurityProperties = micaSecurityProperties;
+		this.captchaService = captchaService;
+		this.cacheManager = cacheManager;
+	}
 
 	@Override
 	public Authentication authenticate(Authentication auth) throws AuthenticationException {
@@ -122,8 +123,4 @@ public class SecAuthenticationProvider extends DaoAuthenticationProvider {
 		return newToken;
 	}
 
-	@Override
-	public void setMessageSource(MessageSource messageSource) {
-		// 不做处理，使用 security 内置的 i18n 配置
-	}
 }
