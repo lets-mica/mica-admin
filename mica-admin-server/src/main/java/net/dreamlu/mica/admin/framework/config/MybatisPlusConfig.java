@@ -2,8 +2,12 @@ package net.dreamlu.mica.admin.framework.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
+import com.baomidou.mybatisplus.extension.plugins.inner.DataPermissionInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import net.dreamlu.mica.admin.framework.mybatis.DemoBlockAttackInnerInterceptor;
 import net.dreamlu.mica.admin.framework.mybatis.MybatisPlusMetaObjectHandler;
 import net.dreamlu.mica.admin.framework.mybatis.SqlLogFilter;
 import org.springframework.beans.factory.ObjectProvider;
