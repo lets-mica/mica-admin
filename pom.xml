@@ -22,10 +22,9 @@
         <mybatis-plus.version>3.5.16</mybatis-plus.version>
         <druid.version>1.2.28</druid.version>
         <java-jwt.version>4.5.2</java-jwt.version>
-        <yauaa.version>7.32.0</yauaa.version>
+        <yauaa.version>8.1.1</yauaa.version>
         <oshi.version>7.3.1</oshi.version>
         <excel-spring-boot-starter.version>4.0.0</excel-spring-boot-starter.version>
-        <freemarker.version>2.3.31</freemarker.version>
         <x-file-storage.version>2.3.0</x-file-storage.version>
     </properties>
 
@@ -115,12 +114,6 @@
                 <groupId>nl.basjes.parse.useragent</groupId>
                 <artifactId>yauaa</artifactId>
                 <version>${yauaa.version}</version>
-            </dependency>
-            <!-- 邮件模板 -->
-            <dependency>
-                <groupId>org.freemarker</groupId>
-                <artifactId>freemarker</artifactId>
-                <version>${freemarker.version}</version>
             </dependency>
             <!-- web -->
             <dependency>

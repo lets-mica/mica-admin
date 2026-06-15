@@ -117,11 +117,6 @@
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
         </dependency>
-        <!-- 邮件模板 -->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-        </dependency>
         <!-- jakarta servlet api -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
