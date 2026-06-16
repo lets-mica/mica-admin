@@ -1,4 +1,4 @@
-package net.dreamlu.mica.admin.project.system.job.pojo;
+package net.dreamlu.mica.admin.project.system.pojo;
 
 import lombok.Data;
 
@@ -14,14 +14,9 @@ import java.util.List;
 public class SysJobQuery {
 
 	/**
-	 * 任务Key（模糊匹配）
+	 * 模糊查询 jobKey,jobName,description
 	 */
-	private String jobKey;
-
-	/**
-	 * 任务名称（模糊匹配）
-	 */
-	private String jobName;
+	private String blurry;
 
 	/**
 	 * 是否启用

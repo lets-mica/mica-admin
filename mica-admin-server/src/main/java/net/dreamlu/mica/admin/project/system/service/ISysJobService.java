@@ -1,9 +1,9 @@
-package net.dreamlu.mica.admin.project.system.job.service;
+package net.dreamlu.mica.admin.project.system.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
-import net.dreamlu.mica.admin.project.system.job.entity.SysJob;
-import net.dreamlu.mica.admin.project.system.job.pojo.SysJobQuery;
+import net.dreamlu.mica.admin.project.system.entity.SysJob;
+import net.dreamlu.mica.admin.project.system.pojo.SysJobQuery;
 
 /**
  * <p>

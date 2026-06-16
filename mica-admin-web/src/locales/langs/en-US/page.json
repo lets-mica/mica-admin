@@ -19,7 +19,8 @@
     "notice": "Notice",
     "message": "Message",
     "userMessage": "My Messages",
-    "config": "Config"
+    "config": "Config",
+    "job": "Job Management"
   },
   "monitor": {
     "title": "Monitor",

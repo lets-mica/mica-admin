@@ -1,4 +1,4 @@
-package net.dreamlu.mica.admin.project.system.job.example;
+package net.dreamlu.mica.admin.project.system.job;
 
 import lombok.extern.slf4j.Slf4j;
 import net.dreamlu.mica.admin.framework.job.annotation.SysJob;

@@ -19,7 +19,8 @@
     "notice": "通知公告",
     "message": "消息管理",
     "userMessage": "我的消息",
-    "config": "系统配置"
+    "config": "系统配置",
+    "job": "任务管理"
   },
   "monitor": {
     "title": "系统监控",

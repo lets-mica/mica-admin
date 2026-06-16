@@ -1,4 +1,4 @@
-package net.dreamlu.mica.admin.project.system.job.controller;
+package net.dreamlu.mica.admin.project.system.controller;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -10,11 +10,11 @@ import net.dreamlu.mica.admin.framework.annotation.ApiLog;
 import net.dreamlu.mica.admin.framework.base.BaseController;
 import net.dreamlu.mica.admin.framework.job.core.SysJobRegistry;
 import net.dreamlu.mica.admin.framework.job.core.SysJobScheduler;
-import net.dreamlu.mica.admin.project.system.job.entity.SysJob;
-import net.dreamlu.mica.admin.project.system.job.pojo.SysJobForm;
-import net.dreamlu.mica.admin.project.system.job.pojo.SysJobQuery;
-import net.dreamlu.mica.admin.project.system.job.pojo.SysJobRunOnceForm;
-import net.dreamlu.mica.admin.project.system.job.service.ISysJobService;
+import net.dreamlu.mica.admin.project.system.entity.SysJob;
+import net.dreamlu.mica.admin.project.system.pojo.SysJobForm;
+import net.dreamlu.mica.admin.project.system.pojo.SysJobQuery;
+import net.dreamlu.mica.admin.project.system.pojo.SysJobRunOnceForm;
+import net.dreamlu.mica.admin.project.system.service.ISysJobService;
 import net.dreamlu.mica.core.validation.CreateGroup;
 import net.dreamlu.mica.core.validation.UpdateGroup;
 import org.springframework.security.access.prepost.PreAuthorize;

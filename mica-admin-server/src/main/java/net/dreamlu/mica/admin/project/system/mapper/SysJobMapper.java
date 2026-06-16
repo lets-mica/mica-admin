@@ -1,7 +1,7 @@
-package net.dreamlu.mica.admin.project.system.job.mapper;
+package net.dreamlu.mica.admin.project.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import net.dreamlu.mica.admin.project.system.job.entity.SysJob;
+import net.dreamlu.mica.admin.project.system.entity.SysJob;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

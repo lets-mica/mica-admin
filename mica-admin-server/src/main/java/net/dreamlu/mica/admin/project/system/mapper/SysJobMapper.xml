@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="net.dreamlu.mica.admin.project.system.job.mapper.SysJobMapper">
+<mapper namespace="net.dreamlu.mica.admin.project.system.mapper.SysJobMapper">
 
-    <resultMap id="BaseResultMap" type="net.dreamlu.mica.admin.project.system.job.entity.SysJob">
+    <resultMap id="BaseResultMap" type="net.dreamlu.mica.admin.project.system.entity.SysJob">
         <result column="id" property="id"/>
         <result column="created_by" property="createdBy"/>
         <result column="created_at" property="createdAt"/>

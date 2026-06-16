@@ -1,4 +1,4 @@
-package net.dreamlu.mica.admin.project.system.job.entity;
+package net.dreamlu.mica.admin.project.system.entity;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;

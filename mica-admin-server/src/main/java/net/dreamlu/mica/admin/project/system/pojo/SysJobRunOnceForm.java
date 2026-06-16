@@ -1,4 +1,4 @@
-package net.dreamlu.mica.admin.project.system.job.pojo;
+package net.dreamlu.mica.admin.project.system.pojo;
 
 import lombok.Data;
 

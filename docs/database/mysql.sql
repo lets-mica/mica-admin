@@ -286,6 +286,14 @@ INSERT INTO `sys_menu` VALUES (120, 6, 'Markdown编辑器', 'Markdown', 3, 'mark
 INSERT INTO `sys_menu` VALUES (121, 6, '图标选择器', 'Icons', 4, 'icons', 'components:icons:list', 'components/icons/index', 'lucide:smile', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '图标选择器');
 -- 系统管理 - 消息中心（前端 views/system/message/index.vue 已存在，补齐菜单节点）
 INSERT INTO `sys_menu` VALUES (122, 1, '消息中心', 'SystemMessage', 10, 'message', 'system:message:list', 'system/message/index', 'lucide:mail', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '消息中心菜单');
+-- 系统管理 - 任务管理（@SysJob 配套页面 views/system/job/index.vue）
+INSERT INTO `sys_menu` VALUES (123, 1, '任务管理', 'Job', 11, 'job', 'system:job:list', 'system/job/index', 'lucide:alarm-clock', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '任务管理菜单');
+-- 任务管理 - 按钮权限
+INSERT INTO `sys_menu` VALUES (1052, 123, '任务查询', 'JobQuery', 1, '#', 'system:job:query', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
+INSERT INTO `sys_menu` VALUES (1053, 123, '任务新增', 'JobAdd', 2, '#', 'system:job:add', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
+INSERT INTO `sys_menu` VALUES (1054, 123, '任务修改', 'JobEdit', 3, '#', 'system:job:edit', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
+INSERT INTO `sys_menu` VALUES (1055, 123, '任务删除', 'JobRemove', 4, '#', 'system:job:remove', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
+INSERT INTO `sys_menu` VALUES (1056, 123, '任务导出', 'JobExport', 5, '#', 'system:job:export', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 -- 系统监控 - 日志（parent_id=2）
 INSERT INTO `sys_menu` VALUES (500, 2, '操作日志', 'Log', 6, 'log', 'monitor:operlog:list', 'monitor/log/index', 'lucide:file-text', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '操作日志菜单');
 INSERT INTO `sys_menu` VALUES (501, 2, '异常日志', 'ErrorLog', 7, 'log/error', 'monitor:logininfor:list', 'monitor/log/errorLog', 'lucide:triangle-alert', 0, 1, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '异常日志菜单');
@@ -562,6 +570,9 @@ INSERT INTO `sys_role_menu` VALUES (2, 1045);
 INSERT INTO `sys_role_menu` VALUES (2, 1046);
 INSERT INTO `sys_role_menu` VALUES (2, 1047);
 INSERT INTO `sys_role_menu` VALUES (2, 1048);
+-- 默认给管理员角色（role_id=2）授予任务管理全部按钮权限
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES
+(2, 123), (2, 1052), (2, 1053), (2, 1054), (2, 1055), (2, 1056);
 
 -- ----------------------------
 -- Table structure for sys_user

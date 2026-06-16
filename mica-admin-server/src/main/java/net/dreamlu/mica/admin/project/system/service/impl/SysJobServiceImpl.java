@@ -1,13 +1,13 @@
-package net.dreamlu.mica.admin.project.system.job.service.impl;
+package net.dreamlu.mica.admin.project.system.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.dreamlu.mica.admin.project.system.job.entity.SysJob;
-import net.dreamlu.mica.admin.project.system.job.mapper.SysJobMapper;
-import net.dreamlu.mica.admin.project.system.job.pojo.SysJobQuery;
-import net.dreamlu.mica.admin.project.system.job.service.ISysJobService;
+import net.dreamlu.mica.admin.project.system.entity.SysJob;
+import net.dreamlu.mica.admin.project.system.mapper.SysJobMapper;
+import net.dreamlu.mica.admin.project.system.pojo.SysJobQuery;
+import net.dreamlu.mica.admin.project.system.service.ISysJobService;
 import net.dreamlu.mica.core.utils.StringUtil;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +27,12 @@ public class SysJobServiceImpl extends ServiceImpl<SysJobMapper, SysJob> impleme
 	@Override
 	public Wrapper<SysJob> getQueryWrapper(SysJobQuery query) {
 		LambdaQueryWrapper<SysJob> wrapper = new LambdaQueryWrapper<>();
-		wrapper.like(StringUtil.isNotBlank(query.getJobKey()), SysJob::getJobKey, query.getJobKey());
-		wrapper.like(StringUtil.isNotBlank(query.getJobName()), SysJob::getJobName, query.getJobName());
+		// 模糊查询 jobKey,jobName,description
+		String blurry = query.getBlurry();
+		wrapper.and(StringUtil.isNotBlank(blurry), w -> w
+			.like(SysJob::getJobKey, blurry)
+			.or().like(SysJob::getJobName, blurry)
+			.or().like(SysJob::getDescription, blurry));
 		wrapper.eq(query.getEnabled() != null, SysJob::getEnabled, query.getEnabled());
 		List<LocalDateTime> createTime = query.getCreateTime();
 		if (createTime != null && createTime.size() > 1) {

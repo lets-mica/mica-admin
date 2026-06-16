@@ -1,9 +1,9 @@
-package net.dreamlu.mica.admin.project.system.job.config;
+package net.dreamlu.mica.admin.framework.job.loader;
 
 import lombok.RequiredArgsConstructor;
 import net.dreamlu.mica.admin.framework.job.core.SysJobScheduler;
-import net.dreamlu.mica.admin.project.system.job.entity.SysJob;
-import net.dreamlu.mica.admin.project.system.job.service.ISysJobService;
+import net.dreamlu.mica.admin.project.system.entity.SysJob;
+import net.dreamlu.mica.admin.project.system.service.ISysJobService;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
