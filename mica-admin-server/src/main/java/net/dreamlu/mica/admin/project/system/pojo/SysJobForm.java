@@ -1,12 +1,12 @@
 package net.dreamlu.mica.admin.project.system.pojo;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import lombok.Data;
 import net.dreamlu.mica.core.validation.CreateGroup;
 import net.dreamlu.mica.core.validation.UpdateGroup;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import java.io.Serializable;
 
 /**

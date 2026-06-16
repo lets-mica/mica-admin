@@ -1,8 +1,8 @@
 package net.dreamlu.mica.admin.project.system.pojo;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Map;
 
