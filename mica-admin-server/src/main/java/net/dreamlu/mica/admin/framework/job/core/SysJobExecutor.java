@@ -3,7 +3,6 @@ package net.dreamlu.mica.admin.framework.job.core;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.dreamlu.mica.core.utils.Exceptions;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicLong;
@@ -18,10 +17,8 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author L.cm
  */
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class SysJobExecutor {
-
 	/**
 	 * 全局执行计数器（监控用）
 	 */
