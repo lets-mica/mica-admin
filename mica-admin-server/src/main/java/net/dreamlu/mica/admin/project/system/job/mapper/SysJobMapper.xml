@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.dreamlu.mica.admin.project.system.job.mapper.SysJobMapper">
+
+    <resultMap id="BaseResultMap" type="net.dreamlu.mica.admin.project.system.job.entity.SysJob">
+        <result column="id" property="id"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="job_key" property="jobKey"/>
+        <result column="job_name" property="jobName"/>
+        <result column="cron_expression" property="cronExpression"/>
+        <result column="enabled" property="enabled"/>
+        <result column="param_schema" property="paramSchema"/>
+        <result column="description" property="description"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        created_by,
+        created_at,
+        updated_by,
+        updated_at,
+        job_key,
+        job_name,
+        cron_expression,
+        enabled,
+        param_schema,
+        description
+    </sql>
+
+</mapper>

@@ -638,3 +638,29 @@ UPDATE `sys_menu` SET `name` = `title` WHERE `name` IS NULL OR `name` = '';
 
 -- 第二步：修改字段为 NOT NULL DEFAULT ''
 ALTER TABLE `sys_menu` MODIFY COLUMN `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '菜单名称';
+
+-- ============================================================================
+-- Table structure for sys_job
+-- 数据库驱动定时任务（@SysJob）。所有调度参数（cron / 启停 / 参数 schema）
+-- 均存储在此表，应用启动时由 SysJobScheduler 读取并初始化调度。
+-- ============================================================================
+DROP TABLE IF EXISTS `sys_job`;
+CREATE TABLE `sys_job`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `job_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '任务唯一标识（对应 @SysJob.value）',
+  `job_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '任务名称',
+  `cron_expression` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT 'cron 表达式',
+  `enabled` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否启用（0否 1是）',
+  `param_schema` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '参数结构定义 JSON，例如：{"bizDate":"DATE","force":"BOOLEAN"}',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '任务描述',
+  `created_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `created_at` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `updated_at` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_job_key`(`job_key`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据库驱动定时任务' ROW_FORMAT = Compact;
+
+-- 演示任务：与 DemoSysJob 配套
+INSERT INTO `sys_job` (`job_key`, `job_name`, `cron_expression`, `enabled`, `param_schema`, `description`) VALUES
+('demoTask', '演示任务', '0/30 * * * * ?', 0, '{"bizDate":"DATE","force":"BOOLEAN"}', '演示任务：定时打印业务日期；支持补数（bizDate / force）');
