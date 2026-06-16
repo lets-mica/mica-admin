@@ -8,6 +8,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    NDatePicker: typeof import('naive-ui')['NDatePicker']
+    NInputNumber: typeof import('naive-ui')['NInputNumber']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
