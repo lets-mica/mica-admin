@@ -49,7 +49,7 @@
 4. 部署默认采用的 `systemd` 详见 `script/start.sh` 脚本。
 
 ### 3. 效果演示
-http://admin.dreamlu.net
+https://admin.dreamlu.net
 
 默认用户名：admin、test 密码：test
 

@@ -359,11 +359,6 @@ async function loadData() {
     console.error('Failed to load file list:', e);
     data.value = [];
     pagination.total = 0;
-    notification.error({
-      content: '加载文件失败',
-      description: e?.response?.data?.msg || e?.message || '请检查后端服务',
-      duration: 4000,
-    });
   } finally {
     loading.value = false;
   }
@@ -427,7 +422,6 @@ async function handleCopyUrl(row: FileStorageItem) {
     notification.success({ content: '链接已复制', duration: 1800 });
   } catch (e) {
     console.error('Copy failed:', e);
-    notification.error({ content: '复制失败，请手动复制', duration: 2000 });
   }
 }
 
@@ -460,11 +454,6 @@ function handleDelete(id: number) {
         loadData();
       } catch (e: any) {
         console.error('Failed to delete:', e);
-        notification.error({
-          content: '操作失败',
-          description: e?.response?.data?.msg || e?.message || '删除失败',
-          duration: 3000,
-        });
       }
     },
   });
@@ -491,11 +480,6 @@ function handleBatchDelete() {
         loadData();
       } catch (e: any) {
         console.error('Failed to batch delete:', e);
-        notification.error({
-          content: '操作失败',
-          description: e?.response?.data?.msg || e?.message || '删除失败',
-          duration: 3000,
-        });
       }
     },
   });

@@ -56,7 +56,7 @@ async function handleSubmit() {
     show.value = false;
     resetForm();
   } catch (e: any) {
-    notification.error({ content: '修改失败', description: e.message, duration: 3000 });
+    console.error('Failed to update pass:', e);
   } finally {
     loading.value = false;
   }

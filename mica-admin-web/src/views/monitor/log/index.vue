@@ -53,11 +53,6 @@ async function loadData() {
     console.error('Failed to load operation logs:', e);
     data.value = [];
     pagination.total = 0;
-    notification.error({
-      content: '加载操作日志失败',
-      description: e?.response?.data?.msg || e?.message || '请检查后端服务',
-      duration: 4000,
-    });
   } finally {
     loading.value = false;
   }
@@ -76,7 +71,6 @@ function handleClear() {
         loadData();
       } catch (e: any) {
         console.error('Failed to clear logs:', e);
-        notification.error({ content: '操作失败', description: e.message || '无法清空日志', duration: 3000 });
       }
     },
   });
@@ -108,11 +102,7 @@ async function handleExport() {
     await exportInfoLogExcel(params);
     notification.success({ content: '导出成功', duration: 2000 });
   } catch (e: any) {
-    notification.error({
-      content: '导出失败',
-      description: e?.response?.data?.msg || e?.message || '导出失败',
-      duration: 3000,
-    });
+    console.error('Failed to export operation logs:', e);
   } finally {
     exporting.value = false;
   }

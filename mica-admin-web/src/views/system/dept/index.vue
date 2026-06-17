@@ -191,11 +191,6 @@ async function loadData() {
   } catch (e: any) {
     console.error('Failed to load depts:', e);
     data.value = [];
-    notification.error({
-      content: '加载部门失败',
-      description: e?.response?.data?.msg || e?.message || '请检查后端服务',
-      duration: 4000,
-    });
   } finally {
     loading.value = false;
   }
@@ -324,11 +319,7 @@ async function handleSubmit() {
     modalApi.close();
     loadData();
   } catch (e: any) {
-    notification.error({
-      content: '操作失败',
-      description: e?.response?.data?.msg || e?.message || '保存失败',
-      duration: 3000,
-    });
+    console.error('Failed to submit:', e);
   } finally {
     modalApi.unlock();
   }
@@ -347,11 +338,7 @@ function handleDelete(id: number) {
         selectedRowKeys.value = selectedRowKeys.value.filter((key) => key !== id);
         loadData();
       } catch (e: any) {
-        notification.error({
-          content: '操作失败',
-          description: e?.response?.data?.msg || e?.message || '删除失败',
-          duration: 3000,
-        });
+        console.error('Failed to delete:', e);
       }
     },
   });
@@ -378,11 +365,7 @@ function handleBatchDelete() {
         selectedRowKeys.value = [];
         loadData();
       } catch (e: any) {
-        notification.error({
-          content: '操作失败',
-          description: e?.response?.data?.msg || e?.message || '删除失败',
-          duration: 3000,
-        });
+        console.error('Failed to batch delete:', e);
       }
     },
   });
@@ -412,11 +395,7 @@ function handleChangeEnabled(row: DeptItem, enabled: boolean) {
         notification.success({ content: `${label}成功`, duration: 2000 });
       } catch (e: any) {
         row.enabled = prev ? 1 : 0;
-        notification.error({
-          content: '操作失败',
-          description: e?.response?.data?.msg || e?.message || '更新状态失败',
-          duration: 3000,
-        });
+        console.error('Failed to change enabled:', e);
       }
     },
     onNegativeClick: () => {
@@ -441,11 +420,7 @@ async function handleExport() {
     await exportDeptExcel(params);
     notification.success({ content: '导出成功', duration: 2000 });
   } catch (e: any) {
-    notification.error({
-      content: '导出失败',
-      description: e?.response?.data?.msg || e?.message || '导出失败',
-      duration: 3000,
-    });
+    console.error('Failed to export:', e);
   } finally {
     exporting.value = false;
   }

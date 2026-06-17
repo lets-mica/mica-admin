@@ -127,7 +127,7 @@ async function handleMarkAllRead() {
     notification.success({ content: '已全部标记为已读', duration: 2000 });
     loadData();
   } catch (e: any) {
-    notification.error({ content: '操作失败', description: e.message || '', duration: 3000 });
+    console.error('Failed to mark all as read:', e);
   }
 }
 

@@ -62,11 +62,6 @@ async function loadData() {
     console.error('Failed to load tokens:', e);
     data.value = [];
     pagination.total = 0;
-    notification.error({
-      content: '加载在线用户失败',
-      description: e?.response?.data?.msg || e?.message || '请检查后端服务',
-      duration: 4000,
-    });
   } finally {
     loading.value = false;
   }
@@ -85,7 +80,6 @@ function handleDelete(key: string) {
         loadData();
       } catch (e: any) {
         console.error('Failed to delete token:', e);
-        notification.error({ content: '操作失败', description: e.message || '强退失败', duration: 3000 });
       }
     },
   });
@@ -109,7 +103,6 @@ function handleBatchDelete() {
         loadData();
       } catch (e: any) {
         console.error('Failed to batch delete tokens:', e);
-        notification.error({ content: '操作失败', description: e.message || '强退失败', duration: 3000 });
       }
     },
   });

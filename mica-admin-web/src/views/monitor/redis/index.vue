@@ -36,11 +36,6 @@ async function loadData() {
     show.value = false;
     loadError.value = e?.response?.data?.msg || e?.message || 'Redis 监控接口不可用';
     loading.value = false;
-    notification.error({
-      content: '加载 Redis 监控失败',
-      description: loadError.value,
-      duration: 4000,
-    });
   }
 }
 

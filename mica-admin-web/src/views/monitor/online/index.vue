@@ -66,11 +66,6 @@ async function loadData() {
     console.error('Failed to load online users:', e);
     data.value = [];
     pagination.total = 0;
-    notification.error({
-      content: '加载在线用户失败',
-      description: e?.response?.data?.msg || e?.message || '请检查后端服务',
-      duration: 4000,
-    });
   } finally {
     loading.value = false;
   }
@@ -88,11 +83,7 @@ function handleKickOut(key: string) {
         notification.success({ content: '已强退该用户', duration: 2000 });
         loadData();
       } catch (e: any) {
-        notification.error({
-          content: '操作失败',
-          description: e?.response?.data?.msg || e?.message || '强退失败',
-          duration: 3000,
-        });
+        console.error('Failed to kick out user:', e);
       }
     },
   });
@@ -118,11 +109,7 @@ function handleBatchKickOut() {
         selectedRowKeys.value = [];
         loadData();
       } catch (e: any) {
-        notification.error({
-          content: '操作失败',
-          description: e?.response?.data?.msg || e?.message || '强退失败',
-          duration: 3000,
-        });
+        console.error('Failed to batch kick out users:', e);
       }
     },
   });

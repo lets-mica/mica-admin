@@ -31,11 +31,6 @@ async function loadData() {
     console.error('Failed to load server info:', e);
     show.value = false;
     loadError.value = e?.response?.data?.msg || e?.message || '服务器监控接口不可用';
-    notification.error({
-      content: '加载服务器监控失败',
-      description: loadError.value,
-      duration: 4000,
-    });
   } finally {
     loading.value = false;
   }

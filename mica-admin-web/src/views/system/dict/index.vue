@@ -93,11 +93,6 @@ async function loadDictTypes() {
     }
   } catch (e: any) {
     console.error('Failed to load dict types:', e);
-    notification.error({
-      content: '加载字典类型失败',
-      description: e.message || '请检查网络或权限',
-      duration: 3000,
-    });
     dictTypes.value = [];
     total.value = 0;
     selectedType.value = null;
@@ -117,11 +112,6 @@ async function loadDictData() {
     dictData.value = await getDictItems(selectedType.value.name);
   } catch (e: any) {
     console.error('Failed to load dict data:', e);
-    notification.error({
-      content: '加载字典项失败',
-      description: e.message || '请检查网络或权限',
-      duration: 3000,
-    });
     dictData.value = [];
   } finally {
     dataLoading.value = false;
@@ -178,7 +168,6 @@ async function handleSubmitType() {
     loadDictTypes();
   } catch (e: any) {
     console.error('Failed to submit type:', e);
-    notification.error({ content: '操作失败', description: e.message || '保存失败', duration: 3000 });
   } finally {
     typeModalApi.unlock();
   }
@@ -201,7 +190,6 @@ function handleDeleteType(id: number) {
         loadDictTypes();
       } catch (e: any) {
         console.error('Failed to delete type:', e);
-        notification.error({ content: '操作失败', description: e.message || '删除失败', duration: 3000 });
       }
     },
   });
@@ -260,7 +248,6 @@ async function handleSubmitDict() {
     loadDictData();
   } catch (e: any) {
     console.error('Failed to submit dict:', e);
-    notification.error({ content: '操作失败', description: e.message || '保存失败', duration: 3000 });
   } finally {
     dictModalApi.unlock();
   }
@@ -279,7 +266,6 @@ function handleDeleteDict(id: number) {
         loadDictData();
       } catch (e: any) {
         console.error('Failed to delete dict:', e);
-        notification.error({ content: '操作失败', description: e.message || '删除失败', duration: 3000 });
       }
     },
   });
@@ -300,11 +286,7 @@ async function handleExportType() {
     await exportDictExcel(params);
     notification.success({ content: '导出字典类型成功', duration: 2000 });
   } catch (e: any) {
-    notification.error({
-      content: '导出失败',
-      description: e?.response?.data?.msg || e?.message || '导出失败',
-      duration: 3000,
-    });
+    console.error('Export dict type failed:', e);
   } finally {
     exportingType.value = false;
   }
@@ -320,11 +302,7 @@ async function handleExportItem() {
     await exportDictInfoExcel({ name: selectedType.value.name });
     notification.success({ content: '导出字典详情成功', duration: 2000 });
   } catch (e: any) {
-    notification.error({
-      content: '导出失败',
-      description: e?.response?.data?.msg || e?.message || '导出失败',
-      duration: 3000,
-    });
+    console.error('Export dict info failed:', e);
   } finally {
     exportingItem.value = false;
   }
