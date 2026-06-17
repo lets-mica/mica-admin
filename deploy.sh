@@ -10,14 +10,14 @@ echo "打包代码中..."
 mvn clean package -Pprod -U -Dmaven.test.skip=true > /dev/null
 
 #变量
-SERVER_NAME="mica-admin"
+SERVER_NAME="mica-admin-server"
 SERVER_HOME="/www/server/${SERVER_NAME}"
 echo "变量 SERVER_HOME=${SERVER_HOME}"
 
 #上传代码
 echo "tx 上传代码中..."
 scp "./script/start.sh" tx:"/www/server/script"
-scp "./mica-admin-server/target/${SERVER_NAME}.jar" tx:"${SERVER_HOME}"
+scp "./${SERVER_NAME}/target/${SERVER_NAME}.jar" tx:"${SERVER_HOME}"
 
 #重启
 ssh tx "/www/server/script/start.sh ${SERVER_NAME} restartd"
