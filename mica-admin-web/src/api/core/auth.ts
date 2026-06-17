@@ -105,6 +105,8 @@ export async function loginApi(data: LoginParams): Promise<{ accessToken: string
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
+      // 登录失败由本函数 message.error 处理，不再走全局弹窗
+      skipErrorHandler: true,
     });
 
     if (respData && respData.token) {
@@ -137,5 +139,6 @@ export async function getMenusApi() {
  */
 export async function logoutApi() {
   cachedPublicKey = '';
-  return api.get<any>('/api/logout');
+  // 登出失败不需要弹窗（被调用方一般会兜底清状态）
+  return api.get<any>('/api/logout', { skipErrorHandler: true });
 }

@@ -174,7 +174,6 @@ async function handleSubmit() {
     loadUserInfo();
   } catch (error: any) {
     console.error('Failed to update:', error);
-    notification.error({ content: '更新失败', description: error.message, duration: 3000 });
   } finally {
     saveLoading.value = false;
   }

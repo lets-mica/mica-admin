@@ -56,11 +56,6 @@ async function loadData() {
     console.error('Failed to load SQL list:', e);
     data.value = [];
     show.value = true;
-    notification.error({
-      content: '加载 SQL 监控失败',
-      description: e?.response?.data?.msg || e?.message || '请检查 Druid 监控是否启用',
-      duration: 4000,
-    });
   } finally {
     loading.value = false;
   }

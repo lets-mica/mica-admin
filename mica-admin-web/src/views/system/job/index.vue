@@ -306,11 +306,6 @@ async function loadData() {
     console.error('Failed to load jobs:', e);
     data.value = [];
     pagination.total = 0;
-    notification.error({
-      content: '加载任务失败',
-      description: e?.response?.data?.msg || e?.message || '请检查后端服务',
-      duration: 4000,
-    });
   } finally {
     loading.value = false;
   }
@@ -420,11 +415,6 @@ async function handleSubmit() {
     loadData();
   } catch (e: any) {
     console.error('Failed to submit:', e);
-    notification.error({
-      content: '操作失败',
-      description: e?.response?.data?.msg || e?.message || '保存失败',
-      duration: 3000,
-    });
   } finally {
     formSubmitting.value = false;
     formModalApi.unlock();
@@ -438,7 +428,7 @@ async function handleStart(row: SysJob) {
     notification.success({ content: `任务 ${row.jobName} 已启动`, duration: 2000 });
     loadData();
   } catch (e: any) {
-    notification.error({ content: '启动失败', description: e?.message, duration: 3000 });
+    console.error('Failed to start job:', e);
   }
 }
 
@@ -454,7 +444,6 @@ async function handleStop(row: SysJob) {
         notification.success({ content: `任务 ${row.jobName} 已停止`, duration: 2000 });
         loadData();
       } catch (e: any) {
-        notification.error({ content: '停止失败', description: e?.message, duration: 3000 });
       }
     },
   });
@@ -466,7 +455,7 @@ async function handleRefresh(row: SysJob) {
     notification.success({ content: `任务 ${row.jobName} 已重新加载`, duration: 2000 });
     loadData();
   } catch (e: any) {
-    notification.error({ content: '刷新失败', description: e?.message, duration: 3000 });
+    console.error('Failed to refresh job:', e);
   }
 }
 
@@ -499,11 +488,7 @@ async function handleRunOnceWithParamsConfirm() {
     notification.success({ content: '已提交执行', duration: 2000 });
     runOnceModalApi.close();
   } catch (e: any) {
-    notification.error({
-      content: '执行失败',
-      description: e?.response?.data?.msg || e?.message,
-      duration: 3000,
-    });
+    console.error('Failed to run job once:', e);
   } finally {
     runOnceSubmitting.value = false;
     runOnceModalApi.unlock();
@@ -526,7 +511,6 @@ function handleDelete(ids: number[]) {
         selectedRowKeys.value = [];
         loadData();
       } catch (e: any) {
-        notification.error({ content: '删除失败', description: e?.message, duration: 3000 });
       }
     },
   });
@@ -546,7 +530,7 @@ async function handleExport() {
     });
     notification.success({ content: '导出成功', duration: 2000 });
   } catch (e: any) {
-    notification.error({ content: '导出失败', description: e?.message, duration: 3000 });
+    console.error('Failed to export jobs:', e);
   } finally {
     exporting.value = false;
   }

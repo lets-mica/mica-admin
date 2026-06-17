@@ -179,11 +179,6 @@ async function loadData() {
     flatData.value = [];
     data.value = [];
     menuTree.value = [];
-    notification.error({
-      content: '加载菜单失败',
-      description: e?.response?.data?.msg || e?.message || '请检查后端服务',
-      duration: 4000,
-    });
   } finally {
     loading.value = false;
   }
@@ -270,7 +265,6 @@ async function handleSubmit() {
     loadData();
   } catch (e: any) {
     console.error('Failed to submit:', e);
-    notification.error({ content: '操作失败', description: e.message || '保存失败', duration: 3000 });
   } finally {
     dialogLoading.value = false;
     modalApi.unlock();
@@ -290,7 +284,6 @@ function handleDelete(id: number) {
         loadData();
       } catch (e: any) {
         console.error('Failed to delete:', e);
-        notification.error({ content: '操作失败', description: e.message || '删除失败', duration: 3000 });
       }
     },
   });
@@ -308,11 +301,7 @@ async function handleExport() {
     await exportMenuExcel(params);
     notification.success({ content: '导出成功', duration: 2000 });
   } catch (e: any) {
-    notification.error({
-      content: '导出失败',
-      description: e?.response?.data?.msg || e?.message || '导出失败',
-      duration: 3000,
-    });
+    console.error('Failed to export:', e);
   } finally {
     exporting.value = false;
   }

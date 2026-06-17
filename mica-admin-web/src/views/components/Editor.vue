@@ -99,11 +99,6 @@ async function onFileChange(e: Event) {
     }
   } catch (err: any) {
     console.error('图片上传失败:', err);
-    notification.error({
-      content: '图片上传失败',
-      description: err?.message || '请稍后重试',
-      duration: 3000,
-    });
   } finally {
     uploading.value = false;
     target.value = ''; // 允许重复选择同一文件

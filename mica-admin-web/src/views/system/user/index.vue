@@ -223,11 +223,6 @@ async function loadData() {
     console.error('Failed to load users:', e);
     data.value = [];
     pagination.total = 0;
-    notification.error({
-      content: '加载用户失败',
-      description: e?.response?.data?.msg || e?.message || '请检查后端服务',
-      duration: 4000,
-    });
   } finally {
     loading.value = false;
   }
@@ -416,11 +411,6 @@ async function handleSubmit() {
     loadData();
   } catch (e: any) {
     console.error('Failed to submit:', e);
-    notification.error({
-      content: '操作失败',
-      description: e?.response?.data?.msg || e?.message || '保存失败',
-      duration: 3000,
-    });
   } finally {
     modalApi.unlock();
   }
@@ -439,11 +429,7 @@ function handleDelete(id: number) {
         notification.success({ content: '用户已删除', duration: 2000 });
         loadData();
       } catch (e: any) {
-        notification.error({
-          content: '操作失败',
-          description: e?.response?.data?.msg || e?.message || '删除失败',
-          duration: 3000,
-        });
+        console.error('Failed to delete user:', e);
       }
     },
   });
@@ -467,11 +453,6 @@ function handleBatchDelete() {
         selectedRowKeys.value = [];
         loadData();
       } catch (e: any) {
-        notification.error({
-          content: '操作失败',
-          description: e?.response?.data?.msg || e?.message || '删除失败',
-          duration: 3000,
-        });
       }
     },
   });
@@ -504,11 +485,6 @@ function handleChangeEnabled(row: UserItem, enabled: boolean) {
         notification.success({ content: `${label}成功`, duration: 2000 });
       } catch (e: any) {
         row.enabled = prev;
-        notification.error({
-          content: '操作失败',
-          description: e?.response?.data?.msg || e?.message || '更新状态失败',
-          duration: 3000,
-        });
       }
     },
     onNegativeClick: () => {
@@ -535,11 +511,7 @@ async function handleExport() {
     await exportUserExcel(params);
     notification.success({ content: '导出成功', duration: 2000 });
   } catch (e: any) {
-    notification.error({
-      content: '导出失败',
-      description: e?.response?.data?.msg || e?.message || '导出失败',
-      duration: 3000,
-    });
+    console.error('Failed to export users:', e);
   } finally {
     exporting.value = false;
   }

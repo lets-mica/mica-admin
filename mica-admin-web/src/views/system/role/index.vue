@@ -202,11 +202,6 @@ async function loadData() {
     console.error('Failed to load roles:', e);
     data.value = [];
     pagination.total = 0;
-    notification.error({
-      content: '加载角色失败',
-      description: e?.response?.data?.msg || e?.message || '请检查后端服务',
-      duration: 4000,
-    });
   } finally {
     loading.value = false;
   }
@@ -358,11 +353,7 @@ async function handleSubmit() {
     modalApi.close();
     loadData();
   } catch (e: any) {
-    notification.error({
-      content: '操作失败',
-      description: e?.response?.data?.msg || e?.message || '保存失败',
-      duration: 3000,
-    });
+    console.error('Failed to submit role:', e);
   } finally {
     modalApi.unlock();
   }
@@ -383,11 +374,7 @@ function handleDelete(id: number) {
         }
         loadData();
       } catch (e: any) {
-        notification.error({
-          content: '操作失败',
-          description: e?.response?.data?.msg || e?.message || '删除失败',
-          duration: 3000,
-        });
+        console.error('Failed to delete role:', e);
       }
     },
   });
@@ -416,11 +403,7 @@ function handleBatchDelete() {
         selectedRowKeys.value = [];
         loadData();
       } catch (e: any) {
-        notification.error({
-          content: '操作失败',
-          description: e?.response?.data?.msg || e?.message || '删除失败',
-          duration: 3000,
-        });
+        console.error('Failed to batch delete roles:', e);
       }
     },
   });
@@ -442,11 +425,7 @@ async function handleExport() {
     await exportRoleExcel(params);
     notification.success({ content: '导出成功', duration: 2000 });
   } catch (e: any) {
-    notification.error({
-      content: '导出失败',
-      description: e?.response?.data?.msg || e?.message || '导出失败',
-      duration: 3000,
-    });
+    console.error('Failed to export roles:', e);
   } finally {
     exporting.value = false;
   }
@@ -469,11 +448,6 @@ async function handleRoleRowClick(row: RoleItem) {
   } catch (e: any) {
     console.error('Failed to load role menus:', e);
     menuCheckedKeys.value = [];
-    notification.error({
-      content: '加载菜单权限失败',
-      description: e?.response?.data?.msg || e?.message,
-      duration: 3000,
-    });
   }
 }
 
@@ -502,11 +476,7 @@ async function saveMenu() {
     await editRoleMenu({ id: currentRoleId.value, menuIds });
     notification.success({ content: '菜单分配已保存', duration: 2000 });
   } catch (e: any) {
-    notification.error({
-      content: '保存失败',
-      description: e?.response?.data?.msg || e?.message || '保存菜单失败',
-      duration: 3000,
-    });
+    console.error('Failed to save role menus:', e);
   } finally {
     menuLoading.value = false;
   }
