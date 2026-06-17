@@ -32,6 +32,13 @@ export interface UserItem {
   posts?: { id: number; name: string }[];
 }
 
+export interface UserProfileForm {
+    nickName: string;
+    email?: string;
+    phone?: string;
+    gender?: number;
+}
+
 export type { RoleItem };
 
 export async function getUserList(params?: {
@@ -61,6 +68,10 @@ export async function addUser(data: Partial<UserItem>) {
 
 export async function editUser(data: Partial<UserItem>) {
   return api.put('/api/system/users', data);
+}
+
+export async function editUserCenter(data: Partial<UserProfileForm>) {
+    return api.put('/api/system/users/center', data);
 }
 
 export async function deleteUser(ids: number[]) {

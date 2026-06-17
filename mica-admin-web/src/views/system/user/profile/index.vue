@@ -24,7 +24,7 @@ import {
 import { useAccessStore, useUserStore } from '@vben/stores';
 import { Building, LogIn, Mail, Phone, Shield, User as UserIcon } from '@lucide/vue';
 
-import { editUser, getUser } from '#/api/system/user';
+import { editUserCenter, getUser } from '#/api/system/user';
 import { getOperationLogList } from '#/api/monitor/log';
 import { notification } from '#/adapter/naive';
 import { formatDateTime } from '#/utils/format-date';
@@ -164,8 +164,7 @@ async function handleSubmit() {
   }
   saveLoading.value = true;
   try {
-    await editUser({
-      id: userInfo.value?.id,
+    await editUserCenter({
       nickName: form.nickName,
       phone: form.phone,
       gender: form.gender,
