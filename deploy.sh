@@ -7,7 +7,7 @@
 
 #代码打包
 echo "打包代码中..."
-./mvnw clean package -Pprod -U -Dmaven.test.skip=true > /dev/null
+mvn clean package -Pprod -U -Dmaven.test.skip=true > /dev/null
 
 #变量
 SERVER_NAME="mica-admin"
@@ -25,4 +25,4 @@ echo "tx 启动完成"
 
 #清理本地打包文件，避免引用 prod 的配置
 echo "清理本地编译中..."
-./mvnw clean package -Dmaven.test.skip=true > /dev/null
+mvn clean package -Dmaven.test.skip=true > /dev/null
