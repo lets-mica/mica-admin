@@ -42,6 +42,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
 		if (createTime != null && createTime.size() > 1) {
 			wrapper.between(SysLog::getCreatedAt, createTime.get(0), createTime.get(1));
 		}
+		wrapper.orderByDesc(SysLog::getCreatedAt);
 		return wrapper;
 	}
 
