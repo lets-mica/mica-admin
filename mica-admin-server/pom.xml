@@ -153,7 +153,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-${jar.version}</finalName>
+        <finalName>${project.artifactId}</finalName>
         <resources>
             <resource>
                 <directory>src/main/java</directory>
