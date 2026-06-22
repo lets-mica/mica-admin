@@ -166,16 +166,36 @@ App 1.0 通讯录用户详情页"拨号"、"发消息"按钮**置灰占位**(详
 - 一键拨号(原生 `uni.makePhoneCall`)
 - 一键发消息(集成 IM SDK:环信/腾讯云/融云)
 
-### 后端改造(无或极简)
+### 推荐方案:复用 mica-im 模块
 
-若仅做拨号,**后端无需改造** —— `uni.makePhoneCall` 调用原生电话。
+**mica-admin 官方 IM 模块**([docs/im/](../im/README.md))基于 mica-mqtt 实现,
+覆盖单聊 + 群聊 + 部门群,**直接对接即可**,无需引入第三方 IM SDK。
 
-若做 IM,需要:
+#### 接入步骤
 
-- 接入 IM 服务端 SDK(根据选型)
-- 后端提供 IM token 签发接口(可选)
+1. 后端按 [docs/im/roadmap.md](../im/roadmap.md) 实施 Phase 1(单聊 MVP)+ Phase 1.1(群聊)
+2. App 端按 [docs/im/architecture.md §13](../im/architecture.md#13-与-app-端集成) 集成:
+   - 安装 mqtt-client 库
+   - 封装 `src/modules/extension/im/mqtt/`
+   - 替换占位 UI
+3. 通讯录"发消息"按钮启用,跳到 `pages/extension/im/chat-p2p`
 
-### App 端接入(2-3 天)
+#### 后端新增接口(IM 模块提供)
+
+- `GET /api/im/conversations/p2p/{userId}` — 获取/创建与某用户的会话
+- `GET /api/im/conversations/{id}/messages` — 历史消息
+- 详见 [docs/im/api-design.md](../im/api-design.md)
+
+### 替代方案:第三方 IM SDK
+
+若选择环信/腾讯云/融云:
+
+#### 后端改造(1 周)
+
+- 接入 IM 服务端 SDK
+- 后端提供 IM token 签发接口 `/api/im/token`(供 App 端登录 IM)
+
+#### App 端接入(2-3 天)
 
 ```typescript
 // contact/detail.vue

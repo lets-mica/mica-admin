@@ -20,6 +20,12 @@
 | [extension.md](./extension.md) | 二次开发扩展点(明确哪些需要新写后端) |
 | [roadmap.md](./roadmap.md) | 迭代路线图(MVP → 1.0 → 1.1 → 2.0) |
 
+## 关联模块
+
+- **IM 模块**([docs/im/](../im/README.md)):基于 mica-mqtt 的实时通讯模块,
+  App 端的"通讯录拨打/IM"扩展点在 Phase 1 后即可对接,
+  详见 [extension.md §3](./extension.md#3-通讯录拨打im)。
+
 ## 产品定位
 
 | 维度 | 内容 |

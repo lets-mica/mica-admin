@@ -471,6 +471,7 @@ interface SysDictInfo {
 | 配置管理 | `/api/system/config/**` | 同上 |
 | 消息管理(管理员) | `/api/system/message/**` | 同上 |
 | Swagger 文档 | `/v3/api-docs`、`/doc.html` | 仅开发用,App 不集成 |
+| IM 模块 | `/api/im/**` | 见 [docs/im/api-design.md](../im/api-design.md)(Phase 1 后可用) |
 
 ---
 
