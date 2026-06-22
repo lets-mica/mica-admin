@@ -58,6 +58,52 @@
 | 实时推送(App) | MQTT 原生 | 协议支持 |
 | 实时推送(小程序) | HTTP 轮询 + 微信模板消息 | 小程序不支持长连接 |
 
+## 源码位置
+
+IM 模块**作为 `mica-admin-server` 的子模块**,**不单独建 maven 模块 / 目录**:
+
+```
+mica-admin/
+├── mica-admin-server/
+│   ├── pom.xml                                    [MODIFY]   # 加 mica-mqtt 依赖
+│   └── src/main/java/net/dreamlu/mica/admin/
+│       ├── framework/                             # 框架核心(现有)
+│       ├── project/system/                        # 业务(现有)
+│       └── im/                                    # ★ IM 模块(新增)
+│           ├── config/
+│           │   └── ImMqttConfig.java              # broker 内嵌启动
+│           ├── auth/
+│           │   ├── MqttAuthInterceptor.java
+│           │   └── MqttSessionManager.java
+│           ├── topic/
+│           │   └── MqttTopicFilter.java
+│           ├── listener/
+│           │   ├── MqttMessageListener.java
+│           │   ├── ImP2pMessageHandler.java
+│           │   └── ImGroupMessageHandler.java
+│           ├── entity/
+│           │   ├── ImConversation.java
+│           │   ├── ImConversationMember.java
+│           │   ├── ImMessage.java
+│           │   ├── ImGroup.java
+│           │   └── ImGroupMember.java
+│           ├── mapper/                            # MyBatis-Plus Mapper
+│           ├── service/                           # 业务接口 + 实现
+│           ├── controller/                        # REST Controller
+│           └── dto/                               # 内部 DTO
+├── docs/database/
+│   ├── im-schema-phase-1.sql                      [NEW]
+│   └── im-schema-phase-1-1.sql                    [NEW]
+└── docs/im/                                       # 设计文档(本文档)
+```
+
+### 为什么不单独建 `mica-admin-im/`
+
+- mica-admin 用户群体多为小团队/个人,**简单胜于分层**
+- IM 强依赖 mica-admin-server 的 JWT/Redis/MyBatis,**拆出去会带来重复配置和依赖管理负担**
+- 复用 `BaseController` / `BaseModel` / `JwtTokenStore` 等基础设施,合在一起最简单
+- **未来如果需要拆**:用 `git subtree split` 可一键拆为独立仓库
+
 ## 与 mica-admin 现有能力集成点
 
 ```

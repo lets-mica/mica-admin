@@ -4,12 +4,20 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## 项目概述
 
-mica-admin 是基于 [mica](https://gitee.com/596392912/mica) 工具集的低代码权限管理平台，使用 Maven、Spring Boot 2.7、Spring Security、MyBatis-Plus（后端）+ Vben Admin 5.x（前端）。
+mica-admin 是基于 [mica](https://gitee.com/596392912/mica) 工具集的低代码权限管理平台，使用 Maven、Spring Boot 2.7、Spring Security、MyBatis-Plus（后端）+ Vben Admin 5.x（前端）+ uniapp x（移动 App）。
 
-Maven multi-module 结构：
+仓库根目录结构（mono-repo，单 git 仓库）：
 
-- `mica-admin-server/` — Spring Boot 后端（Java 8+）
-- `mica-admin-web/` — 前端工程（Vite + Vue 3 + Naive UI）。这是 Vben Admin 5.x 的**本地化**版本，源码提取到 `mica-admin-web/vben/`，由 pnpm workspace 协议引用。完整前端说明见 `mica-admin-web/AGENTS.md`。
+| 目录 | 说明 | 技术栈 |
+|---|---|---|
+| `mica-admin-server/` | Spring Boot 后端（Java 8+） | Maven 模块 |
+| `mica-admin-web/` | Web 管理端（Vben Admin 5.x 本地化） | Vite + Vue 3 + Naive UI |
+| `mica-admin-uniapp/` | **移动 App（uniapp x）** | uniapp x + Vue 3 + TypeScript + Pinia |
+| `docs/` | 设计文档 | - |
+
+> **`mica-admin-uniapp/` 不进 Maven**：它是独立的 npm/pnpm 工程，与 `mica-admin-web/` 平级。
+> 三者放在同一 git 仓库是为了 AI 编码时能"看见完整上下文",便于跨模块协作。
+> 设计文档参见 [`docs/app/`](./docs/app/README.md)(App 端)和 [`docs/im/`](./docs/im/README.md)(IM 模块)。
 
 ## 构建命令
 
@@ -55,6 +63,7 @@ pnpm api               # 从 http://127.0.0.1:8080/v3/api-docs 生成 swagger �
 - `net.dreamlu.mica.admin.common` — 公共常量（`ApiCode`、`MicaAdminConstants`）。
 - `net.dreamlu.mica.admin.framework` — 框架核心：安全、MyBatis、AOP 日志、控制器基类、VO、工具类。
 - `net.dreamlu.mica.admin.project` — 业务模块，目前主要是 `project.system`（用户/角色/菜单/部门/字典/文件存储/监控/日志/通知）。
+- `net.dreamlu.mica.admin.im` — **IM 模块**(基于 mica-mqtt 的实时通讯,详见 [`docs/im/`](./docs/im/README.md))。
 
 ### 关键框架细节
 
@@ -100,6 +109,22 @@ pnpm api               # 从 http://127.0.0.1:8080/v3/api-docs 生成 swagger �
 - **i18n**：`src/locales/langs/{zh-CN,en-US}/`，通过 `vue-i18n` 引用。
 - **API 自动生成**：`pnpm api` 读取后端 swagger (`http://127.0.0.1:8080/v3/api-docs`)，输出到 `src/api/Api.ts`。
 
+## 移动 App 架构（`mica-admin-uniapp/`）
+
+完整设计见 [`docs/app/`](./docs/app/README.md)。摘要要点:
+
+- **框架**：uniapp x(Vue 3 + Vite)+ TypeScript + Pinia + Vite。
+- **UI**：uni-ui 或 uView Plus(按需引入,跨端一致)。
+- **后端联调**:dev server 通过 `/api` 代理到 `http://localhost:8080`(同 Web 端)。
+- **认证**:复用 mica-admin-web 的 `auth-mica-admin.ts` 逻辑,密码走 RSA + 算术验证码。
+- **响应**:`code = 0` 表示成功(同 mica-admin-web)。
+- **目录规范**:
+  - `src/modules/auth/` — 登录(通用,不修改)
+  - `src/modules/{业务}/` — 业务模块
+  - `src/modules/extension/` — **二次开发预留**,只新增不修改
+- **App 与 IM 集成**:详见 [`docs/app/extension.md §3`](./docs/app/extension.md#3-通讯录拨打im) 和 [`docs/im/architecture.md §13`](./docs/im/architecture.md#13-与-app-端集成)。
+- **MQTT 库选型**:iOS 用 CocoaMQTT,Android 用 Paho Android,小程序不支持长连接走 HTTP + 微信模板消息降级。
+
 ## 配置文件
 
 后端：
@@ -108,21 +133,27 @@ pnpm api               # 从 http://127.0.0.1:8080/v3/api-docs 生成 swagger �
 - `mica-admin-server/src/main/resources/application-prod.yml` — 生产配置。
 - `mica-admin-server/src/main/resources/messages/messages*.properties` — i18n 文案。
 - `mica-admin-server/src/main/resources/templates/email.ftl` — Freemarker 邮件模板。
+- **IM 模块启用后**:`application.yml` 增加 `mica.mqtt` 配置项(端口 1883/9001、broker 启停等),详见 `docs/im/architecture.md §2.2`。
 
 前端：
 - `mica-admin-web/.env.development` / `.env.production` — `VITE_GLOB_API_URL`（默认 `/api`）、`VITE_PORT`（dev=5888）、`VITE_ROUTER_HISTORY`（dev=`web`、prod=`hash`）、`VITE_APP_NAMESPACE`、`VITE_APP_STORE_SECURE_KEY`。
+
+App:
+- `mica-admin-uniapp/.env.development` / `.env.production` — 同 mica-admin-web 的环境变量。
 
 ## 部署
 
 - **Linux systemd 脚本**：`script/start.sh`。服务目录约定 `/www/server/${SERVER_NAME}/${SERVER_NAME}.jar`，命令 `start.sh 服务名 {startd|restartd|stopd}`。脚本会自动写入 `/etc/systemd/system/${SERVER_NAME}.service` 并 `enable`。
 - **一键发布**：仓库根 `deploy.sh`（`mvn clean package -Pprod -U -Dmaven.test.skip=true` → scp jar 与 `start.sh` 到远端 host `tx` → 远端执行 `restartd` → 清理本地 prod 包）。
+- **App 发布**:`mica-admin-uniapp/` 走各平台商店上架流程(不在 deploy.sh 范围内)。可在 `.github/workflows/uniapp-build.yml` 配置独立 CI。
 
 ## 前置依赖
 
 - MySQL：导入 `docs/database/mysql.sql`。
 - Redis：localhost:6379。
 - Java 8+（后端）。
-- Node.js 18+ + pnpm（前端）。
+- Node.js 18+ + pnpm（前端 + App）。
+- **IM 模块额外**:`mica-mqtt-spring-boot-starter`(随 mica-admin 一起编译)。
 - Linux 部署需 jdk8（脚本按序探测 `/www/server/jdk8/`、`/usr/local/jdk`、`/data/jdk`）。
 
 ## 编辑器约定（`.editorconfig`）
@@ -142,3 +173,18 @@ pnpm api               # 从 http://127.0.0.1:8080/v3/api-docs 生成 swagger �
 - 业务侧 RBAC：路由/菜单/按钮权限通过后端 `sys_menu` + `sys_role_menu` 控制，前端通过 `v-permission` 自定义指令与动态路由消费。
 - README 中 TODO 列表（数据权限）尚未实现，新增需求前先确认是否落在该 TODO。
 - 后端成功响应 `code = 0`（非 200），前端拦截器已适配；新写接口时保持一致。
+
+### mica-admin-uniapp(App)
+
+- **二次开发只新增不修改**:`src/modules/extension/` 是二次开发预留目录,通用模块(`auth/`、`profile/` 等)**不要修改**。
+- **MQTT 鉴权**:App 端 MQTT 客户端的 `username` 必须传 JWT,不要传用户名。
+- **小程序限制**:微信小程序不支持 MQTT 长连接,IM 模块在小程序端走 HTTP + 微信模板消息降级(详见 `docs/im/architecture.md §1.1`)。
+- **不要直接改 `docs/app/` 文档**:那是设计文档,改动会误导二次开发方。如需调整,先确认再改。
+
+### IM 模块(`net.dreamlu.mica.admin.im`)
+
+- **JWT-only 鉴权**:CONNECT 包的 `username` 必须是 mica-admin 的 JWT,服务端只校验 token 有效性,不接受明文用户名密码。
+- **Topic 权限**:服务端 `MqttTopicFilter` 校验用户只能订阅自己相关的 topic,客户端不要尝试订阅他人私聊。
+- **消息顺序**:同一会话内消息严格按 `server_received_at` 排序,客户端不要自作主张重排。
+- **离线兜底**:`sys_user_message` 是离线 IM 消息的兜底通道,不要清空或迁移。
+- **资源占用**:broker 内嵌后约增加 50-100MB 内存,小内存服务器需关注。

@@ -39,11 +39,11 @@ Phase 2.x: 富消息等     ──────── 后续评估
 **涉及文件**:
 
 ```
-pom.xml                                              [MODIFY]
-src/main/resources/application.yml                   [MODIFY]
-src/main/java/net/dreamlu/mica/admin/im/
-  ├── ImMqttConfig.java                              [NEW]
-  └── (空目录占位)
+mica-admin-server/pom.xml                            [MODIFY]   # 加 mica-mqtt 依赖
+mica-admin-server/src/main/resources/application.yml [MODIFY]
+mica-admin-server/src/main/java/net/dreamlu/mica/admin/im/
+  └── config/
+      └── ImMqttConfig.java                          [NEW]
 ```
 
 **验收**:
@@ -65,7 +65,7 @@ src/main/java/net/dreamlu/mica/admin/im/
 **涉及文件**:
 
 ```
-src/main/java/net/dreamlu/mica/admin/im/
+mica-admin-server/src/main/java/net/dreamlu/mica/admin/im/
   ├── auth/
   │   ├── MqttAuthInterceptor.java                  [NEW]
   │   └── MqttSessionManager.java                   [NEW]
@@ -95,12 +95,12 @@ src/main/java/net/dreamlu/mica/admin/im/
 **涉及文件**:
 
 ```
-src/main/java/net/dreamlu/mica/admin/im/
+mica-admin-server/src/main/java/net/dreamlu/mica/admin/im/
   ├── listener/
   │   └── MqttMessageListener.java                  [NEW]
   └── service/
       └── ImPushService.java                        [NEW]
-src/main/java/net/dreamlu/mica/admin/project/system/service/impl/
+mica-admin-server/src/main/java/net/dreamlu/mica/admin/project/system/service/impl/
   └── SysMessageServiceImpl.java                    [MODIFY]   # 在 publish() 里加推送
 mica-admin-web/src/
   ├── utils/mqtt.ts                                 [NEW]
@@ -138,7 +138,7 @@ mica-admin-web/src/
 ```
 docs/database/
   └── im-schema-phase-1.sql                         [NEW]
-src/main/java/net/dreamlu/mica/admin/im/
+mica-admin-server/src/main/java/net/dreamlu/mica/admin/im/
   ├── entity/
   │   ├── ImConversation.java                       [NEW]
   │   ├── ImConversationMember.java                 [NEW]
@@ -177,7 +177,7 @@ src/main/java/net/dreamlu/mica/admin/im/
 **涉及文件**:
 
 ```
-src/main/java/net/dreamlu/mica/admin/im/
+mica-admin-server/src/main/java/net/dreamlu/mica/admin/im/
   ├── listener/
   │   └── ImP2pMessageHandler.java                  [NEW]
   ├── service/
@@ -208,7 +208,7 @@ src/main/java/net/dreamlu/mica/admin/im/
 **涉及文件**:
 
 ```
-src/main/java/net/dreamlu/mica/admin/im/
+mica-admin-server/src/main/java/net/dreamlu/mica/admin/im/
   ├── service/impl/ImConversationServiceImpl.java  [MODIFY]   # 列表聚合
   ├── service/impl/ImMessageServiceImpl.java       [MODIFY]   # 分页
   └── controller/ImMessageController.java           [NEW]
@@ -234,7 +234,7 @@ src/main/java/net/dreamlu/mica/admin/im/
 **涉及文件**:
 
 ```
-src/main/java/net/dreamlu/mica/admin/im/
+mica-admin-server/src/main/java/net/dreamlu/mica/admin/im/
   ├── service/
   │   ├── IImUnreadService.java                     [NEW]
   │   └── impl/ImUnreadServiceImpl.java             [NEW]
@@ -308,7 +308,7 @@ mica-admin-web/src/router/routes/modules/im.ts      [NEW]   # 路由
 
 ```
 docs/database/im-schema-phase-1-1.sql               [NEW]
-src/main/java/net/dreamlu/mica/admin/im/
+mica-admin-server/src/main/java/net/dreamlu/mica/admin/im/
   ├── entity/
   │   ├── ImGroup.java                              [NEW]
   │   └── ImGroupMember.java                        [NEW]
@@ -340,7 +340,7 @@ src/main/java/net/dreamlu/mica/admin/im/
 **涉及文件**:
 
 ```
-src/main/java/net/dreamlu/mica/admin/im/
+mica-admin-server/src/main/java/net/dreamlu/mica/admin/im/
   └── service/impl/ImGroupServiceImpl.java          [MODIFY]
 ```
 
@@ -358,7 +358,7 @@ src/main/java/net/dreamlu/mica/admin/im/
 **涉及文件**:
 
 ```
-src/main/java/net/dreamlu/mica/admin/im/
+mica-admin-server/src/main/java/net/dreamlu/mica/admin/im/
   ├── listener/
   │   └── ImGroupMessageHandler.java                [NEW]
   └── topic/
@@ -384,9 +384,9 @@ src/main/java/net/dreamlu/mica/admin/im/
 **涉及文件**:
 
 ```
-src/main/java/net/dreamlu/mica/admin/project/system/service/impl/
+mica-admin-server/src/main/java/net/dreamlu/mica/admin/project/system/service/impl/
   └── SysDeptServiceImpl.java                       [MODIFY]   # 加事件
-src/main/java/net/dreamlu/mica/admin/im/
+mica-admin-server/src/main/java/net/dreamlu/mica/admin/im/
   └── listener/
       └── DeptGroupSyncListener.java                [NEW]
 

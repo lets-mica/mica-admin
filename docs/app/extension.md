@@ -173,8 +173,11 @@ App 1.0 通讯录用户详情页"拨号"、"发消息"按钮**置灰占位**(详
 
 #### 接入步骤
 
-1. 后端按 [docs/im/roadmap.md](../im/roadmap.md) 实施 Phase 1(单聊 MVP)+ Phase 1.1(群聊)
-2. App 端按 [docs/im/architecture.md §13](../im/architecture.md#13-与-app-端集成) 集成:
+1. **后端**:按 [docs/im/roadmap.md](../im/roadmap.md) 实施
+   - IM 代码位于 `mica-admin-server/src/main/java/net/dreamlu/mica/admin/im/`(子包,**非独立模块**)
+   - 引入 `mica-mqtt-spring-boot-starter` 依赖(见 `docs/im/architecture.md §2.1`)
+   - 数据库迁移脚本在 `docs/database/im-schema-phase-1*.sql`
+2. **App 端**:按 [docs/im/architecture.md §13](../im/architecture.md#13-与-app-端集成) 集成:
    - 安装 mqtt-client 库
    - 封装 `src/modules/extension/im/mqtt/`
    - 替换占位 UI
