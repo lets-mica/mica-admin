@@ -374,7 +374,10 @@ reactive({ totalUnread });
 </script>
 
 <template>
-  <div class="flex h-[calc(100vh-80px)] w-full flex-col rounded-2xl bg-white shadow-sm md:flex-row">
+  <div>
+    <div
+      class="flex h-[calc(100vh-80px)] w-full flex-col rounded-2xl bg-white shadow-sm md:flex-row"
+    >
     <!-- 左侧：会话列表 -->
     <div
       class="flex w-full shrink-0 flex-col border-r border-gray-100 bg-gray-50 md:w-[320px]"
@@ -537,38 +540,43 @@ reactive({ totalUnread });
         </div>
 
         <!-- 输入框 -->
-        <div class="border-t border-gray-100 bg-white px-5 py-3">
-          <NSpace align="center" :wrap="false">
-            <NInput
-              v-model:value="inputText"
-              placeholder="输入消息，回车发送"
-              :disabled="!activeConversation"
-              type="textarea"
-              :autosize="{ minRows: 1, maxRows: 3 }"
-              @keydown.enter.prevent.exact="onSendMessage"
-            />
-            <NButton type="primary" :disabled="!inputText.trim() || !activeConversation" @click="onSendMessage">
-              发送
-            </NButton>
-          </NSpace>
+        <div class="flex shrink-0 items-end gap-2 border-t border-gray-100 bg-white px-5 py-3">
+          <NInput
+            v-model:value="inputText"
+            class="flex-1"
+            placeholder="输入消息，回车发送"
+            :disabled="!activeConversation"
+            type="textarea"
+            :autosize="{ minRows: 1, maxRows: 4 }"
+            @keydown.enter.prevent.exact="onSendMessage"
+          />
+          <NButton
+            type="primary"
+            class="shrink-0"
+            :disabled="!inputText.trim() || !activeConversation"
+            @click="onSendMessage"
+          >
+            发送
+          </NButton>
         </div>
       </template>
+      </div>
     </div>
-  </div>
 
-  <!-- 发起单聊弹窗 -->
-  <NModal v-model:show="showP2pModal" preset="card" title="发起聊天" style="width: 520px;">
-    <div class="mb-3 text-sm text-gray-500">
-      请选择要发起聊天的对象：
-    </div>
-    <UserPicker v-model="p2pTargetId" :multiple="false" placeholder="搜索用户名或昵称" />
-    <template #footer>
-      <NSpace justify="end">
-        <NButton @click="showP2pModal = false">取消</NButton>
-        <NButton type="primary" :loading="p2pLoading" :disabled="p2pTargetId == null" @click="onStartP2p">
-          开始聊天
-        </NButton>
-      </NSpace>
-    </template>
-  </NModal>
+    <!-- 发起单聊弹窗 -->
+    <NModal v-model:show="showP2pModal" preset="card" title="发起聊天" style="width: 520px;">
+      <div class="mb-3 text-sm text-gray-500">
+        请选择要发起聊天的对象：
+      </div>
+      <UserPicker v-model="p2pTargetId" :multiple="false" placeholder="搜索用户名或昵称" />
+      <template #footer>
+        <NSpace justify="end">
+          <NButton @click="showP2pModal = false">取消</NButton>
+          <NButton type="primary" :loading="p2pLoading" :disabled="p2pTargetId == null" @click="onStartP2p">
+            开始聊天
+          </NButton>
+        </NSpace>
+      </template>
+    </NModal>
+  </div>
 </template>

@@ -3,11 +3,13 @@ package net.dreamlu.mica.admin.project.im.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import net.dreamlu.mica.admin.framework.base.BaseController;
 import net.dreamlu.mica.admin.framework.security.auth.AuthUser;
 import net.dreamlu.mica.admin.project.system.entity.SysUser;
 import net.dreamlu.mica.admin.project.system.service.ISysUserService;
+import net.dreamlu.mica.core.utils.StringUtil;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,7 +57,7 @@ public class ImUserController extends BaseController {
 		// 仅过滤明确禁用（enabled = false）的账号；enabled 为 null 视为启用（兼容老数据）
 		wrapper.notInSql(SysUser::getId, "SELECT id FROM sys_user WHERE enabled = 0");
 		wrapper.ne(SysUser::getId, authUser.getUserId());
-		if (keyword != null && !keyword.isBlank()) {
+		if (StringUtil.isNotBlank(keyword)) {
 			wrapper.and(w -> w.like(SysUser::getUserName, keyword.trim())
 				.or().like(SysUser::getNickName, keyword.trim()));
 		}
@@ -106,19 +108,11 @@ public class ImUserController extends BaseController {
 	/**
 	 * IM 模块的用户简要信息 VO。
 	 */
+	@Data
 	public static class ImUserVO {
 		private Long id;
 		private String userName;
 		private String nickName;
 		private String avatar;
-
-		public Long getId() { return id; }
-		public void setId(Long id) { this.id = id; }
-		public String getUserName() { return userName; }
-		public void setUserName(String userName) { this.userName = userName; }
-		public String getNickName() { return nickName; }
-		public void setNickName(String nickName) { this.nickName = nickName; }
-		public String getAvatar() { return avatar; }
-		public void setAvatar(String avatar) { this.avatar = avatar; }
 	}
 }

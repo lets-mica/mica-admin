@@ -23,7 +23,7 @@ onShow(() => {
 
 <style lang="scss">
 /* uni-ui 样式 */
-@import '@dcloudio/uni-ui/lib/uni-icons/uni-icons.css';
+@import '@dcloudio/uni-ui/lib/uni-icons/uniicons.css';
 
 /* 全局样式 */
 page {
