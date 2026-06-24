@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
 /**
- * @SysJob 自动配置
+ * SysJob 自动配置
  * <p>
  * 装配顺序：registry → executor → scanner → scheduler
  * </p>
@@ -35,8 +35,6 @@ import org.springframework.context.annotation.DependsOn;
 @EnableConfigurationProperties(SysJobProperties.class)
 public class SysJobAutoConfig {
 
-	private final SysJobProperties sysJobProperties;
-
 	@Bean
 	public SysJobRegistry sysJobRegistry() {
 		return new SysJobRegistry();
@@ -48,15 +46,18 @@ public class SysJobAutoConfig {
 	}
 
 	@Bean
-	public SysJobScanner sysJobScanner(ApplicationContext applicationContext, SysJobRegistry registry) {
+	public SysJobScanner sysJobScanner(ApplicationContext applicationContext,
+	                                   SysJobRegistry registry,
+	                                   SysJobProperties sysJobProperties) {
 		return new SysJobScanner(applicationContext, registry, sysJobProperties);
 	}
 
 	@Bean
 	@DependsOn("sysJobScanner")
 	public SysJobScheduler sysJobScheduler(SysJobRegistry registry,
-										   SysJobExecutor executor,
-										   SysJobScheduler.JobDefinitionLoader definitionLoader) {
+	                                       SysJobExecutor executor,
+	                                       SysJobScheduler.JobDefinitionLoader definitionLoader,
+	                                       SysJobProperties sysJobProperties) {
 		return new SysJobScheduler(sysJobProperties, registry, executor, definitionLoader);
 	}
 }
