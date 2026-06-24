@@ -73,6 +73,7 @@ loadCaptcha()
           v-model="captchaCode"
           placeholder="验证码"
           :input-border="false"
+          prefix-icon="image"
           class="captcha-input"
         />
         <view class="captcha-img" @tap="loadCaptcha">
