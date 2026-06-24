@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.dreamlu.mica.admin.project.im.mapper.ImGroupMapper">
+
+	<resultMap id="BaseResultMap" type="net.dreamlu.mica.admin.project.im.entity.ImGroup">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="avatar" column="avatar"/>
+		<result property="type" column="type"/>
+		<result property="ownerId" column="owner_id"/>
+		<result property="deptId" column="dept_id"/>
+		<result property="announcement" column="announcement"/>
+		<result property="memberCount" column="member_count"/>
+		<result property="maxMembers" column="max_members"/>
+		<result property="createdBy" column="created_by"/>
+		<result property="createdAt" column="created_at"/>
+		<result property="updatedBy" column="updated_by"/>
+		<result property="updatedAt" column="updated_at"/>
+	</resultMap>
+
+	<!-- 我的群：JOIN im_group_member，按 im_group.updated_at DESC 排序 -->
+	<select id="selectMyGroups" resultMap="BaseResultMap">
+		SELECT g.*
+		FROM im_group g
+		INNER JOIN im_group_member gm ON gm.group_id = g.id
+		WHERE gm.user_id = #{userId}
+		ORDER BY g.updated_at DESC, g.id DESC
+		LIMIT 200
+	</select>
+
+	<!-- 按部门 id 找部门群（每个部门最多一个） -->
+	<select id="selectByDeptId" resultMap="BaseResultMap">
+		SELECT *
+		FROM im_group
+		WHERE dept_id = #{deptId}
+			AND type = 'department'
+		LIMIT 1
+	</select>
+
+	<!-- 原子增减成员数 -->
+	<update id="incrMemberCount">
+		UPDATE im_group
+		SET member_count = member_count + #{delta},
+			updated_at   = CURRENT_TIMESTAMP
+		WHERE id = #{groupId}
+	</update>
+
+</mapper>

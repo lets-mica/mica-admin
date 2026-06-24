@@ -1,0 +1,18 @@
+node_modules/
+dist/
+unpackage/
+.tmp/
+.cache/
+*.log
+.DS_Store
+.idea/
+.vscode/
+*.local
+.env.local
+.hbuilderx/
+
+# IDE
+*.iml
+
+# OS
+Thumbs.db

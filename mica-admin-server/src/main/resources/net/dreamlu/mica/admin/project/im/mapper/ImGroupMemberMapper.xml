@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.dreamlu.mica.admin.project.im.mapper.ImGroupMemberMapper">
+
+	<resultMap id="BaseResultMap" type="net.dreamlu.mica.admin.project.im.entity.ImGroupMember">
+		<id property="id" column="id"/>
+		<result property="groupId" column="group_id"/>
+		<result property="userId" column="user_id"/>
+		<result property="role" column="role"/>
+		<result property="nickname" column="nickname"/>
+		<result property="joinedAt" column="joined_at"/>
+	</resultMap>
+
+	<select id="selectByGroupId" resultMap="BaseResultMap">
+		SELECT *
+		FROM im_group_member
+		WHERE group_id = #{groupId}
+		ORDER BY joined_at ASC
+	</select>
+
+	<select id="selectByUserId" resultMap="BaseResultMap">
+		SELECT *
+		FROM im_group_member
+		WHERE user_id = #{userId}
+		ORDER BY joined_at DESC
+	</select>
+
+	<select id="countByGroupId" resultType="long">
+		SELECT COUNT(*)
+		FROM im_group_member
+		WHERE group_id = #{groupId}
+	</select>
+
+</mapper>

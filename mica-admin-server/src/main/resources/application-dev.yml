@@ -4,11 +4,6 @@ spring:
     url: jdbc:mysql://localhost:3306/mica_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
     username: root
     password: root
-mica:
-  swagger:
-    authorization:
-      enabled: true
-      key-name: Authorization
 # x-file-storage 统一文件存储：默认 local（本地）
 dromara:
   x-file-storage:
@@ -24,9 +19,3 @@ dromara:
         path-patterns: /api/upload/**
         enable-storage: true
         enable-access: true
-# springdoc 支持 knife4j
-springdoc:
-  swagger-ui:
-    urls:
-      - name: swagger
-        url: /v3/api-docs

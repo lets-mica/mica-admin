@@ -675,3 +675,154 @@ CREATE TABLE `sys_job`  (
 -- 演示任务：与 DemoSysJob 配套
 INSERT INTO `sys_job` (`job_key`, `job_name`, `cron_expression`, `enabled`, `param_schema`, `description`) VALUES
 ('demoTask', '演示任务', '0/30 * * * * ?', 0, '{"bizDate":"DATE","force":"BOOLEAN"}', '演示任务：定时打印业务日期；支持补数（bizDate / force）');
+
+-- ============================================================================
+-- IM 模块表结构（Phase 1 + Phase 1.1）
+-- 字段命名与现有 entity 完全对齐：
+--   im_conversation.id       -> 字符串业务主键，单聊 "{min}_{max}"，群聊 "g_{groupId}"
+--   im_message.id            -> 雪花算法(BIGINT)
+--   im_message.server_received_at / status / recall_* -> mica-admin 自定义字段
+-- ============================================================================
+
+-- ----------------------------
+-- Table structure for im_conversation
+-- ----------------------------
+DROP TABLE IF EXISTS `im_conversation`;
+CREATE TABLE `im_conversation` (
+  `id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '会话 id，单聊:{min}_{max}；群聊:g_{groupId}',
+  `type` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'p2p' COMMENT '会话类型：p2p / group',
+  `user_a` bigint(20) NULL DEFAULT NULL COMMENT '单聊参与方 A（升序，p2p 时非空）',
+  `user_b` bigint(20) NULL DEFAULT NULL COMMENT '单聊参与方 B（升序，p2p 时非空）',
+  `last_msg_id` bigint(20) NULL DEFAULT NULL COMMENT '最后一条消息 id',
+  `last_msg_time` datetime(0) NULL DEFAULT NULL COMMENT '最后一条消息时间',
+  `last_msg_preview` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '最后一条消息预览（200 字内）',
+  `created_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `created_at` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `updated_at` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_user_a` (`user_a`) USING BTREE,
+  KEY `idx_user_b` (`user_b`) USING BTREE,
+  KEY `idx_last_msg_time` (`last_msg_time` DESC) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'IM 会话' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for im_conversation_member
+-- ----------------------------
+DROP TABLE IF EXISTS `im_conversation_member`;
+CREATE TABLE `im_conversation_member` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `conversation_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '会话 id',
+  `user_id` bigint(20) NOT NULL COMMENT '用户 id',
+  `role` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'member' COMMENT '成员角色：p2p=member；group=owner/admin/member',
+  `unread_count` int(11) NULL DEFAULT 0 COMMENT '未读消息数（DB 缓存，权威值在 Redis）',
+  `last_read_msg_id` bigint(20) NULL DEFAULT NULL COMMENT '已读到的最大消息 id',
+  `last_read_time` datetime(0) NULL DEFAULT NULL COMMENT '最后一次已读时间',
+  `mute` tinyint(1) NULL DEFAULT 0 COMMENT '是否免打扰 0否 1是',
+  `top` tinyint(1) NULL DEFAULT 0 COMMENT '是否置顶 0否 1是',
+  `created_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `created_at` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `updated_at` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_conv_user`(`conversation_id`, `user_id`) USING BTREE,
+  KEY `idx_user_id` (`user_id`) USING BTREE,
+  KEY `idx_conversation_id` (`conversation_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'IM 会话成员' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for im_message
+-- ----------------------------
+DROP TABLE IF EXISTS `im_message`;
+CREATE TABLE `im_message` (
+  `id` bigint(20) NOT NULL COMMENT '消息 id（雪花算法）',
+  `conversation_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '会话 id',
+  `sender_id` bigint(20) NOT NULL COMMENT '发送者 userId',
+  `receiver_id` bigint(20) NULL DEFAULT NULL COMMENT '接收者 userId（单聊专用，群聊为 NULL）',
+  `msg_type` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'text' COMMENT '消息类型：text / image / file / system',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '消息正文',
+  `extra` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '扩展字段（JSON 字符串）',
+  `status` int(11) NULL DEFAULT 1 COMMENT '消息状态：0 发送中 1 已送达 2 已撤回 3 失败',
+  `server_received_at` datetime(3) NULL DEFAULT NULL COMMENT '服务端入库时间（顺序基准，毫秒精度）',
+  `recall_by` bigint(20) NULL DEFAULT NULL COMMENT '撤回操作人 userId',
+  `recall_at` datetime(0) NULL DEFAULT NULL COMMENT '撤回时间',
+  `created_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `created_at` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `updated_at` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_conv_received` (`conversation_id`, `server_received_at` DESC) USING BTREE,
+  KEY `idx_sender_received` (`sender_id`, `server_received_at` DESC) USING BTREE,
+  KEY `idx_status` (`status`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'IM 消息' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for im_group
+-- ----------------------------
+DROP TABLE IF EXISTS `im_group`;
+CREATE TABLE `im_group` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '群 id',
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '群名称',
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '群头像 URL',
+  `type` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'normal' COMMENT '群类型：normal/department',
+  `owner_id` bigint(20) NOT NULL COMMENT '群主 userId',
+  `dept_id` bigint(20) NULL DEFAULT NULL COMMENT '关联部门 id（部门群专用）',
+  `announcement` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '群公告',
+  `member_count` int(11) NULL DEFAULT 0 COMMENT '成员数（冗余字段，加速列表查询）',
+  `max_members` int(11) NULL DEFAULT 200 COMMENT '最大成员数',
+  `created_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `created_at` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `updated_at` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_owner_id` (`owner_id`) USING BTREE,
+  KEY `idx_dept_id` (`dept_id`) USING BTREE,
+  KEY `idx_type` (`type`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'IM 群' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for im_group_member
+-- ----------------------------
+DROP TABLE IF EXISTS `im_group_member`;
+CREATE TABLE `im_group_member` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `group_id` bigint(20) NOT NULL COMMENT '群 id',
+  `user_id` bigint(20) NOT NULL COMMENT '用户 id',
+  `role` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'member' COMMENT '角色：owner/admin/member',
+  `nickname` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '群内昵称（可选）',
+  `joined_at` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '加入时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_group_user`(`group_id`, `user_id`) USING BTREE,
+  KEY `idx_user_id` (`user_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'IM 群成员' ROW_FORMAT = Compact;
+
+-- ============================================================================
+-- IM 字典（参考 docs/im/data-model.md §10）
+-- ============================================================================
+
+-- IM 角色
+INSERT INTO `sys_dict` (`name`, `description`) VALUES ('im_role', 'IM 角色');
+INSERT INTO `sys_dict_info` (`type`, `label`, `value`) VALUES
+  ('im_role', '群主', 'owner'),
+  ('im_role', '管理员', 'admin'),
+  ('im_role', '成员', 'member');
+
+-- IM 会话类型
+INSERT INTO `sys_dict` (`name`, `description`) VALUES ('im_conversation_type', 'IM 会话类型');
+INSERT INTO `sys_dict_info` (`type`, `label`, `value`) VALUES
+  ('im_conversation_type', '单聊', 'p2p'),
+  ('im_conversation_type', '群聊', 'group');
+
+-- IM 消息类型
+INSERT INTO `sys_dict` (`name`, `description`) VALUES ('im_message_type', 'IM 消息类型');
+INSERT INTO `sys_dict_info` (`type`, `label`, `value`) VALUES
+  ('im_message_type', '文本', 'text'),
+  ('im_message_type', '图片', 'image'),
+  ('im_message_type', '文件', 'file'),
+  ('im_message_type', '系统', 'system');
+
+-- IM 群类型
+INSERT INTO `sys_dict` (`name`, `description`) VALUES ('im_group_type', 'IM 群类型');
+INSERT INTO `sys_dict_info` (`type`, `label`, `value`) VALUES
+  ('im_group_type', '普通群', 'normal'),
+  ('im_group_type', '部门群', 'department');

@@ -77,27 +77,28 @@
 
 ---
 
-## v1.0 — 正式版本(11 模块)
+## v1.0 — 正式版本(12 模块)
 
-**目标**:**App 端开箱即用**,完整覆盖 mica-admin 现有 16 个控制器中 App 适用的能力。
+**目标**:**App 端开箱即用**,完整覆盖 mica-admin 现有 21 个控制器中 App 适用的能力(含 IM 模块)。
 
 ### 范围
 
-11 个模块全部交付:
+12 个模块全部交付:
 
 | # | 模块 | 后端接口 |
 |---|---|---|
 | 1 | 登录 | `/api/auth/*` + `/api/session` |
-| 2 | 工作台 | 聚合 |
+| 2 | 工作台 | 聚合(含 IM 未读) |
 | 3 | 消息中心 | `/api/system/user/message/*` |
 | 4 | 应用中心 | `/api/auth/menus`(WebView 兜底) |
 | 5 | 我的 | `/api/system/users/*` |
-| 6 | 通讯录 | `/api/system/users` + `/api/system/dept` |
+| 6 | 通讯录 | `/api/system/users` + `/api/system/dept` + `/api/im/users/*` |
 | 7 | 通知公告 | `/api/system/notice` |
 | 8 | 文件中心 | `/api/upload/**` |
 | 9 | Token 管理 | `/api/auth/token` |
-| 10 | 监控 | `/api/system/monitor/server` |
+| 10 | 监控 | `/api/system/monitor/server` + `/admin/im/stats/*` |
 | 11 | 字典查询 | `/api/system/dict*` |
+| 12 | **IM 即时通讯** ⭐ | `/api/im/*` + MQTT `ws://host:8083/mqtt` |
 
 ### 关键能力
 
@@ -108,17 +109,21 @@
 - **权限适配**(菜单按 `isAdmin` 显隐)
 - **App 自动更新**(可选,uniapp 自带)
 - **基础埋点**(用户行为统计,可选)
+- **MQTT 长连接管理**(重连、订阅同步、离线兜底)
 
 ### 工作量
 
-- 前端:2-3 周
-- 后端:0(零改造)
-- 设计:1 周(高保真原型)
-- 测试:1 周
+- 前端:2-3 周(含 IM 模块的 mqtt-client + 4 个 store + 5 个页面)
+- 后端:0(零改造;IM broker 已内置)
+- 设计:1 周(高保真原型,含 IM 会话列表/单聊/群聊窗口)
+- 测试:1 周(含多端 MQTT 连通性测试)
 
 ### 验收
 
-- [ ] 全部 11 个模块功能完整
+- [ ] 全部 12 个模块功能完整
+- [ ] IM 单聊/群聊/会话列表/群管理/消息未读均可用
+- [ ] App 前台时新消息 < 1s 触达(MQTT)
+- [ ] App 离线期间消息不丢(`sys_user_message` 兜底)
 - [ ] 与 mica-admin 后端零改造对接
 - [ ] 通过 App Store / 应用市场上架审核(若需要)
 - [ ] 用户体验流畅,关键操作 < 3 步
@@ -128,46 +133,70 @@
 ```
 src/
 ├── api/                       # 自动生成(从 swagger)
-│   └── Api.ts
+│   ├── Api.ts                 # 系统模块客户端
+│   └── im/                    # IM 模块客户端(api/im.ts、api/group.ts、api/user.ts)
 ├── modules/
 │   ├── auth/                  # 登录
-│   ├── workbench/             # 工作台
+│   ├── workbench/             # 工作台(含 IM 未读)
 │   ├── message/               # 消息中心
 │   ├── menu/                  # 应用中心
 │   ├── profile/               # 我的
-│   ├── contacts/              # 通讯录
+│   ├── contacts/              # 通讯录(含"发消息"按钮)
 │   ├── notice/                # 通知公告
 │   ├── file/                  # 文件中心
 │   ├── token/                 # Token 管理(管理员)
 │   ├── monitor/               # 监控(管理员)
 │   ├── dict/                  # 字典查询(管理员)
+│   ├── im/                    # ⭐ IM 即时通讯
+│   │   ├── mqtt-client.ts     # mqtt.js 5.x 客户端封装
+│   │   ├── conversation-list  # 会话列表 store
+│   │   ├── chat-window        # 单聊/群聊窗口 store
+│   │   ├── group-mgr          # 群管理 store
+│   │   ├── pages/
+│   │   │   ├── conversation-list.vue
+│   │   │   ├── chat-window.vue
+│   │   │   ├── group-detail.vue
+│   │   │   └── group-create.vue
+│   │   └── components/
+│   │       ├── UserPicker.vue # 复用选人组件
+│   │       └── MessageItem.vue
 │   └── extension/             # ⭐ 二次开发预留
 │       ├── README.md
 │       └── placeholder/
 │           ├── approval.vue   # 审批占位
-│           ├── attendance.vue # 考勤占位
-│           └── im.vue         # IM 占位
+│           └── attendance.vue # 考勤占位
 ├── pages.json                 # 路由
 ├── stores/                    # Pinia
 ├── utils/
 │   ├── request.ts             # 网络请求(含 mica-admin code=0 适配)
 │   ├── rsa.ts                 # RSA 加密(密码)
-│   └── storage.ts             # 本地存储封装
+│   ├── storage.ts             # 本地存储封装
+│   └── mqtt-config.ts         # MQTT 连接配置(URL/JWT/clientId)
 ├── components/                # 通用组件
 ├── locales/                   # i18n
 └── config/
-    └── env.ts
+    └── env.ts                 # 含 MQTT_WS_URL、MQTT_TOPIC_PREFIX
 ```
 
 ---
 
 ## v1.1 — 增强版本
 
-**目标**:补齐 mica-admin 现有能力中 App 暂未覆盖的部分 + 轻量二次开发扩展。
+**目标**:补齐 mica-admin 现有能力中 App 暂未覆盖的部分 + IM 增强 + 轻量二次开发扩展。
 
 ### 范围
 
-#### 1.1.1 mica-admin 现有能力补齐(0 后端)
+#### 1.1.1 IM 增强(0 后端)
+
+- **图片消息**(走 `/api/upload` 上传后发 URL)
+- **文件消息**(同上)
+- **消息搜索**(本地索引或服务端 ES 扩展)
+- **@提及** 解析 + 高亮(群消息)
+- **消息免打扰**(单会话级 / 全局级)
+- **撤回消息**(已具备,App UI 集成)
+- **已读回执**(1.0 不展示,v1.1 启用)
+
+#### 1.1.2 mica-admin 现有能力补齐(0 后端)
 
 - **我的 → 工作台快捷入口自定义**(本地持久化)
 - **消息中心 → 已读/未读 Tab 切换**
@@ -175,7 +204,7 @@ src/
 - **通知公告 → 关键字搜索**
 - **Token 管理 → 风险检测**(长时间未活跃提醒)
 
-#### 1.1.2 二次开发扩展(选做)
+#### 1.1.3 二次开发扩展(选做)
 
 按业务需求挑选,推荐组合:
 
@@ -183,16 +212,17 @@ src/
 |---|---|---|
 | 消息跳转业务单据 | 1 天 | 几乎所有场景 |
 | 数据看板(图表) | 1-2 天 | 管理员看数据 |
+| 系统级推送(uniPush) | 0.5 天 + 1 天 | App 后台推送 |
 | 工资条 / 通讯录增强 | 1 周 | 自定义业务 |
+| 通讯录"打电话" | 0.5 天 | 原生拨号 |
 
-#### 1.1.3 体验增强
+#### 1.1.4 体验增强
 
 - **离线缓存**(消息列表、通讯录)
 - **App 启动图 + 引导页**
 - **手势密码 / Face ID**
 - **深色模式**
 - **字体大小适配**
-- **消息免打扰设置**
 
 ### 工作量
 
@@ -204,6 +234,7 @@ src/
 - [ ] App 离线可用基础功能
 - [ ] 至少完成 1-2 个二次开发扩展点
 - [ ] 用户体验达国内一线 OA App 标准
+- [ ] IM 体验对标钉钉/企业微信基础版
 
 ---
 
@@ -220,7 +251,7 @@ src/
 - 请假 / 报销 / 出差 / 采购 / 加班 / 用车
 - 多级审批、会签、或签
 - 审批委托、撤回、转交
-- 与消息中心深度整合(待办推送)
+- 与 IM 深度整合(待办推送走 `im/sys/{userId}/system` topic)
 
 #### 2.0.2 考勤打卡
 
@@ -228,11 +259,14 @@ src/
 - 排班 / 调班 / 请假联动
 - 月历视图 + 异常提醒
 
-#### 2.0.3 实时推送
+#### 2.0.3 音视频通话 + 系统级推送
 
-- App 端:uniPush / 个推(支持 iOS/Android/小程序)
-- 后端:推送 SDK 集成
-- 推送模板 + 静默推送
+- **音视频通话**:集成声网 Agora / 腾讯云 TRTC SDK
+  - 信令走 IM MQTT topic
+  - 单聊/群聊内拉起原生 VoIP 界面
+- **系统级推送**:uniPush / 个推(支持 iOS/Android/小程序)
+  - App 后台推送通知
+  - 推送模板 + 静默推送
 
 #### 2.0.4 数据看板
 
@@ -255,7 +289,8 @@ src/
 ### 验收
 
 - [ ] 工作流可处理 5+ 种业务
-- [ ] 实时推送 < 3s 触达
+- [ ] 音视频通话延迟 < 500ms
+- [ ] 系统级推送 < 3s 触达
 - [ ] 考勤数据准确
 - [ ] 数据看板可配置
 
@@ -280,10 +315,12 @@ src/
 | 风险 | 影响 | 缓解 |
 |---|---|---|
 | mica-admin 后端接口变更 | App 不可用 | api-mapping.md 同步维护 |
-| 小程序不支持长连接 | 实时推送受限 | App 走 uniPush,小程序走轮询 |
-| uniapp 跨端兼容问题 | iOS/Android/小程序行为不一致 | 关键页面多端实测 |
+| 小程序不支持 MQTT 长连接 | IM 模块在小程序端能力受限 | App 走 MQTT + IM sys topic;小程序走 HTTP 轮询 + 微信模板消息 |
+| MQTT broker 资源占用 | 小内存服务器压力大(broker 内嵌后约 +50-100MB) | 小内存(< 1GB)部署建议关闭 `mqtt.server.enabled` 走外置 broker |
+| uniapp 跨端兼容问题 | iOS/Android/小程序行为不一致 | 关键页面多端实测;IM 优先 iOS/Android,小程序降级方案 |
 | 工作流引擎选型 | 决定 v2.0 工期 | 1.1 阶段先做技术验证 |
 | 二次开发方能力差异 | App 升级节奏不可控 | extension.md 提供模板 + 示例 |
+| IM 消息可靠性 | 弱网/丢消息 | `sys_user_message` 兜底;App 启动批量补拉 |
 
 ---
 
@@ -315,7 +352,9 @@ v3.0 平台化 ─────────────────────
 ## 资源
 
 - [README.md](./README.md) — 总入口
-- [features.md](./features.md) — 11 模块功能
+- [features.md](./features.md) — 12 模块功能
 - [wireframes.md](./wireframes.md) — 全部草图
 - [api-mapping.md](./api-mapping.md) — 接口清单
 - [extension.md](./extension.md) — 二次开发扩展点
+- [docs/im/README.md](../im/README.md) — IM 模块设计
+- [docs/im/api-design.md](../im/api-design.md) — IM 接口与 Topic 协议

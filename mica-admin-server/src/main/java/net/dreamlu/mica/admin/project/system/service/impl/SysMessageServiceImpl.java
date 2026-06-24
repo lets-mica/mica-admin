@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
+import net.dreamlu.mica.admin.project.im.push.ImPushPayload;
+import net.dreamlu.mica.admin.project.im.push.ImPushService;
 import net.dreamlu.mica.admin.project.system.entity.SysMessage;
 import net.dreamlu.mica.admin.project.system.entity.SysUser;
 import net.dreamlu.mica.admin.project.system.entity.SysUserMessage;
@@ -13,6 +15,8 @@ import net.dreamlu.mica.admin.project.system.service.ISysMessageService;
 import net.dreamlu.mica.admin.project.system.service.ISysUserMessageService;
 import net.dreamlu.mica.admin.project.system.service.ISysUserService;
 import net.dreamlu.mica.core.utils.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +34,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SysMessageServiceImpl extends ServiceImpl<SysMessageMapper, SysMessage> implements ISysMessageService {
+	private static final Logger log = LoggerFactory.getLogger(SysMessageServiceImpl.class);
 	private final ISysUserService userService;
 	private final ISysUserMessageService userMessageService;
+	private final ImPushService imPushService;
 
 	@Override
 	public Wrapper<SysMessage> getQueryWrapper(MessageQuery query) {
@@ -121,6 +127,17 @@ public class SysMessageServiceImpl extends ServiceImpl<SysMessageMapper, SysMess
 			return um;
 		}).collect(Collectors.toList());
 		userMessageService.saveBatch(userMessages, 500);
+		// IM 模块：写入离线兜底后，实时推送至在线端
+		ImPushPayload payload = ImPushPayload.builder()
+			.msgType("sys")
+			.senderId(0L)
+			.receiverId(null)
+			.title(message.getTitle())
+			.content(message.getContent())
+			.offlineMsgId(messageId)
+			.build();
+		int delivered = imPushService.broadcastSystemMessage(finalUserIds, payload);
+		log.info("[IM] SysMessage publish: messageId={}, targets={}, delivered={}", messageId, finalUserIds.size(), delivered);
 	}
 
 }

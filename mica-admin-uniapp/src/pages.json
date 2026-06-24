@@ -1,0 +1,197 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "工作台",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/message/index",
+      "style": {
+        "navigationBarTitleText": "消息",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/menu/index",
+      "style": {
+        "navigationBarTitleText": "应用中心"
+      }
+    },
+    {
+      "path": "pages/profile/index",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    },
+    {
+      "path": "modules/auth/pages/login",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
+      "path": "modules/profile/pages/update-pass",
+      "style": {
+        "navigationBarTitleText": "修改密码"
+      }
+    },
+    {
+      "path": "modules/profile/pages/update-email",
+      "style": {
+        "navigationBarTitleText": "修改邮箱"
+      }
+    },
+    {
+      "path": "modules/profile/pages/about",
+      "style": {
+        "navigationBarTitleText": "关于"
+      }
+    },
+    {
+      "path": "modules/contacts/pages/dept-detail",
+      "style": {
+        "navigationBarTitleText": "部门成员"
+      }
+    },
+    {
+      "path": "modules/contacts/pages/user-detail",
+      "style": {
+        "navigationBarTitleText": "用户详情"
+      }
+    },
+    {
+      "path": "modules/contacts/pages/index",
+      "style": {
+        "navigationBarTitleText": "通讯录",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "modules/notice/pages/list",
+      "style": {
+        "navigationBarTitleText": "公告",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "modules/notice/pages/detail",
+      "style": {
+        "navigationBarTitleText": "公告详情"
+      }
+    },
+    {
+      "path": "modules/file/pages/index",
+      "style": {
+        "navigationBarTitleText": "文件中心"
+      }
+    },
+    {
+      "path": "modules/token/pages/index",
+      "style": {
+        "navigationBarTitleText": "Token 管理",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "modules/menu/pages/webview",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "modules/im/pages/conversation-list",
+      "style": {
+        "navigationBarTitleText": "会话"
+      }
+    },
+    {
+      "path": "modules/im/pages/chat-window",
+      "style": {
+        "navigationBarTitleText": "聊天"
+      }
+    },
+    {
+      "path": "modules/im/pages/group-detail",
+      "style": {
+        "navigationBarTitleText": "群信息"
+      }
+    },
+    {
+      "path": "modules/im/pages/group-create",
+      "style": {
+        "navigationBarTitleText": "创建群"
+      }
+    },
+    {
+      "path": "modules/im/pages/start-chat",
+      "style": {
+        "navigationBarTitleText": "发起聊天"
+      }
+    },
+    {
+      "path": "modules/monitor/pages/server",
+      "style": {
+        "navigationBarTitleText": "服务监控"
+      }
+    },
+    {
+      "path": "modules/dict/pages/list",
+      "style": {
+        "navigationBarTitleText": "字典查询"
+      }
+    },
+    {
+      "path": "modules/extension/pages/approval",
+      "style": {
+        "navigationBarTitleText": "审批中心"
+      }
+    },
+    {
+      "path": "modules/extension/pages/attendance",
+      "style": {
+        "navigationBarTitleText": "考勤打卡"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "MICA Work",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#F5F6F8"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#18A37E",
+    "borderStyle": "black",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/tabbar/workbench.png",
+        "selectedIconPath": "static/tabbar/workbench-active.png",
+        "text": "工作台"
+      },
+      {
+        "pagePath": "pages/message/index",
+        "iconPath": "static/tabbar/message.png",
+        "selectedIconPath": "static/tabbar/message-active.png",
+        "text": "消息"
+      },
+      {
+        "pagePath": "pages/menu/index",
+        "iconPath": "static/tabbar/menu.png",
+        "selectedIconPath": "static/tabbar/menu-active.png",
+        "text": "应用"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "iconPath": "static/tabbar/profile.png",
+        "selectedIconPath": "static/tabbar/profile-active.png",
+        "text": "我的"
+      }
+    ]
+  }
+}

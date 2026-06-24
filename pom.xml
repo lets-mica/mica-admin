@@ -28,6 +28,7 @@
         <excel-spring-boot-starter.version>1.2.8</excel-spring-boot-starter.version>
         <freemarker.version>2.3.31</freemarker.version>
         <x-file-storage.version>2.3.0</x-file-storage.version>
+        <mica-mqtt.version>2.6.6</mica-mqtt.version>
     </properties>
 
     <parent>
@@ -181,6 +182,12 @@
                 <groupId>org.dromara.x-file-storage</groupId>
                 <artifactId>x-file-storage-spring</artifactId>
                 <version>${x-file-storage.version}</version>
+            </dependency>
+            <!-- mica-mqtt IM 模块依赖 -->
+            <dependency>
+                <groupId>org.dromara.mica-mqtt</groupId>
+                <artifactId>mica-mqtt-server-spring-boot-starter</artifactId>
+                <version>${mica-mqtt.version}</version>
             </dependency>
             <!-- 获取系统信息 -->
             <dependency>
