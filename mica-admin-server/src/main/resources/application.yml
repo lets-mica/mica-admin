@@ -111,27 +111,3 @@ mica:
       - /swagger-ui/**
     jwt-token:
       secret: 2874c8079512f189bfb715403603002acbc785da3e6778d7c1ac35ef44188f0a # 详见 JwtTokenTest
-# IM 模块：mica-mqtt 内嵌 broker 配置
-# 端口规划（遵循 mica-mqtt 默认值，避免运维混淆）：
-#   1883  - TCP，原生 App / mqtt.fx 调试
-#   8083  - WebSocket，浏览器 mqtt.js（mica-mqtt 默认端口）
-#   18083 - HTTP，mica-mqtt 控制台（可选）
-mqtt:
-  server:
-    enabled: true
-    name: mica-admin-im
-    heartbeat-timeout: 120000
-    auth:
-      # 鉴权由 MqttAuthInterceptor 处理（JWT 校验）
-      enable: false
-    mqtt-listener:
-      enable: true
-      port: 1883
-    ws-listener:
-      enable: true
-      port: 8083
-    http-listener:
-      enable: false
-      port: 18083
-    stat-enable: false
-    debug: false

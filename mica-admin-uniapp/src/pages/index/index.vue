@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import { useImStore } from '@/modules/im/stores/im'
-import { getNotices } from '@/api/notice'
+import { getNoticeFeed } from '@/api/notice'
 import { getUnreadMessages } from '@/api/message'
 import { formatDateTime } from '@/utils/format'
 import type { NoticeVo } from '@/api/notice'
 import type { UserMessage } from '@/api/message'
 
 const auth = useAuthStore()
-const im = useImStore()
 
 const greeting = ref('')
 const sysUnread = ref<UserMessage[]>([])
@@ -25,25 +23,22 @@ function updateGreeting() {
 }
 
 const quickEntries = [
-  { icon: '💬', name: '消息', path: '/pages/message/index', badge: () => im.unreadTotal },
+  { icon: '💬', name: '消息', path: '/pages/message/index' },
   { icon: '👥', name: '通讯录', path: '/modules/contacts/pages/index' },
-  { icon: '📢', name: '公告', path: '/modules/notice/pages/list' },
   { icon: '📁', name: '文件', path: '/modules/file/pages/index' }
 ]
 
 const adminEntries = [
   { icon: '🔑', name: 'Token', path: '/modules/token/pages/index' },
   { icon: '📊', name: '监控', path: '/modules/monitor/pages/server' },
-  { icon: '📖', name: '字典', path: '/modules/dict/pages/list' },
-  { icon: '📝', name: '日志', path: '/pages/message/index' }
+  { icon: '📖', name: '字典', path: '/modules/dict/pages/list' }
 ]
 
 async function load() {
   updateGreeting()
   await Promise.all([
-    im.refreshUnread(),
     getUnreadMessages().then((r) => (sysUnread.value = r || [])).catch(() => {}),
-    getNotices({ current: 1, size: 3 }).then((p) => (notices.value = p.records || [])).catch(() => {})
+    getNoticeFeed({ current: 1, size: 3 }).then((p) => (notices.value = p.records || [])).catch(() => {})
   ])
 }
 
@@ -70,16 +65,9 @@ onMounted(() => {
           <text class="dept">{{ auth.user?.deptName || '未分配部门' }}</text>
         </view>
       </view>
-      <view class="badge" v-if="im.unreadTotal > 0">
-        <uni-badge :text="im.unreadTotal > 99 ? '99+' : String(im.unreadTotal)" />
-      </view>
     </view>
 
     <view class="card stat">
-      <view class="stat-item">
-        <text class="num">{{ im.unreadTotal }}</text>
-        <text class="label">IM 未读</text>
-      </view>
       <view class="stat-item">
         <text class="num">{{ sysUnread.length }}</text>
         <text class="label">系统未读</text>
@@ -93,7 +81,7 @@ onMounted(() => {
     <view class="card notices" v-if="notices.length">
       <view class="card-header">
         <text class="title">最新公告</text>
-        <text class="more" @tap="go('/modules/notice/pages/list')">更多 ›</text>
+        <text class="more" @tap="go('/pages/message/index')">更多 ›</text>
       </view>
       <view v-for="n in notices" :key="n.id" class="notice-row" @tap="go(`/modules/notice/pages/detail?id=${n.id}`)">
         <text class="notice-title text-ellipsis">{{ n.title }}</text>
@@ -109,9 +97,6 @@ onMounted(() => {
         <view v-for="q in quickEntries" :key="q.name" class="quick-item" @tap="go(q.path)">
           <text class="quick-icon">{{ q.icon }}</text>
           <text class="quick-name">{{ q.name }}</text>
-          <view v-if="q.name === '消息' && im.unreadTotal > 0" class="quick-badge">
-            <uni-badge :text="im.unreadTotal > 99 ? '99+' : String(im.unreadTotal)" />
-          </view>
         </view>
       </view>
     </view>

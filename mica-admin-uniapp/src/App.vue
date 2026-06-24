@@ -1,19 +1,13 @@
 <script setup lang="ts">
 import { onLaunch, onShow } from '@dcloudio/uni-app'
 import { useAuthStore } from '@/stores/auth'
-import { useImStore } from '@/modules/im/stores/im'
 
 const auth = useAuthStore()
-const im = useImStore()
 
 onLaunch(() => {
   console.log('[App] launched')
-  // 1. 恢复登录态
+  // 恢复登录态
   auth.bootstrap()
-  // 2. 已登录 → 建立 MQTT 长连接
-  if (auth.isLoggedIn) {
-    im.connectMqtt()
-  }
 })
 
 onShow(() => {

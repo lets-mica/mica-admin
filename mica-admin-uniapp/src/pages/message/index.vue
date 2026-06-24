@@ -1,22 +1,40 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useImStore } from '@/modules/im/stores/im'
+import { ref, onMounted, computed } from 'vue'
+import { getNoticeFeed } from '@/api/notice'
 import { getMessages, markAllRead, markRead } from '@/api/message'
 import { formatRelative } from '@/utils/format'
+import type { NoticeVo } from '@/api/notice'
 import type { UserMessage } from '@/api/message'
 
-const im = useImStore()
-const sysMessages = ref<UserMessage[]>([])
-const currentTab = ref<number>(0) // 0 = 消息, 1 = 会话
+const currentTab = ref<number>(0)
 const loading = ref(false)
+
+const notices = ref<NoticeVo[]>([])
+const sysMessages = ref<UserMessage[]>([])
+const unreadMsgCount = computed(() => sysMessages.value.filter(m => !m.read).length)
+
+async function loadNotices() {
+  try {
+    const p = await getNoticeFeed({ current: 1, size: 50 })
+    notices.value = p.records || []
+  } catch {
+    notices.value = []
+  }
+}
+
+async function loadMessages() {
+  try {
+    const p = await getMessages({ current: 1, size: 50 })
+    sysMessages.value = p.records || []
+  } catch {
+    sysMessages.value = []
+  }
+}
 
 async function load() {
   loading.value = true
   try {
-    await Promise.all([
-      im.loadConversations(),
-      getMessages({ current: 1, size: 50 }).then((p) => (sysMessages.value = p.records || []))
-    ])
+    await Promise.all([loadNotices(), loadMessages()])
   } finally {
     loading.value = false
   }
@@ -26,9 +44,7 @@ async function onTapMessage(m: UserMessage) {
   if (!m.read) {
     await markRead(m.id)
     m.read = true
-    await im.refreshUnread()
   }
-  // 跳转业务单据(1.0 仅示例)
   if (m.bizType && m.bizId) {
     uni.showToast({ title: `${m.bizType}#${m.bizId} 跳转待开发`, icon: 'none' })
   }
@@ -37,56 +53,59 @@ async function onTapMessage(m: UserMessage) {
 async function onMarkAll() {
   await markAllRead()
   sysMessages.value.forEach((m) => (m.read = true))
-  await im.refreshUnread()
 }
 
-function onTabChange(i: number) {
-  currentTab.value = i
+function onTapNotice(n: NoticeVo) {
+  uni.navigateTo({ url: `/modules/notice/pages/detail?id=${n.id}` })
 }
 
-function onStartChat() {
-  uni.navigateTo({ url: '/modules/im/pages/start-chat' })
-}
-
-function onOpenConv(c: any) {
-  const url =
-    c.type === 'P2P'
-      ? `/modules/im/pages/chat-window?type=p2p&peerId=${c.targetId}&convId=${c.id}`
-      : `/modules/im/pages/chat-window?type=group&groupId=${c.targetId}&convId=${c.id}`
-  uni.navigateTo({ url })
-}
-
-function onMessageIncoming() {
-  load()
+function noticeTypeLabel(type?: number) {
+  return type === 2 ? '公告' : '通知'
 }
 
 onMounted(() => {
-  uni.$on('im:message', onMessageIncoming)
-  uni.$on('im:system-message', onMessageIncoming)
   load()
-})
-onUnmounted(() => {
-  uni.$off('im:message', onMessageIncoming)
-  uni.$off('im:system-message', onMessageIncoming)
 })
 </script>
 
 <template>
   <view class="page">
     <view class="tabs">
-      <view class="tab" :class="{ active: currentTab === 0 }" @tap="onTabChange(0)">
-        <text>消息</text>
-        <view v-if="sysMessages.filter(m => !m.read).length > 0" class="dot" />
+      <view class="tab" :class="{ active: currentTab === 0 }" @tap="currentTab = 0">
+        <text>公告</text>
       </view>
-      <view class="tab" :class="{ active: currentTab === 1 }" @tap="onTabChange(1)">
-        <text>会话</text>
-        <view v-if="im.unreadTotal > 0" class="dot" />
+      <view class="tab" :class="{ active: currentTab === 1 }" @tap="currentTab = 1">
+        <text>系统消息</text>
+        <view v-if="unreadMsgCount > 0" class="badge">
+          <text>{{ unreadMsgCount > 99 ? '99+' : unreadMsgCount }}</text>
+        </view>
       </view>
-      <view class="plus" @tap="onStartChat">+</view>
     </view>
 
-    <!-- 消息 Tab -->
+    <!-- 公告 Tab -->
     <view v-if="currentTab === 0" class="list">
+      <view v-if="notices.length === 0" class="empty">
+        <text>暂无公告</text>
+      </view>
+      <view
+        v-for="n in notices"
+        :key="n.id"
+        class="notice-row"
+        @tap="onTapNotice(n)"
+      >
+        <view class="notice-head">
+          <view class="tag" :class="{ announce: n.type === 2 }">
+            <text>{{ noticeTypeLabel(n.type) }}</text>
+          </view>
+          <text class="title text-ellipsis">{{ n.title }}</text>
+          <text class="time">{{ formatRelative(n.createdAt) }}</text>
+        </view>
+        <text class="content text-ellipsis">{{ n.content }}</text>
+      </view>
+    </view>
+
+    <!-- 系统消息 Tab -->
+    <view v-else class="list">
       <view v-if="sysMessages.length === 0" class="empty">
         <text>暂无消息</text>
       </view>
@@ -108,33 +127,6 @@ onUnmounted(() => {
       </view>
       <view v-if="sysMessages.some(m => !m.read)" class="footer-btn">
         <button size="mini" @tap="onMarkAll">全部已读</button>
-      </view>
-    </view>
-
-    <!-- 会话 Tab -->
-    <view v-else class="list">
-      <view v-if="im.conversations.length === 0" class="empty">
-        <text>暂无会话,点击右上角 + 发起聊天</text>
-      </view>
-      <view
-        v-for="c in im.sortedConversations"
-        :key="c.id"
-        class="conv-row"
-        @tap="onOpenConv(c)"
-      >
-        <image class="avatar" :src="c.avatar || '/static/default-avatar.png'" />
-        <view class="conv-body">
-          <view class="conv-head">
-            <text class="name">{{ c.title }}</text>
-            <text class="time">{{ formatRelative(c.updatedAt) }}</text>
-          </view>
-          <view class="conv-msg">
-            <text class="preview text-ellipsis">{{ c.lastMessage?.content || ' ' }}</text>
-            <view v-if="c.unreadCount > 0" class="badge">
-              <uni-badge :text="c.unreadCount > 99 ? '99+' : String(c.unreadCount)" />
-            </view>
-          </view>
-        </view>
       </view>
     </view>
   </view>
@@ -159,6 +151,10 @@ onUnmounted(() => {
     font-size: 30rpx;
     color: #8f959e;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8rpx;
     &.active {
       color: $uni-color-primary;
       font-weight: 600;
@@ -174,23 +170,17 @@ onUnmounted(() => {
         border-radius: 2rpx;
       }
     }
-    .dot {
-      position: absolute;
-      top: 16rpx;
-      right: 50%;
-      margin-right: -36rpx;
-      width: 14rpx;
-      height: 14rpx;
-      border-radius: 50%;
+    .badge {
+      min-width: 32rpx;
+      height: 32rpx;
+      padding: 0 8rpx;
+      border-radius: 16rpx;
       background: #f53f3f;
+      color: #fff;
+      font-size: 20rpx;
+      line-height: 32rpx;
+      text-align: center;
     }
-  }
-  .plus {
-    width: 80rpx;
-    text-align: center;
-    line-height: 80rpx;
-    color: $uni-color-primary;
-    font-size: 44rpx;
   }
 }
 .list {
@@ -200,6 +190,50 @@ onUnmounted(() => {
   text-align: center;
   color: #8f959e;
   padding: 100rpx 0;
+}
+.notice-row {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  .notice-head {
+    display: flex;
+    align-items: center;
+    gap: 12rpx;
+    .tag {
+      flex-shrink: 0;
+      padding: 4rpx 12rpx;
+      border-radius: 6rpx;
+      background: #e8f4ff;
+      color: $uni-color-primary;
+      font-size: 22rpx;
+      line-height: 1.4;
+      &.announce {
+        background: #fff4e6;
+        color: #fa8c16;
+      }
+      text {
+        white-space: nowrap;
+      }
+    }
+    .title {
+      flex: 1;
+      font-size: 30rpx;
+      font-weight: 500;
+      color: #1f2329;
+    }
+    .time {
+      flex-shrink: 0;
+      color: #8f959e;
+      font-size: 22rpx;
+    }
+  }
+  .content {
+    display: block;
+    color: #555;
+    font-size: 26rpx;
+    margin-top: 8rpx;
+  }
 }
 .msg-row {
   background: #fff;
@@ -242,48 +276,5 @@ onUnmounted(() => {
 .footer-btn {
   text-align: center;
   padding: 20rpx 0;
-}
-.conv-row {
-  background: #fff;
-  border-radius: 16rpx;
-  padding: 24rpx;
-  margin-bottom: 16rpx;
-  display: flex;
-  .avatar {
-    width: 88rpx;
-    height: 88rpx;
-    border-radius: 50%;
-    background: #e8e8e8;
-  }
-  .conv-body {
-    flex: 1;
-    margin-left: 20rpx;
-    overflow: hidden;
-  }
-  .conv-head {
-    display: flex;
-    justify-content: space-between;
-    .name {
-      font-size: 30rpx;
-      font-weight: 500;
-    }
-    .time {
-      color: #8f959e;
-      font-size: 22rpx;
-    }
-  }
-  .conv-msg {
-    display: flex;
-    align-items: center;
-    margin-top: 6rpx;
-    .preview {
-      flex: 1;
-      color: #555;
-      font-size: 26rpx;
-    }
-    .badge {
-      margin-left: 10rpx;
-    }
-  }
 }
 </style>

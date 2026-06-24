@@ -11,7 +11,6 @@ import { env } from '@/config/env'
     </view>
     <view class="info">
       <text>基于 mica-admin + uniapp + Vue 3 + Vite 构建</text>
-      <text>MQTT: {{ env.mqttUrl }}</text>
       <text>API: {{ env.apiUrl }}</text>
     </view>
   </view>

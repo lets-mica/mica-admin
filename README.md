@@ -4,7 +4,7 @@
 
 ### 一套代码，三个端，开箱即用的低代码权限管理平台
 
-**后端 · Web 管理端 · 移动 App · 内置 IM 即时通讯**
+**后端 · Web 管理端 · 移动 App**
 
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.18-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![Java](https://img.shields.io/badge/Java-8%2B-ED8B00?logo=openjdk&logoColor=white)](https://www.java.com)
@@ -14,7 +14,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://github.com)
 
-[在线演示](https://admin.dreamlu.net) · [更新日志](#-更新日志) · [架构设计](docs/im/architecture.md) · [二次开发指南](docs/app/extension.md)
+[在线演示](https://admin.dreamlu.net) · [更新日志](#-更新日志) · [二次开发指南](docs/app/extension.md)
 
 </div>
 
@@ -22,11 +22,14 @@
 
 ## 🎯 这是什么？
 
-**mica-admin** 是一个面向中小团队的**全栈低代码权限管理平台**，把企业日常需要的**用户/角色/菜单/部门/字典/文件/监控/通知**全部集成在一起，并自带可二开的**即时通讯模块**。
+**mica-admin** 是一个面向中小团队的**全栈低代码权限管理平台**,把企业日常需要的**用户/角色/菜单/部门/字典/文件/监控/通知**全部集成在一起,定位为通用后台系统。
 
 - 🏢 **管理后台** —— 用户、角色、菜单、部门、字典、文件、监控、操作日志一应俱全
-- 📱 **移动 App** —— uniapp x 跨端，iOS / Android / H5 / 微信小程序一套代码
-- 🚀 **一键部署** —— `deploy.sh` 跑完，jar 包就到生产了
+- 📱 **移动 App** —— uniapp x 跨端,iOS / Android / H5 / 微信小程序一套代码
+- 🚀 **一键部署** —— `deploy.sh` 跑完,jar 包就到生产了
+
+> 自 v1.0 起,mica-admin **不再内置即时通讯(IM)**。
+> 系统定位回归通用后台,如需 IM 走第三方 SDK 或二次开发扩展。
 
 ---
 
@@ -49,8 +52,7 @@ mica-admin/                                  # mono-repo (单 git 仓库)
 │   └── net.dreamlu.mica.admin
 │       ├── common/      公共常量 (ApiCode 等)
 │       ├── framework/   框架核心 (Security / MyBatis / AOP / JWT)
-│       ├── project/     业务模块 (用户 / 角色 / 菜单 / 部门 / 字典 ...)
-│       └── im/          ⭐ IM 模块 (mica-mqtt,详见 docs/im/)
+│       └── project/     业务模块 (用户 / 角色 / 菜单 / 部门 / 字典 ...)
 │
 ├── mica-admin-web/                          # Web 管理端 (Vben Admin 5.x 本地化)
 │   ├── src/             业务代码
@@ -59,10 +61,9 @@ mica-admin/                                  # mono-repo (单 git 仓库)
 ├── mica-admin-uniapp/                       # 移动 App (uniapp x)
 │   └── src
 │       ├── modules/auth        登录 (通用)
-│       ├── modules/im          ⭐ IM 即时通讯 (通用)
 │       └── modules/extension   二次开发只新增
 │
-├── docs/                  设计文档 (App / IM / 数据库)
+├── docs/                  设计文档 (App / 数据库)
 ├── deploy.sh              一键部署脚本
 ├── script/                systemd 服务脚本
 └── AGENTS.md              AI 编码助手规则
@@ -84,7 +85,7 @@ mica-admin/                                  # mono-repo (单 git 仓库)
     <td align="center"><b>后端</b></td>
     <td>
       Spring Boot 2.7 · Spring Security · MyBatis-Plus 3.5 · Druid · Redis · JWT · RSA
-      <br/>Undertow · Log4j2 · mica-captcha · mica-openapi · dromara x-file-storage · <b>mica-mqtt</b>
+      <br/>Undertow · Log4j2 · mica-captcha · mica-openapi · dromara x-file-storage
     </td>
   </tr>
   <tr>
@@ -98,7 +99,7 @@ mica-admin/                                  # mono-repo (单 git 仓库)
     <td align="center"><b>App</b></td>
     <td>
       uniapp x · Vue 3.4 + TypeScript 5 + Pinia 2 + Vite 5
-      <br/>uni-ui · mqtt.js 5.x · dayjs · pinia-plugin-persistedstate
+      <br/>uni-ui · dayjs · pinia-plugin-persistedstate
     </td>
   </tr>
   <tr>
@@ -111,37 +112,22 @@ mica-admin/                                  # mono-repo (单 git 仓库)
 
 ## ⭐ 核心亮点
 
-### 1. 三端一套代码，权限完全打通
+### 1. 三端一套代码,权限完全打通
 
 - Web 端 / App 端 / 后端**共用 RBAC 模型** (`sys_user` / `sys_role` / `sys_menu`)
 - 后台给用户配什么菜单/按钮,App 端就显示什么
-- JWT 鉴权贯通三端,MQTT 推送也走 JWT
+- JWT 鉴权贯通三端
 
-### 2. 💬 内置 IM 即时通讯（**差异化杀手锏**）
+### 2. 🛠️ 代码生成器
 
-基于 **mica-mqtt** 内嵌 broker,JWT 鉴权,**零外部依赖**。
-
-| 能力 | 状态 |
-| :-- | :--: |
-| 单聊 / 群聊 | ✅ |
-| 会话列表 / 未读数 | ✅ |
-| 历史消息 / 离线消息 | ✅ |
-| 群管理（创建/邀请/解散） | ✅ |
-| 在线状态 / 实时推送 | ✅ |
-| 已读回执 / 撤回 / @ | 🔜 Phase 2 |
-
-详细协议见 [`docs/im/api-design.md`](docs/im/api-design.md)。
-
-### 3. 🛠️ 代码生成器
-
-跑一次 `main()` 就生成完整的 Controller / Service / Mapper / Vue 页面：
+跑一次 `main()` 就生成完整的 Controller / Service / Mapper / Vue 页面:
 
 ```java
 // mica-admin-server/src/test/java/.../generator/MysqlAutoGenerator.java
 strategyConfig.addInclude("sys_user", "sys_role");
 ```
 
-### 4. 🚀 一键部署
+### 3. 🚀 一键部署
 
 ```bash
 ./deploy.sh
@@ -150,9 +136,9 @@ strategyConfig.addInclude("sys_user", "sys_role");
 
 服务用 **systemd** 托管(`script/start.sh`),开箱即用。
 
-### 5. 🔌 二次开发友好
+### 4. 🔌 二次开发友好
 
-**通用模块不修改，二次开发只新增**。App 端把扩展点统一放在 `modules/extension/`，
+**通用模块不修改,二次开发只新增**。App 端把扩展点统一放在 `modules/extension/`,
 后端按业务新建包即可,完全不碰 `framework/`。
 
 ---
@@ -174,8 +160,6 @@ strategyConfig.addInclude("sys_user", "sys_role");
 
 ```bash
 mysql -u root -p < docs/database/mysql.sql
-# 可选：IM 模块
-mysql -u root -p < docs/database/im-schema.sql
 ```
 
 ### 2. 启动后端
@@ -217,9 +201,6 @@ mvn clean package -Pprod -U -Dmaven.test.skip=true
 | :-- | :-- | :-- |
 | [docs/app/README.md](docs/app/README.md) | 移动端开发者 | App 端产品定位、IA、技术栈、模块清单 |
 | [docs/app/extension.md](docs/app/extension.md) | 二次开发方 | 哪些可复用、哪些需新增后端 |
-| [docs/im/README.md](docs/im/README.md) | IM 开发者 | IM 模块定位、范围、里程碑 |
-| [docs/im/architecture.md](docs/im/architecture.md) | 架构师 | 分层、mica-mqtt 接入、鉴权、可靠性 |
-| [docs/im/api-design.md](docs/im/api-design.md) | 前后端 | HTTP REST + MQTT Topic 协议 |
 | [docs/database/mysql.sql](docs/database/mysql.sql) | 运维 | 数据库结构 |
 | [mica-admin-uniapp/AGENTS.md](mica-admin-uniapp/AGENTS.md) | App 二次开发 | 通用模块不修改原则 |
 | [AGENTS.md](AGENTS.md) | AI 编码助手 | 仓库级编码规范 |
@@ -228,17 +209,16 @@ mvn clean package -Pprod -U -Dmaven.test.skip=true
 
 ## 🗺️ 路线图
 
-- [x] 用户/角色/菜单/部门/字典/文件/监控/通知（系统模块）
+- [x] 用户/角色/菜单/部门/字典/文件/监控/通知(系统模块)
 - [x] RBAC + 按钮级权限 (`v-permission` 指令)
-- [x] 代码生成器（MyBatis-Plus + Freemarker）
-- [x] Web 端 Vben Admin 5.x 升级（Vue 3 + Naive UI）
-- [x] App 端 12 个基础模块
-- [x] **IM 即时通讯**（单聊/群聊/会话/离线）
-- [x] Magic-API 低代码（`/magic/web`）
-- [ ] **数据权限**（行级过滤,见 README 历史 TODO）
-- [ ] 已读回执 / 撤回 / @ 引用
-- [ ] 音视频通话（评估中）
-- [ ] 第三方推送（uniPush）
+- [x] 代码生成器(MyBatis-Plus + Freemarker)
+- [x] Web 端 Vben Admin 5.x 升级(Vue 3 + Naive UI)
+- [x] App 端 11 个基础模块
+- [x] Magic-API 低代码(`/magic/web`)
+- [x] **IM 模块下线**(v1.0 起 mica-admin 回归通用后台定位)
+- [ ] 数据权限(行级过滤)
+- [ ] 第三方推送(uniPush)
+- [ ] 工作流/审批(二次开发扩展点)
 
 ---
 
@@ -249,7 +229,6 @@ PR 永远欢迎 🙏
 1. Fork → 2. Feature Branch → 3. Commit → 4. PR
 2. 后端改动请补单测 (`mvn test -Dtest=ClassName#methodName`)
 3. 前端改动请跑 `pnpm typecheck` + `pnpm lint`
-4. IM 模块改动同步更新 [`docs/im/api-design.md`](docs/im/api-design.md)
 
 ## 📜 开源协议
 
@@ -258,7 +237,6 @@ PR 永远欢迎 🙏
 ## 🌟 致谢
 
 - [mica](https://gitee.com/596392912/mica) —— 让 Java 开发更高效的瑞士军刀
-- [mica-mqtt](https://gitee.com/dromara/mica-mqtt) —— Java 系的轻量 MQTT Broker
 - [vue-vben-admin](https://github.com/vbenjs/vue-vben-admin) —— Vue 3 中后台模板的天花板
 - [uniapp](https://uniapp.dcloud.net.cn) —— 一套代码,8 端运行
 

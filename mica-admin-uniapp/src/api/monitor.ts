@@ -54,18 +54,6 @@ export function getServerMonitor() {
 }
 
 /**
- * IM 在线人数
- * @see ImStatsController#online -> { totalOnline: number }
- */
-export interface ImStats {
-  totalOnline: number
-}
-
-export function getImOnlineStats() {
-  return http.get<ImStats>('/admin/im/stats/online')
-}
-
-/**
  * 在线 Token
  * @see net.dreamlu.mica.admin.framework.vo.TokenVo
  */

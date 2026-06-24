@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { getImOnlineStats, getServerMonitor } from '@/api/monitor'
+import { getServerMonitor } from '@/api/monitor'
 import type { ServerMonitor } from '@/api/monitor'
 
 const data = ref<ServerMonitor | null>(null)
-const imOnline = ref(0)
 const timer = ref<number | null>(null)
 
 /**
@@ -27,12 +26,7 @@ function cpuPct(s: string | undefined): number {
 }
 
 async function load() {
-  const [m, o] = await Promise.all([
-    getServerMonitor(),
-    getImOnlineStats().catch(() => ({ totalOnline: 0 }))
-  ])
-  data.value = m
-  imOnline.value = o.totalOnline ?? 0
+  data.value = await getServerMonitor()
 }
 
 onMounted(() => {
@@ -90,8 +84,8 @@ onUnmounted(() => {
     </view>
 
     <view class="card">
-      <view class="card-title">IM 在线用户</view>
-      <text class="big">{{ imOnline }}</text>
+      <view class="card-title">服务健康度</view>
+      <text class="big">运行中</text>
     </view>
   </view>
 </template>

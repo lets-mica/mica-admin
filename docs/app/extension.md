@@ -10,13 +10,11 @@
 |---|---|---|---|---|
 | 1 | 消息跳转业务单据 | 点击消息跳到对应单据 | 0.5 天 | 0.5 天 |
 | 2 | 原生应用中心 | 菜单点开是 uniapp 原生页 | 0(纯前端) | 按菜单数 |
-| 3 | **通讯录"发消息"** | 一键发起单聊 | **0(已内置 IM 模块)** | 1 天 |
-| 3.1 | 通讯录打电话 | 一键拨号 | 0(原生 `uni.makePhoneCall`) | 0.5 天 |
-| 3.2 | 音视频通话 | 单聊/群聊内 VoIP | 1-2 周(SDK) | 2-3 天 |
+| 3 | 通讯录打电话 | 一键拨号 | 0(原生 `uni.makePhoneCall`) | 0.5 天 |
+| 3.1 | 音视频通话 | App 内 VoIP | 1-2 周(SDK) | 2-3 天 |
 | 4 | 审批/工作流 | App 端审批中心 | 1-2 周 | 1 周 |
 | 5 | 考勤打卡 | 上下班打卡 | 2-3 天 | 1-2 天 |
-| 6 | **系统消息实时推送** | App 前台秒级触达 | **0(已内置 IM sys topic)** | 0.5 天 |
-| 6.1 | 系统级推送(APNs/华为/小米) | App 后台推送 | 0.5 天 | 1 天 |
+| 6 | 系统级推送(APNs/华为/小米) | App 后台推送 | 0.5 天 | 1 天 |
 | 7 | 数据看板(图表) | 工作台数据卡片 | 1 天 | 1-2 天 |
 
 ---
@@ -158,41 +156,11 @@ export const iconMap: Record<string, string> = {
 
 ---
 
-## 3. 通讯录拨打/IM
+## 3. 通讯录打电话与音视频通话
 
-> 本节拆分 3 个子项:**发消息**(已就绪)、**打电话**(原生即可)、**音视频通话**(需 SDK)。
+> 本节拆分 2 个子项:**打电话**(原生即可)、**音视频通话**(需 SDK)。
 
-### 3.1 通讯录"发消息"(已就绪)
-
-#### 现状
-
-mica-admin IM 模块已完整实现并内嵌 broker。
-通讯录用户详情页"发消息"按钮 **1.0 已可用**,无需任何后端改造。
-
-#### App 端接入(1 天)
-
-复用 mica-im 模块的 HTTP + MQTT 通道(详见 [api-mapping.md §12](./api-mapping.md#模块-12-im-即时通讯)
-与 [docs/im/api-design.md](../im/api-design.md)):
-
-```typescript
-// contact/detail.vue
-async function onSendMessageClick(peerUserId: number) {
-  // 1. 获取/创建单聊会话
-  const { conversation } = await createP2pConversation({ peerUserId })
-  // 2. 跳单聊窗口
-  uni.navigateTo({
-    url: `/modules/im/chat-window?convId=${conversation.id}&type=p2p&peerId=${peerUserId}`
-  })
-}
-```
-
-注意要点:
-
-- App 启动时已建立 MQTT 长连接 + 订阅 inbox(见 [features.md §12](./features.md#12-im-即时通讯-))
-- "发消息"按钮需做防抖,避免重复点击产生多个会话
-- 单聊窗口从 `chat-window` 复用,不要新建独立页面
-
-### 3.2 通讯录"打电话"(原生即可)
+### 3.1 通讯录"打电话"(原生即可)
 
 #### 现状
 
@@ -222,25 +190,24 @@ function callPhone(phone: string) {
 ```
 
 > App 端仅触发系统拨号器,实际通话由运营商承载,无需集成第三方电话 SDK。
-> 如需 VoIP 网络电话(类似钉钉),见 §3.3。
+> 如需 VoIP 网络电话(类似钉钉),见 §3.2。
 
-### 3.3 音视频通话(需 SDK)
+### 3.2 音视频通话(需 SDK)
 
 #### 现状
 
-mica-im 仅文本/图片/文件消息,**不包含 VoIP 能力**。
+mica-admin 不包含音视频能力。
 
 #### 推荐方案
 
 - 集成声网 Agora / 腾讯云 TRTC / 环信音视频 SDK
-- 通话建立信令走 IM MQTT topic(如 `im/p2p/{userId}/inbox` 携带 `type: 'CALL_INVITE'`)
-- App 端监听该 topic → 拉起原生音视频界面
+- App 端通过自定义信令协议拉起原生音视频界面
 
 #### 后端改造(1-2 周)
 
 - 接入音视频服务端 SDK
 - 实现通话信令(CALL_INVITE / CALL_ACCEPT / CALL_REJECT / CALL_HANGUP)
-- 可复用 mica-im 群聊做多人通话
+- 可在业务消息中携带通话邀请
 
 #### App 端接入(2-3 天)
 
@@ -249,18 +216,6 @@ mica-im 仅文本/图片/文件消息,**不包含 VoIP 能力**。
 - 后台/前台切换时 SDK 状态保存
 
 > 此扩展点投入较大,通常 v1.1+ 评估。
-
-### 3.4 查看 TA 的群(后端小补)
-
-若要在用户详情页展示"该用户参与的群列表",后端需新增:
-
-```
-GET /api/im/users/{userId}/groups
-→ GroupVo[]
-权限:已登录
-```
-
-1-2 小时工作量。1.0 可省略,二次开发按需补。
 
 ---
 
@@ -455,62 +410,23 @@ extension/attendance/
 
 ---
 
-## 6. 实时推送
+## 6. 系统级推送(APNs / 华为 / 小米)
 
-> mica-mqtt 已内嵌,App 1.0 即可享受 **前台实时推送**;**后台推送**仍需厂商通道。
+### 6.1 现状
 
-### 6.1 App 前台实时推送(IM sys topic,已就绪)
-
-#### 现状
-
-mica-admin `SysMessageServiceImpl.publish()` 已通过 `ImPushService` 把系统消息
-推送到 `im/sys/{userId}/system` MQTT topic。App 前台时 MQTT 连接保持,
-可即时收到通知,工作台角标 + Tab 角标实时刷新。
-
-#### App 端接入(0.5 天)
-
-App 启动时订阅 `im/sys/{userId}/system`,收到消息后:
-
-```typescript
-// src/modules/im/mqtt-client.ts (已内置)
-client.on('message', (topic, payload) => {
-  if (topic === `im/sys/${userId}/system`) {
-    const notice = JSON.parse(payload.toString())
-    // 1. 弹通知
-    uni.showNotification({
-      title: notice.title,
-      content: notice.content,
-      payload: { bizType: notice.bizType, bizId: notice.bizId }
-    })
-    // 2. 刷新工作台未读
-    sysUnreadStore.refresh()
-    // 3. 离线消息兜底(下次 App 启动时拉 sys_user_message)
-  }
-})
-```
-
-#### 离线兜底
-
-App 后台/断网期间,`ImPushService` 同步把消息写入 `sys_user_message` 表。
-App 重新前台时调 `GET /api/system/user/message/unread` 兜底拉取,**消息不丢**。
-
-### 6.2 系统级推送(APNs / 华为 / 小米,需厂商通道)
-
-#### 现状
-
-- App 切到后台,iOS/Android 系统会 **杀进程** → MQTT 长连接断开
-- 此时新消息无法通过 `im/sys/...` 实时推送,只能等 App 回到前台后兜底拉取
+- App 切到后台,iOS/Android 系统会 **杀进程**
+- 此时新消息无法实时推送,只能等 App 回到前台后拉取 `/api/system/user/message/unread`
 - iOS 用户看到的"通知"由系统级通道(APNs)提供;Android 由厂商通道(华为/小米/OPPO/VIVO)提供
 
-#### 推荐方案:uniPush(个推通道)
+### 6.2 推荐方案:uniPush(个推通道)
 
 - App 端接入 uniPush(个推通道),`manifest.json` 配 push 模块
-- 后端在 `ImPushService` 检测到用户离线时,调用 uniPush REST API
+- 后端在检测到用户离线时,调用 uniPush REST API
 
-#### 后端改造(0.5 天)
+### 6.3 后端改造(0.5 天)
 
 ```java
-// ImPushServiceImpl.pushSystemMessage() 中追加
+// 系统消息发送后,检测用户在线状态
 if (!userIsOnline(userId)) {
     uniPushClient.sendToSingle(userId, Map.of(
         "title", msg.getTitle(),
@@ -523,16 +439,15 @@ if (!userIsOnline(userId)) {
 }
 ```
 
-#### App 端接入(1 天)
+### 6.4 App 端接入(1 天)
 
 - 申请 uniPush 账号 + 配置 `manifest.json`
 - 处理 push 回调(`uni.onPushMessage`)
 - 点击通知 → 调 `getLaunchOptionsSync()` 取 `payload` → 跳业务单据
 
-#### 限制
+### 6.5 限制
 
-- **微信小程序不支持 MQTT 长连接**,IM 模块在小程序端走 HTTP 轮询 + 微信模板消息
-  (具体方案见 [docs/im/architecture.md §1.1](../im/architecture.md#11-与-app-端集成))
+- **微信小程序不支持 MQTT 长连接**,小程序端只能走 HTTP 轮询 + 微信模板消息
 - 厂商通道需各厂商审核,首次接入周期 1-2 周
 
 ---
@@ -652,14 +567,13 @@ src/modules/extension/payslip/
 
 | 投入 | 能拿到 |
 |---|---|
-| 0 后端改造 | App **12** 个开箱即用模块(含 IM 即时通讯) |
+| 0 后端改造 | App **11** 个开箱即用模块(公告/系统消息/通讯录/文件/Token/监控等) |
 | 0.5 天 | 消息跳业务单据 / 系统级推送通道 |
 | 1 天 | 通讯录"打电话"(原生拨号) |
-| 1-2 天 | 通讯录"发消息"(已内置 IM,只需 App UI) |
 | 1 周 | 工资条类小功能 + 数据看板 |
 | 1-2 周 | 完整审批中心 |
-| 2-3 周 | 考勤 + 实时推送(已内置前台)+ 数据看板 + 二次开发模块 |
+| 2-3 周 | 考勤 + 系统级推送 + 数据看板 + 二次开发模块 |
 | 4 周+ | 全功能企业 App(含音视频通话) |
 
 按需投入,不要一上来就"大而全"。**App 1.0 + 1 个扩展点**通常就能满足 80% 内部办公需求。
-**通讯录 IM 与系统消息推送已在 1.0 范围内**(mica-mqtt 已内嵌),无需任何扩展点投入。
+**mica-admin 不内置即时通讯**,App 端如需 IM 走第三方 SDK 或自建(见第三方文档)。

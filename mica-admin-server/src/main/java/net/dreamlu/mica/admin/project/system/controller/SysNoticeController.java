@@ -1,6 +1,8 @@
 package net.dreamlu.mica.admin.project.system.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.pig4cloud.plugin.excel.annotation.ResponseExcel;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,6 +53,17 @@ public class SysNoticeController extends BaseController {
 	@PreAuthorize("@sec.hasPermission('system:notice:list')")
 	public Page<SysNotice> list(Page<SysNotice> page, NoticeQuery query) {
 		return noticeService.page(page, noticeService.getQueryWrapper(query));
+	}
+
+	@Operation(summary = "公告 Feed（已登录用户可见，仅返回已发布）")
+	@GetMapping("feed")
+	@PreAuthorize("@sec.isAuthenticated()")
+	public Page<SysNotice> feed(Page<SysNotice> page, NoticeQuery query) {
+		Wrapper<SysNotice> wrapper = noticeService.getQueryWrapper(query);
+		((LambdaQueryWrapper<SysNotice>) wrapper)
+			.eq(SysNotice::getStatus, 0)
+			.orderByDesc(SysNotice::getCreatedAt);
+		return noticeService.page(page, wrapper);
 	}
 
 	@Operation(summary = "通知公告详情")

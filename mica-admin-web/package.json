@@ -40,7 +40,6 @@
     "json-bigint": "catalog:",
     "lodash-es": "catalog:",
     "lodash.clonedeep": "catalog:",
-    "mqtt": "catalog:",
     "naive-ui": "catalog:",
     "nprogress": "catalog:",
     "pinia": "catalog:",

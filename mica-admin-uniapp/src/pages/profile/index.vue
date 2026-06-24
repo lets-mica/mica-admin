@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth'
-import { useImStore } from '@/modules/im/stores/im'
 
 const auth = useAuthStore()
-const im = useImStore()
 
 interface MenuItem {
   icon: string
@@ -41,7 +39,6 @@ function onLogout() {
     success: async (res) => {
       if (res.confirm) {
         await auth.doLogout()
-        im.disconnectMqtt()
         uni.reLaunch({ url: '/modules/auth/pages/login' })
       }
     }

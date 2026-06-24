@@ -19,12 +19,6 @@ export default defineConfig(({ mode }) => {
         '/api': {
           target: proxyTarget,
           changeOrigin: true
-        },
-        '/mqtt': {
-          target: 'ws://localhost:8083',
-          ws: true,
-          changeOrigin: true,
-          rewrite: (p) => p.replace(/^\/mqtt/, '')
         }
       }
     }

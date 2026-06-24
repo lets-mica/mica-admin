@@ -7,17 +7,16 @@
 | # | 模块 | 后端依赖 | 状态 |
 |---|---|---|---|
 | 1 | 登录/认证 | `/api/auth/*` + `/api/session` | 🟢 可做 |
-| 2 | 工作台(首页) | 聚合现有接口(含 IM 未读) | 🟢 可做 |
-| 3 | 消息中心 | `/api/system/user/message/*` | 🟢 可做 |
+| 2 | 工作台(首页) | 聚合现有接口(系统未读) | 🟢 可做 |
+| 3 | 消息中心(公告 + 系统消息) | `/api/system/user/message/*` + `/api/system/notice/feed` | 🟢 可做 |
 | 4 | 应用中心(动态菜单) | `/api/auth/menus` | 🟢 可做 |
 | 5 | 我的(个人中心) | `/api/system/users/*` | 🟢 可做 |
 | 6 | 通讯录 | `/api/system/users` + `/api/system/dept` | 🟢 可做 |
-| 7 | 通知公告 | `/api/system/notice` | 🟢 可做 |
+| 7 | 通知公告 | `/api/system/notice/feed` | 🟢 可做 |
 | 8 | 文件中心 | `/api/upload/**`(x-file-storage) | 🟢 可做 |
 | 9 | Token 管理(管理员) | `/api/auth/token` | 🟢 可做 |
 | 10 | 监控(简化版) | `/api/system/monitor/server` | 🟢 可做 |
 | 11 | 字典查询 | `/api/system/dict` + `/api/system/dict-info` | 🟢 可做 |
-| 12 | **IM 即时通讯** | `/api/im/*` + MQTT `ws://host:8083/mqtt` | 🟢 可做 |
 
 ---
 
@@ -62,16 +61,15 @@
 |---|---|
 | `GET /api/auth/info` | 当前用户信息 |
 | `GET /api/system/user/message/unread` | 系统消息未读数 |
-| `GET /api/im/conversations/unread-total` | **IM 未读消息总数** |
-| `GET /api/system/notice?page=1&size=5` | 最新公告 |
+| `GET /api/system/notice/feed?current=1&size=3` | 最新公告 |
 
 ### App 端功能
 
 - **顶部问候**:用户头像、姓名、部门、今日日期
-- **未读徽标**:右上角铃铛显示 **系统消息 + IM 未读总数**;Tab 栏"消息"图标也叠加红点
+- **未读徽标**:右上角铃铛显示 **系统消息未读总数**;Tab 栏"消息"图标也叠加红点
 - **待办摘要**:最新 3 条待办类消息(category=business)
 - **公告摘要**:最新 3 条系统公告
-- **快捷入口宫格**:通讯录、文件、Token、字典、日志、监控、**IM 会话**(按权限动态显隐)
+- **快捷入口宫格**:通讯录、文件、Token、字典、日志、监控(按权限动态显隐)
 - **下拉刷新**:刷新所有模块
 
 ### 交互细节
@@ -80,7 +78,6 @@
 - 点击公告项 → 跳公告详情
 - 点击快捷入口 → 跳对应模块(或应用中心)
 - **角色化显示**:普通员工不展示监控/日志/Token 等管理入口
-- **会话快捷入口**直接拉起对应单聊/群聊窗口(传 `convId` 或 `groupId`)
 
 ### 二次开发点
 
@@ -89,12 +86,14 @@
 
 ---
 
-## 3. 消息中心
+## 3. 消息中心(公告 + 系统消息)
 
 ### 后端依赖
 
 | 端点 | 用途 |
 |---|---|
+| `GET /api/system/notice/feed?current=&size=&title=` | 公告 Feed(已发布) |
+| `GET /api/system/notice/{id}` | 公告详情 |
 | `GET /api/system/user/message/unread` | 未读消息(顶部红点) |
 | `GET /api/system/user/message?page=&size=` | 我的消息分页 |
 | `PUT /api/system/user/message/read/{id}` | 标记单条已读 |
@@ -102,17 +101,23 @@
 
 ### App 端功能
 
-- **Tab 切换**:全部 / 未读(可选)
-- **消息列表**:分类徽标(system/business/security/activity)
-- **已读状态**:已读灰色,未读粗体 + 红点
-- **批量操作**:长按进入多选模式 → 批量已读 / 删除(App 端仅批量已读,删除走 Web)
-- **搜索**:按标题/内容模糊搜索
+- **顶部 Tab 切换**:**公告** / **系统消息**
+- **公告 Tab**:
+  - 公告列表:按发布时间倒序,显示标题、类型(通知/公告)、时间
+  - 点击 → 跳公告详情(富文本渲染)
+- **系统消息 Tab**:
+  - Tab 子切换:全部 / 未读(可选)
+  - 消息列表:分类徽标(system/business/security/activity)
+  - 已读状态:已读灰色,未读粗体 + 红点
+  - 批量操作:长按进入多选模式 → 批量已读
+  - 搜索:按标题/内容模糊搜索
 
 ### 交互细节
 
 - 列表左滑 → 标记已读 / 删除
 - 点击消息 → 标记已读 + 弹详情
 - 详情页展示消息标题、内容、时间、发送方
+- 公告详情用 `uni-app` 的 `rich-text` 组件渲染 HTML
 
 ### 二次开发点
 
@@ -210,8 +215,6 @@ export const iconMap: Record<string, string> = {
 |---|---|
 | `GET /api/system/dept` | 部门树 |
 | `GET /api/system/users?blurry=xxx` | 用户搜索(全字段) |
-| `GET /api/im/users/search?keyword=&limit=` | IM 轻量搜索(姓名/工号,排除自己+禁用账号) |
-| `POST /api/im/conversations/p2p` | 获取/创建与某用户的单聊会话(供"发消息"按钮) |
 
 ### App 端功能
 
@@ -220,20 +223,17 @@ export const iconMap: Record<string, string> = {
 - **用户搜索**:按姓名/工号/手机号/邮箱模糊搜索(走 `/api/system/users`)
 - **个人信息卡**:头像、姓名、部门、岗位、手机、邮箱
 - **快捷操作**:
-  - **发消息**(1.0 已可用):点击 → 调 `/api/im/conversations/p2p` 获取/创建会话 → 拉起 IM 单聊窗口
-  - **打电话**(1.0 仍占位):需二次开发(见 [extension.md §3](./extension.md#3-通讯录拨打im))
+  - **打电话**(1.0 仍占位):需二次开发(见 [extension.md §3](./extension.md#3-通讯录拨打))
 
 ### 交互细节
 
 - 搜索结果点击 → 跳用户详情
 - 用户详情展示所有可见字段 + 操作按钮区
 - 部门按层级缩进展示
-- "发消息"按钮防抖(避免重复点击创建多次会话)
 
 ### 二次开发点
 
-- **打电话**:集成原生拨号或第三方电话 SDK(见 [extension.md §3](./extension.md#3-通讯录拨打im))
-- **查看 TA 的群**:用户详情可展示该用户参与的群列表(需后端补 `GET /api/im/users/{id}/groups` 端点,见 [extension.md §3.1](./extension.md#3-通讯录拨打im))
+- **打电话**:集成原生拨号或第三方电话 SDK(见 [extension.md §3](./extension.md#3-通讯录拨打))
 
 ---
 
@@ -243,19 +243,19 @@ export const iconMap: Record<string, string> = {
 
 | 端点 | 用途 |
 |---|---|
-| `GET /api/system/notice?page=&size=` | 公告列表 |
+| `GET /api/system/notice/feed?current=&size=&title=` | 公告 Feed(已登录用户可见) |
 | `GET /api/system/notice/{id}` | 公告详情 |
 
 ### App 端功能
 
-- **公告列表**:按发布时间倒序,显示标题、摘要、时间
+- **公告列表**:按发布时间倒序,显示标题、摘要、类型标签(通知/公告)、时间
 - **公告详情**:富文本/HTML 内容渲染(需 HTML 解析库)
 - **搜索**(可选):按标题模糊搜索
 - **置顶**(可选):后端 `seq` 字段决定排序,App 端识别 `seq=100` 等高优先级置顶
 
 ### 交互细节
 
-- 详情页用 `uni-app` 的 rich-text 组件渲染 HTML
+- 详情页用 `uni-app` 的 `rich-text` 组件渲染 HTML
 - 外链处理:HTML 中的链接可点击跳转
 
 ### 二次开发点
@@ -322,13 +322,10 @@ export const iconMap: Record<string, string> = {
 | 端点 | 用途 |
 |---|---|
 | `GET /api/system/monitor/server` | 服务器监控(CPU/内存/磁盘/JVM) |
-| `GET /admin/im/stats/online` | IM 在线用户数 |
-| `GET /admin/im/stats/broker` | IM broker 状态 |
 
 ### App 端功能
 
 - **服务器概览**:CPU 使用率、内存使用率、JVM 堆内存、磁盘空间
-- **IM 概览**(管理员):在线用户数、broker 连接数、当前订阅 topic 数
 - **简化展示**:App 端只展示关键指标,不做详细图表
 
 ### 交互细节
@@ -340,9 +337,7 @@ export const iconMap: Record<string, string> = {
 ### 二次开发点
 
 - **SQL 监控、Redis 监控**:App 端暂不展示(数据量大、阅读体验差)
-- **阈值告警推送**:**已可通过 IM MQTT 实现** —— 后端监控线程检测到阈值越界,
-  通过 `ImPushService` 推送 `im/sys/{userId}/system` topic,App 端订阅后弹通知;
-  无需引入额外推送通道(详见 [extension.md §6](./extension.md#6-实时推送))
+- **阈值告警推送**:见 [extension.md §6](./extension.md#6-实时推送)
 
 ---
 
@@ -372,112 +367,14 @@ export const iconMap: Record<string, string> = {
 
 ---
 
-## 12. IM 即时通讯 ⭐
-
-> mica-mqtt broker 已内嵌,App 1.0 可直接复用,无需后端改造。完整 HTTP 接口见
-> [api-mapping.md §模块 12](./api-mapping.md#模块-12-im-即时通讯);
-> MQTT Topic 协议见 [docs/im/api-design.md](../im/api-design.md)。
-
-### 后端依赖
-
-| 端点 / Topic | 用途 |
-|---|---|
-| `POST /api/im/conversations/p2p` | 创建/获取单聊会话 |
-| `GET /api/im/conversations` | 会话列表(分页、按更新时间倒序) |
-| `GET /api/im/conversations/{convId}/messages?page=&size=` | 加载历史消息(分页) |
-| `POST /api/im/conversations/{convId}/mark-read` | 标记会话已读(推 `im/ack/...`) |
-| `GET /api/im/conversations/unread-total` | 当前用户未读总数(工作台角标) |
-| `POST /api/im/conversations/mark-all-read` | 全部已读 |
-| `DELETE /api/im/conversations/messages/{messageId}` | 撤回消息(2 分钟内) |
-| `GET /api/im/groups/my` | 当前用户参与的群列表 |
-| `POST /api/im/groups` | 创建群(传 name + memberIds) |
-| `GET /api/im/groups/{groupId}` | 群详情 |
-| `PUT /api/im/groups/{groupId}` | 修改群名/公告 |
-| `DELETE /api/im/groups/{groupId}` | 解散群(仅群主) |
-| `GET /api/im/groups/{groupId}/members` | 成员列表 |
-| `POST /api/im/groups/{groupId}/members` | 邀请成员 |
-| `DELETE /api/im/groups/{groupId}/members/{userId}` | 踢出成员(仅管理员/群主) |
-| `GET /api/im/users/search?keyword=&limit=` | IM 用户轻量搜索 |
-| `GET /api/im/users/batch?ids=` | 批量查用户(头像/昵称) |
-| `ws://host:8083/mqtt` | MQTT WebSocket 接入点 |
-| topic `im/p2p/{fromId}/to/{toId}` | 收到单聊消息(发送方视角) |
-| topic `im/p2p/{userId}/inbox` | 收到单聊消息(接收方视角,核心订阅) |
-| topic `im/group/{groupId}/inbox` | 收到群聊消息 |
-| topic `im/sys/{userId}/system` | 收到系统推送(通知/告警) |
-| topic `im/status/{userId}/state` | 好友在线状态变化(可选订阅) |
-
-### App 端功能
-
-- **会话列表页**(Tab 二级页)
-  - 顶部 Tab 切换:**消息**(系统消息) / **会话**(IM 会话)
-  - 会话卡:头像、名称(对方昵称/群名)、最后一条消息摘要、未读徽标、时间
-  - 长按 → 标记已读 / 删除会话
-  - **发起聊天**:右上角 ➕ → 选用户 → 创建/进入单聊
-- **单聊窗口**
-  - 顶部:对方头像 + 昵称 + 在线状态(订阅 `im/status`)
-  - 中部:消息流(自己右对齐 / 对方左对齐,支持文本/表情/图片/文件)
-  - 底部:输入框 + 表情 + 图片 + 文件 + 发送
-  - 收到消息 → 自动滚到底部 + 振动
-  - 进入页面 → 拉历史消息分页 + 调 mark-read
-- **群聊窗口**
-  - 顶部:群名 + 成员数(点击 → 群详情)
-  - 中部:消息流(显示发送者昵称)
-  - 群管理入口:见 §群管理
-- **群管理**
-  - 创建群:弹群成员多选(复用 `UserPicker` 组件,走 `/api/im/users/search`)+ 输入群名
-  - 群详情:群成员列表、群主标识(👑)、管理员标识(★)
-  - 邀请成员:多选用户 → 调 `POST /api/im/groups/{id}/members`
-  - 踢出成员:仅群主/管理员可见
-  - 退出群:自己非群主时显示;群主退群 → 必须先转让(1.0 限制:先解散)
-  - 修改群名/公告
-- **通讯录"发消息"**:见 §6
-- **消息推送**:App 在前台时订阅 `im/p2p/{userId}/inbox` + `im/group/{groupId}/inbox` + `im/sys/{userId}/system`;
-  后台消息经 `ImPushService` 落入 `sys_user_message`(离线兜底)
-
-### MQTT 客户端实现要点
-
-- **库**:`mqtt@5.x`(注意 ESM 写法: `import mqtt from 'mqtt'`)
-- **连接参数**:
-  - `url`: `ws://localhost:8083/mqtt`(dev) / `wss://your-domain.com/mqtt`(prod)
-  - `username`: **JWT token**(服务端 `MqttAuthInterceptor` 校验,**不要传用户名**)
-  - `clientId`: `app-{userId}-{uuid}`(保证唯一,断线重连更换)
-  - `clean`: true,`reconnectPeriod`: 3000
-- **订阅集合**:登录后立即订阅
-  - `im/p2p/{userId}/inbox`(单聊收件)
-  - `im/group/{groupId}/inbox`(遍历 `/api/im/groups/my` 后逐个订阅)
-  - `im/sys/{userId}/system`(系统消息)
-  - `im/status/{userId}/state`(可选,在线状态)
-- **断线重连**:断线后重连成功 → 重新订阅 + 调 `mark-all-read` 兜底
-- **消息顺序**:同会话严格按 `server_received_at` 升序,客户端不要重排
-
-### 交互细节
-
-- 单聊窗口进入 → 显示骨架屏 + 拉第一页 → 向上滚动触顶加载更早消息
-- 发送消息:本地先 optimistic insert(状态 sending) → MQTT 发到 `im/p2p/{userId}/to/{peerId}` →
-  服务端 `ImP2pMessageHandler` 落库 + 推 inbox topic → 接收方收到 → 本地状态 → sent
-- 失败重试:sending 超时 5s → 标记 failed,长按重发
-- 在线状态:仅单聊窗口顶部显示(避免全量广播,服务端 `MqttTopicFilter` 限流)
-- 撤回:长按自己消息 → "撤回"(2 分钟内有效,服务端 `ImApiCode.MSG_RECALL_TIMEOUT`)
-- 输入中(typing):1.0 不实现,留 v1.1
-
-### 二次开发点
-
-- **图片/文件消息**:1.0 复用 `/api/upload` 上传后发 URL 文本,不做缩略图/进度
-- **@提及**:群消息文本内 `@昵称` 解析 + 高亮 + 通知,1.0 仅做文本提示
-- **已读回执**:1.0 不展示"对方已读",留 v1.1
-- **音视频通话**:见 [extension.md §3.2](./extension.md#3-通讯录拨打im)
-- **消息搜索**:全局搜索消息内容(需后端补 ES 索引,见 [extension.md §3.3](./extension.md#3-通讯录拨打im))
-
----
-
 ## 不在 1.0 的功能(明确标记)
 
 | 功能 | 原因 | 见 |
 |---|---|---|
 | 真正的审批/工作流 | mica-admin 无流程引擎 | [extension.md §4](./extension.md#4-审批工作流) |
 | 考勤打卡 | 无 `sys_attendance` 表 | [extension.md §5](./extension.md#5-考勤打卡) |
-| 音视频通话 | mica-im 仅文本/图片/文件 | [extension.md §3.2](./extension.md#3-通讯录拨打im) |
-| 系统级推送(APNs/华为/小米通道) | App 后台推送需要厂商通道 | [extension.md §6.2](./extension.md#6-实时推送) |
+| 视频会议 | mica-admin 不含音视频 SDK | [extension.md §3.2](./extension.md#3-音视频通话) |
+| 即时通讯(IM) | mica-admin 定位为通用后台,需对接第三方 SDK | 第三方文档 |
+| 系统级推送(APNs/华为/小米通道) | App 后台推送需要厂商通道 | [extension.md §6.2](./extension.md#62-系统级推送) |
 
 > App 1.0 在 UI 上对这些功能 **预留占位**(灰色 + "即将上线"按钮),让二次开发方有明确目标。
-> 注:IM 基础能力(单聊/群聊/会话列表/群管理/系统消息推送) **已在 1.0 范围内**,无需占位。

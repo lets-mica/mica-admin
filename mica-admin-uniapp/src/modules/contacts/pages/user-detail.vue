@@ -3,12 +3,9 @@ import { ref, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { getUserDetail } from '@/api/user'
 import { getPostName } from '@/api/user'
-import { createP2pConversation } from '@/api/im/conversation'
 import type { UserVo } from '@/api/user'
-import { useAuthStore } from '@/stores/auth'
 
 const user = ref<UserVo | null>(null)
-const auth = useAuthStore()
 
 onLoad(async (q) => {
   if (q?.id) user.value = await getUserDetail(Number(q.id))
@@ -23,23 +20,6 @@ function callPhone() {
     phoneNumber: user.value.phone,
     fail: () => uni.showToast({ title: '拨号失败', icon: 'none' })
   })
-}
-
-async function sendMessage() {
-  if (!user.value) return
-  const peerId = user.value.id
-  if (peerId === auth.user?.userId) {
-    uni.showToast({ title: '不能给自己发消息', icon: 'none' })
-    return
-  }
-  try {
-    const { conversation } = await createP2pConversation({ peerUserId: peerId })
-    uni.navigateTo({
-      url: `/modules/im/pages/chat-window?type=p2p&peerId=${peerId}&convId=${conversation.id}`
-    })
-  } catch (e: any) {
-    uni.showToast({ title: e.message || '发起失败', icon: 'none' })
-  }
 }
 </script>
 
@@ -74,10 +54,6 @@ async function sendMessage() {
       <view class="btn" @tap="callPhone">
         <text class="ico">📞</text>
         <text>拨号</text>
-      </view>
-      <view class="btn" @tap="sendMessage">
-        <text class="ico">💬</text>
-        <text>发消息</text>
       </view>
     </view>
   </view>

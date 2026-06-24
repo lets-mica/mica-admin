@@ -21,12 +21,6 @@
       }
     },
     {
-      "path": "pages/menu/index",
-      "style": {
-        "navigationBarTitleText": "应用中心"
-      }
-    },
-    {
       "path": "pages/profile/index",
       "style": {
         "navigationBarTitleText": "我的"
@@ -102,42 +96,6 @@
       }
     },
     {
-      "path": "modules/menu/pages/webview",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "modules/im/pages/conversation-list",
-      "style": {
-        "navigationBarTitleText": "会话"
-      }
-    },
-    {
-      "path": "modules/im/pages/chat-window",
-      "style": {
-        "navigationBarTitleText": "聊天"
-      }
-    },
-    {
-      "path": "modules/im/pages/group-detail",
-      "style": {
-        "navigationBarTitleText": "群信息"
-      }
-    },
-    {
-      "path": "modules/im/pages/group-create",
-      "style": {
-        "navigationBarTitleText": "创建群"
-      }
-    },
-    {
-      "path": "modules/im/pages/start-chat",
-      "style": {
-        "navigationBarTitleText": "发起聊天"
-      }
-    },
-    {
       "path": "modules/monitor/pages/server",
       "style": {
         "navigationBarTitleText": "服务监控"
@@ -187,10 +145,6 @@
       {
         "pagePath": "pages/message/index",
         "text": "💬 消息"
-      },
-      {
-        "pagePath": "pages/menu/index",
-        "text": "🧩 应用"
       },
       {
         "pagePath": "pages/profile/index",

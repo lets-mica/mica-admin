@@ -142,21 +142,19 @@ storage.setUser(userInfo)
 |---|---|---|---|---|
 | 2.1 | GET | `/api/auth/info` | 当前用户 | 已登录 |
 | 2.2 | GET | `/api/system/user/message/unread` | 系统消息未读数 | 已登录 |
-| 2.3 | GET | `/api/im/conversations/unread-total` | **IM 未读总数**(单聊 + 群聊合计) | 已登录 |
-| 2.4 | GET | `/api/system/notice?current=1&size=3` | 最新 3 条公告 | 已登录 |
-| 2.5 | GET | `/api/auth/menus` | 应用中心数据(快捷入口) | 已登录 |
+| 2.3 | GET | `/api/system/notice/feed?current=1&size=3` | 最新 3 条公告(已发布) | 已登录 |
+| 2.4 | GET | `/api/auth/menus` | 应用中心数据(快捷入口) | 已登录 |
 
 ### 工作台前端聚合示例
 
 ```typescript
-const [info, sysUnread, imUnread, notices, menus] = await Promise.all([
+const [info, sysUnread, notices, menus] = await Promise.all([
   getInfo(),
   getSysUnread(),
-  getImUnreadTotal(),                          // 新增
-  getNotices({ current: 1, size: 3 }),
+  getNoticeFeed({ current: 1, size: 3 }),
   getMenus()
 ])
-const totalUnread = sysUnread.length + imUnread // 工作台角标
+const totalUnread = sysUnread.length // 工作台角标
 ```
 
 ---
@@ -278,9 +276,7 @@ interface EmailCodeVo {
 |---|---|---|---|---|---|
 | 6.1 | GET | `/api/system/dept` | - | `SysDept[]` (树形) | 已登录 |
 | 6.2 | GET | `/api/system/users` | `current`, `size`, `blurry?`, `deptId?` | `Page<UserVo>` | 已登录 |
-| 6.3 | GET | `/api/im/users/search` | `keyword`, `limit?` | `ImUserVo[]`(轻量,排除自己+禁用账号) | 已登录 |
-| 6.4 | GET | `/api/im/users/batch` | `ids` (逗号分隔) | `ImUserVo[]` | 已登录 |
-| 6.5 | POST | `/api/im/conversations/p2p` | `{ peerUserId }` | `{ conversation }` (供"发消息"按钮) | 已登录 |
+| 6.3 | GET | `/api/system/users/{id}` | - | `UserVo` | 已登录 |
 
 ### 关键实体
 
@@ -307,15 +303,6 @@ interface UserVo {
   postName?: string
   // ...
 }
-
-// ImUserVo - IM 模块轻量用户(供"发消息"/"邀请入群")
-interface ImUserVo {
-  userId: number
-  username: string
-  nickname: string
-  avatar?: string
-  deptName?: string
-}
 ```
 
 ### 通讯录搜索示例
@@ -328,22 +315,9 @@ const { records } = await getUsers({
   blurry: 'zhang'
 })
 
-// IM 轻量搜索("发消息"选人)
-const list = await imSearchUsers('zhang', 20)
-
-// 批量查(用于消息列表头像补全)
-const list2 = await imBatchUsers('1,2,3,4')
-```
-
-### "发消息"按钮实现
-
-```typescript
-async function onMessageBtnClick(peerUserId: number) {
-  const { conversation } = await createP2pConversation({ peerUserId })
-  uni.navigateTo({
-    url: `/modules/im/chat-window?convId=${conversation.id}&type=p2p&peerId=${peerUserId}`
-  })
-}
+// 用户详情(用于拨号)
+const detail = await getUserDetail(userId)
+uni.makePhoneCall({ phoneNumber: detail.phone })
 ```
 
 ---
@@ -352,8 +326,8 @@ async function onMessageBtnClick(peerUserId: number) {
 
 | # | Method | Path | 入参 | 出参 | 权限 |
 |---|---|---|---|---|---|
-| 7.1 | GET | `/api/system/notice` | `current`, `size` | `Page<SysNotice>` | `system:notice:list` |
-| 7.2 | GET | `/api/system/notice/{id}` | - | `SysNotice` | `system:notice:query` |
+| 7.1 | GET | `/api/system/notice/feed` | `current`, `size`, `title?` | `Page<SysNotice>` | 已登录(仅已发布) |
+| 7.2 | GET | `/api/system/notice/{id}` | - | `SysNotice` | 已登录 |
 
 ### 关键实体
 
@@ -363,20 +337,17 @@ interface SysNotice {
   id: number
   title: string
   content: string        // HTML 格式,需 rich-text 渲染
-  type?: string          // 类型字典
+  type?: string          // 类型字典(1=通知 2=公告)
   seq?: number           // 排序,值越大越靠前(置顶)
-  enabled: boolean       // 是否启用
+  status: number         // 0=正常 1=关闭
   remark?: string
   createdBy: string
   createdAt: string
 }
 ```
 
-> **权限提示**:App 1.0 普通用户**无 `system:notice:list` 权限**,
-> 只能通过工作台聚合接口(参见 §2)展示前 3 条。如需全列表,需后端
-> 调整 `/api/system/notice` 的 `@PreAuthorize`,改为 `@sec.isAuthenticated()`。
->
-> 或二次开发新增 `GET /api/app/notice` 接口供 App 专用。
+> `feed` 接口**仅返回已发布(status=0)**的公告,所有已登录用户均可访问,
+> 无需 `system:notice:list` 权限。管理端的 `list/edit/delete` 操作仍走原权限。
 
 ---
 
@@ -443,8 +414,6 @@ interface TokenVo {
 | 10.1 | GET | `/api/system/monitor/server` | `Map<String, Object>` | `system:monitor:servers` |
 | 10.2 | GET | `/api/system/monitor/sql` | `Map[]` | `system:monitor:sql` |
 | 10.3 | GET | `/api/system/monitor/redis` | `Map<String, Object>` | `system:monitor:redis` |
-| 10.4 | GET | `/admin/im/stats/online` | `{ onlineCount: number }` | 已登录(管理员推荐) |
-| 10.5 | GET | `/admin/im/stats/broker` | broker 状态对象 | 已登录(管理员推荐) |
 
 ### 服务监控返回结构(简化示例)
 
@@ -459,7 +428,6 @@ interface TokenVo {
 ```
 
 > App 1.0 仅取 `server`,SQL/Redis 监控因数据量大、阅读体验差,暂不展示。
-> IM 监控(`/admin/im/stats/**`)显示在线用户数与 broker 状态,便于运维快速判断连接健康度。
 
 ---
 
@@ -493,214 +461,6 @@ interface SysDictInfo {
   status: number       // 0=启用 1=停用
 }
 ```
-
----
-
-## 模块 12:IM 即时通讯 ⭐
-
-> mica-admin IM 模块已完整实现,**App 1.0 即可直接对接**,无需后端改造。
-> 本节覆盖 14 个 HTTP 端点 + 5 个核心 MQTT topic。完整的协议细节、
-> 错误码表、连接示例参见 [docs/im/api-design.md](../im/api-design.md)。
-
-### 12.1 会话与消息
-
-| # | Method | Path | 入参 | 出参 | 权限 |
-|---|---|---|---|---|---|
-| 12.1.1 | POST | `/api/im/conversations/p2p` | `{ peerUserId }` | `{ conversation: ConversationVo }` | 已登录 |
-| 12.1.2 | GET | `/api/im/conversations` | `current?`, `size?` | `Page<ConversationVo>` | 已登录 |
-| 12.1.3 | GET | `/api/im/conversations/{convId}/messages` | `current?`, `size?` | `Page<MessageVo>` | 已登录 |
-| 12.1.4 | POST | `/api/im/conversations/{convId}/mark-read` | `{ lastReadMessageId }` | - | 已登录 |
-| 12.1.5 | GET | `/api/im/conversations/unread-total` | - | `number` | 已登录 |
-| 12.1.6 | POST | `/api/im/conversations/mark-all-read` | - | - | 已登录 |
-| 12.1.7 | DELETE | `/api/im/conversations/messages/{messageId}` | - | - | 已登录(仅自己,2 分钟内) |
-
-### 12.2 群管理
-
-| # | Method | Path | 入参 | 出参 | 权限 |
-|---|---|---|---|---|---|
-| 12.2.1 | GET | `/api/im/groups/my` | - | `GroupVo[]` | 已登录 |
-| 12.2.2 | POST | `/api/im/groups` | `{ name, memberIds[] }` | `GroupVo` | 已登录 |
-| 12.2.3 | GET | `/api/im/groups/{groupId}` | - | `GroupVo` | 已登录(成员) |
-| 12.2.4 | PUT | `/api/im/groups/{groupId}` | `{ name?, announcement? }` | - | 群主/管理员 |
-| 12.2.5 | DELETE | `/api/im/groups/{groupId}` | - | - | 仅群主 |
-| 12.2.6 | GET | `/api/im/groups/{groupId}/members` | - | `GroupMemberVo[]` | 已登录(成员) |
-| 12.2.7 | POST | `/api/im/groups/{groupId}/members` | `{ userIds[] }` | - | 群主/管理员 |
-| 12.2.8 | DELETE | `/api/im/groups/{groupId}/members/{userId}` | - | - | 群主/管理员(非自己) |
-
-### 12.3 IM 用户查询
-
-| # | Method | Path | 入参 | 出参 | 权限 |
-|---|---|---|---|---|---|
-| 12.3.1 | GET | `/api/im/users/search` | `keyword`, `limit?` (默认 20) | `ImUserVo[]` | 已登录 |
-| 12.3.2 | GET | `/api/im/users/batch` | `ids` (逗号分隔) | `ImUserVo[]` | 已登录 |
-
-### 12.4 MQTT 实时通道
-
-**连接信息**:
-
-| 项 | 开发环境 | 生产环境 |
-|---|---|---|
-| WebSocket URL | `ws://localhost:8083/mqtt` | `wss://your-domain.com/mqtt` |
-| TCP URL | `tcp://localhost:1883` | `tcp://your-domain.com:1883` |
-| username | **JWT token**(不要传用户名) | 同上 |
-| clientId | `app-{userId}-{uuid}`(保证唯一) | 同上 |
-
-**核心 Topic**:
-
-| 方向 | Topic | 何时收到 | 备注 |
-|---|---|---|---|
-| 收 | `im/p2p/{userId}/inbox` | 收到单聊消息 | **必须订阅**(自己作为接收方) |
-| 收 | `im/group/{groupId}/inbox` | 收到群聊消息 | 遍历 `/api/im/groups/my` 后逐个订阅 |
-| 收 | `im/sys/{userId}/system` | 系统消息推送 | 通知/告警离线消息兜底通道 |
-| 收 | `im/status/{userId}/state` | 好友上下线 | 可选,仅单聊窗口顶部状态 |
-| 发 | `im/p2p/{fromId}/to/{toId}` | - | 单聊消息发送;`fromId/toId` 必须都传 |
-| 发 | `im/group/{groupId}/outbox` | - | 群聊消息发送(1.0 也可走 `im/group/{groupId}/inbox`,服务端识别 sender) |
-| 发/收 | `im/ack/{type}/{id}` | - | 已读回执(`type` ∈ p2p/group) |
-
-**订阅集合模板(登录后立即订阅)**:
-
-```typescript
-function buildSubscribeTopics(userId: number, myGroups: GroupVo[]) {
-  return [
-    `im/p2p/${userId}/inbox`,
-    `im/sys/${userId}/system`,
-    `im/status/${userId}/state`,
-    ...myGroups.map(g => `im/group/${g.id}/inbox`)
-  ]
-}
-```
-
-### 12.5 关键实体
-
-```typescript
-// ConversationVo - 会话
-interface ConversationVo {
-  id: number                       // 会话 id
-  type: 'P2P' | 'GROUP'
-  title?: string                   // 单聊:对方昵称 / 群聊:群名
-  avatar?: string
-  targetId?: number                // 单聊:peerUserId / 群聊:groupId
-  lastMessage?: MessageVo
-  unreadCount: number
-  updatedAt: string                // ISO 8601(用于排序)
-  pinned?: boolean                 // 1.0 暂未实现
-  muted?: boolean                  // 1.0 暂未实现
-}
-
-// MessageVo - 消息
-interface MessageVo {
-  id: number
-  conversationId: number
-  senderId: number
-  senderName?: string
-  type: 'TEXT' | 'IMAGE' | 'FILE' | 'SYSTEM'
-  content: string                  // 文本或 URL
-  extra?: Record<string, any>      // 图片宽高等
-  recalled?: boolean
-  createdAt: string                // 客户端展示用
-  serverReceivedAt: string         // 排序唯一依据
-}
-
-// GroupVo - 群
-interface GroupVo {
-  id: number
-  name: string
-  avatar?: string
-  ownerId: number
-  announcement?: string
-  memberCount: number
-  myRole: 'OWNER' | 'ADMIN' | 'MEMBER'
-  createdAt: string
-}
-
-// GroupMemberVo - 群成员
-interface GroupMemberVo {
-  userId: number
-  username: string
-  nickname: string
-  avatar?: string
-  role: 'OWNER' | 'ADMIN' | 'MEMBER'
-  joinedAt: string
-  muted?: boolean
-}
-
-// P2pConversationForm - 单聊创建
-interface P2pConversationForm {
-  peerUserId: number
-}
-
-// GroupCreateForm - 群创建
-interface GroupCreateForm {
-  name: string                     // 群名(必填)
-  memberIds: number[]              // 初始成员 userId 列表(必填)
-}
-```
-
-### 12.6 错误码(IM 模块专属,扩展 mica-admin 的 `ApiCode`)
-
-| 错误码 | 含义 | App 端处理 |
-|---|---|---|
-| 5000 | 会话不存在 / 无权访问 | 提示"会话已失效",返回会话列表 |
-| 5001 | 群不存在 / 无权访问 | 提示"群已解散或您已退出",返回会话列表 |
-| 5002 | 不能与自己创建会话 | "发消息"按钮防抖,toast 提示 |
-| 5003 | 已在群中 | 邀请时跳过已存在成员 |
-| 5004 | 群主不可退群(需先转让/解散) | toast 提示 |
-| 5005 | 撤回超时(> 2 分钟) | 提示"超过 2 分钟无法撤回" |
-| 5010 | MQTT 鉴权失败 | 清 token 跳登录 |
-
-### 12.7 完整示例:发送一条单聊消息
-
-```typescript
-import mqtt from 'mqtt'
-
-// 1. 登录后建立 MQTT 连接
-const client = mqtt.connect('ws://localhost:8083/mqtt', {
-  username: token,                  // ⚠️ JWT,不是 username
-  clientId: `app-${userId}-${uuid()}`,
-  clean: true,
-  reconnectPeriod: 3000
-})
-
-// 2. 订阅核心 topic
-const myGroups = await imGetMyGroups()
-const topics = buildSubscribeTopics(userId, myGroups)
-client.subscribe(topics, { qos: 1 })
-
-// 3. 监听消息
-client.on('message', (topic, payload) => {
-  const msg = JSON.parse(payload.toString())
-  if (topic.startsWith('im/p2p/')) onP2pMessage(msg)
-  else if (topic.startsWith('im/group/')) onGroupMessage(msg)
-  else if (topic.startsWith('im/sys/')) onSystemMessage(msg)
-})
-
-// 4. 发送消息(MQTT 直接发,服务端落库后推 inbox)
-const sendP2p = (peerId: number, text: string) => {
-  const payload = {
-    type: 'TEXT',
-    content: text,
-    clientMsgId: uuid(),            // 用于本地匹配 sending 状态
-    sentAt: new Date().toISOString()
-  }
-  client.publish(`im/p2p/${userId}/to/${peerId}`, JSON.stringify(payload), { qos: 1 })
-}
-
-// 5. 进入单聊窗口后,拉历史消息 + 标记已读
-async function openChatWindow(convId: number, peerId: number) {
-  const { records } = await imGetMessages(convId, { current: 1, size: 30 })
-  renderMessages(records)
-  if (records.length) {
-    await imMarkRead(convId, { lastReadMessageId: records[0].id })
-  }
-  // 订阅本会话的 inbox(若未订阅)
-  client.subscribe(`im/p2p/${userId}/inbox`, { qos: 1 })
-}
-```
-
-### 12.8 离线消息兜底
-
-App 离线期间收到的 IM 消息会被 `ImPushService` **同步写入 `sys_user_message`**,
-App 启动后通过 `GET /api/system/user/message/unread` 兜底拉取,确保不丢消息。
 
 ---
 
@@ -818,25 +578,14 @@ server: {
     '/api': {
       target: 'http://localhost:8080',
       changeOrigin: true
-    },
-    // MQTT WebSocket 代理(App 调试 mqtt.js 时使用)
-    '/mqtt': {
-      target: 'ws://localhost:8083',
-      ws: true,
-      changeOrigin: true,
-      rewrite: (path) => path.replace(/^\/mqtt/, '')
     }
   }
 }
 ```
 
-App 连接代码相应调整为 `ws://localhost:5888/mqtt`(走 Vite 代理)。
-
 ### 生产环境
 
 App 端 baseURL 设为 `/api`,与 Web 端共用 nginx 反代或 jar 部署。
-**MQTT WebSocket 需要单独走 8083 端口**(或 nginx `location /mqtt { proxy_pass http://backend:8083/mqtt; }`),
-不要混入 `/api` 代理(mqtt.js 不能复用 HTTP 拦截器)。
 
 ---
 
