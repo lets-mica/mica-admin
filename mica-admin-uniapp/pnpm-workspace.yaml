@@ -1,8 +1,12 @@
 allowBuilds:
   '@parcel/watcher': false
   core-js: false
+  core-js-pure: false
   esbuild: false
   vue-demi: false
+
+minimumReleaseAgeExclude:
+  - vite@8.1.0
 
 overrides:
   '@intlify/core-base': 9.14.5
