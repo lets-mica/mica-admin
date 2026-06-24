@@ -160,6 +160,12 @@
       "style": {
         "navigationBarTitleText": "考勤打卡"
       }
+    },
+    {
+      "path": "pages/profile/edit",
+      "style": {
+        "navigationBarTitleText": "个人信息"
+      }
     }
   ],
   "globalStyle": {

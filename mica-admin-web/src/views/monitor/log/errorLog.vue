@@ -42,7 +42,7 @@ function renderExpand(row: LogItem) {
 const columns: DataTableColumns<LogItem> = [
   { type: 'expand', renderExpand: renderExpand },
   { title: '用户名', key: 'userName', width: 100 },
-  { title: 'IP', key: 'requestIp', width: 130 },
+  { title: 'IP', key: 'requestIp', width: 150 },
   { title: 'IP来源', key: 'address', width: 180, ellipsis: { tooltip: true } },
   { title: '描述', key: 'description', ellipsis: { tooltip: true } },
   { title: '操作系统', key: 'os', width: 160 },

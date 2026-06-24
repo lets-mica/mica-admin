@@ -1,13 +1,5 @@
 # mica-admin-uniapp/AGENTS.md
 
-## 二次开发准则
-
-**通用模块不修改,二次开发只新增。**
-
-- `modules/auth/`、`modules/workbench/`、`modules/message/`、`modules/menu/`、`modules/profile/`、`modules/contacts/`、`modules/notice/`、`modules/file/`、`modules/token/`、`modules/monitor/`、`modules/dict/`、`modules/im/` 均为 mica-admin 官方维护的通用模块,二次开发方**禁止修改**。
-- 二次开发请放在 `modules/extension/{模块名}/`,在 `pages.json` 注册路由。
-- 完整接入指引见 [`docs/app/extension.md`](../docs/app/extension.md)。
-
 ## 代码风格
 
 - **Composition API + `<script setup lang="ts">`**(与 Vue 3 一致)。
