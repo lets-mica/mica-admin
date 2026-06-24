@@ -23,7 +23,7 @@
  *     6. mqttStore.sendTextMessage(peerUserId, content) 上行 + 本地乐观插入气泡
  *     7. 服务端收到后通过下行 topic 回推 → mqttStore.newMessages 追加新消息
  */
-import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 import {
   NAvatar,
@@ -73,8 +73,8 @@ const activeConversationId = ref<string | null>(null);
 async function loadConversations() {
   loadingList.value = true;
   try {
-    const list = await getConversationList();
-    conversations.value = list ?? [];
+    const list = (await getConversationList()) ?? [];
+    conversations.value = list;
     // 初始化 mqttStore 的 unreadMap（页面内会再从 Redis 增量更新）
     const map: Record<string, number> = {};
     for (const c of list) {
@@ -227,30 +227,30 @@ let pollTimer: number | null = null;
 
 function startPolling() {
   pollTimer = window.setInterval(() => {
-    const newMsgs = mqttStore.newMessages;
-    if (newMsgs.length === 0) return;
-    // 拷贝并清空 store 中的临时集合（页面是事件消费方，不把状态堆积在 store 中）
-    const batch = newMsgs.splice(0, newMsgs.length);
-    for (const m of batch) mergeIncoming(m);
+    try {
+      const newMsgs = mqttStore.newMessages;
+      if (newMsgs.length > 0) {
+        // 拷贝并清空 store 中的临时集合（页面是事件消费方，不把状态堆积在 store 中）
+        const batch = newMsgs.splice(0, newMsgs.length);
+        for (const m of batch) mergeIncoming(m);
+      }
 
-    // 事件消息（撤回 / 已读回传）
-    const evtBatch = mqttStore.eventMessages.splice(0, mqttStore.eventMessages.length);
-    for (const evt of evtBatch) mergeEvent(evt);
+      // 事件消息（撤回 / 已读回传）
+      const evtBatch = mqttStore.eventMessages.splice(0, mqttStore.eventMessages.length);
+      for (const evt of evtBatch) mergeEvent(evt);
+    } catch (e) {
+      // 轮询中的任何异常都不能逃逸成 Unhandled error，否则会触发 Vue 的 component update 警告
+      console.error('[IM] polling tick failed:', e);
+    }
   }, 500);
 }
 
 function mergeIncoming(m: MessageVO) {
+  if (!m || m.id == null) return;
   // 1. 合并到消息列表（如果当前会话就是目标会话）
   if (activeConversationId.value === m.conversationId) {
-    // 去重：同一 senderId + content + 时间相近 视为同一消息（避免服务端回推 + 本地乐观插入重复）
-    const dup = activeMessages.value.some((existing) => {
-      if (existing.id === m.id) return true;
-      return (
-        existing.senderId === m.senderId &&
-        existing.content === m.content &&
-        m.id > 0 // 服务端消息 id 为正数时，替换 id < 0 的临时消息
-      );
-    });
+    // 去重：以消息 id 为准（同一 id 不重复插入）
+    const dup = activeMessages.value.some((existing) => existing.id === m.id);
     if (!dup) {
       // 如果存在 id 为负的临时消息（内容一致），替换为正式消息（保留 id/status）
       const tempIdx = activeMessages.value.findIndex(
@@ -524,7 +524,7 @@ reactive({ totalUnread });
                   <span>{{ formatTime(m.serverReceivedAt) }}</span>
                   <span v-if="m.status === 0" class="text-amber-500">发送中</span>
                   <span v-else-if="m.status === 3" class="text-red-500">发送失败</span>
-                  <span v-if="isMine(m) && m.id > 0 && !m.status" class="text-green-600">已送达</span>
+                  <span v-else-if="isMine(m) && m.id > 0 && m.status === 1" class="text-green-600">已送达</span>
                   <NPopconfirm
                     v-if="isMine(m) && m.status !== 2 && m.id > 0"
                     positive-text="撤回"

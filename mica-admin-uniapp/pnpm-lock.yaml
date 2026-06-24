@@ -4,6 +4,10 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@intlify/core-base': 9.14.5
+  '@intlify/shared': 9.14.5
+
 importers:
 
   .:
@@ -952,17 +956,9 @@ packages:
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
 
-  '@intlify/core-base@9.1.9':
-    resolution: {integrity: sha512-x5T0p/Ja0S8hs5xs+ImKyYckVkL4CzcEXykVYYV6rcbXxJTe2o58IquSqX9bdncVKbRZP7GlBU1EcRaQEEJ+vw==}
-    engines: {node: '>= 10'}
-
   '@intlify/core-base@9.14.5':
     resolution: {integrity: sha512-5ah5FqZG4pOoHjkvs8mjtv+gPKYU0zCISaYNjBNNqYiaITxW8ZtVih3GS/oTOqN8d9/mDLyrjD46GBApNxmlsA==}
     engines: {node: '>= 16'}
-
-  '@intlify/devtools-if@9.1.9':
-    resolution: {integrity: sha512-oKSMKjttG3Ut/1UGEZjSdghuP3fwA15zpDPcjkf/1FjlOIm6uIBGMNS5jXzsZy593u+P/YcnrZD6cD3IVFz9vQ==}
-    engines: {node: '>= 10'}
 
   '@intlify/message-compiler@9.1.9':
     resolution: {integrity: sha512-6YgCMF46Xd0IH2hMRLCssZI3gFG4aywidoWQ3QP4RGYQXQYYfFC54DxhSgfIPpVoPLQ+4AD29eoYmhiHZ+qLFQ==}
@@ -978,10 +974,6 @@ packages:
 
   '@intlify/runtime@9.1.9':
     resolution: {integrity: sha512-XgPw8+UlHCiie3fI41HPVa/VDJb3/aSH7bLhY1hJvlvNV713PFtb4p4Jo+rlE0gAoMsMCGcsiT982fImolSltg==}
-    engines: {node: '>= 10'}
-
-  '@intlify/shared@9.1.9':
-    resolution: {integrity: sha512-xKGM1d0EAxdDFCWedcYXOm6V5Pfw/TMudd6/qCdEb4tv0hk9EKeg7lwQF1azE0dP2phvx0yXxrt7UQK+IZjNdw==}
     engines: {node: '>= 10'}
 
   '@intlify/shared@9.14.5':
@@ -4967,8 +4959,8 @@ snapshots:
       '@babel/types': 7.29.7
       '@dcloudio/uni-i18n': 3.0.0-4030620241128001
       '@dcloudio/uni-shared': 3.0.0-4030620241128001
-      '@intlify/core-base': 9.1.9
-      '@intlify/shared': 9.1.9
+      '@intlify/core-base': 9.14.5
+      '@intlify/shared': 9.14.5
       '@intlify/vue-devtools': 9.1.9
       '@rollup/pluginutils': 5.4.0(rollup@4.62.2)
       '@vue/compiler-core': 3.4.21
@@ -5349,28 +5341,15 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.3': {}
 
-  '@intlify/core-base@9.1.9':
-    dependencies:
-      '@intlify/devtools-if': 9.1.9
-      '@intlify/message-compiler': 9.1.9
-      '@intlify/message-resolver': 9.1.9
-      '@intlify/runtime': 9.1.9
-      '@intlify/shared': 9.1.9
-      '@intlify/vue-devtools': 9.1.9
-
   '@intlify/core-base@9.14.5':
     dependencies:
       '@intlify/message-compiler': 9.14.5
       '@intlify/shared': 9.14.5
 
-  '@intlify/devtools-if@9.1.9':
-    dependencies:
-      '@intlify/shared': 9.1.9
-
   '@intlify/message-compiler@9.1.9':
     dependencies:
       '@intlify/message-resolver': 9.1.9
-      '@intlify/shared': 9.1.9
+      '@intlify/shared': 9.14.5
       source-map: 0.6.1
 
   '@intlify/message-compiler@9.14.5':
@@ -5384,9 +5363,7 @@ snapshots:
     dependencies:
       '@intlify/message-compiler': 9.1.9
       '@intlify/message-resolver': 9.1.9
-      '@intlify/shared': 9.1.9
-
-  '@intlify/shared@9.1.9': {}
+      '@intlify/shared': 9.14.5
 
   '@intlify/shared@9.14.5': {}
 
@@ -5394,7 +5371,7 @@ snapshots:
     dependencies:
       '@intlify/message-resolver': 9.1.9
       '@intlify/runtime': 9.1.9
-      '@intlify/shared': 9.1.9
+      '@intlify/shared': 9.14.5
 
   '@istanbuljs/load-nyc-config@1.1.0':
     dependencies:

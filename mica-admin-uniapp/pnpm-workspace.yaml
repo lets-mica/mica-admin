@@ -3,3 +3,7 @@ allowBuilds:
   core-js: false
   esbuild: false
   vue-demi: false
+
+overrides:
+  '@intlify/core-base': 9.14.5
+  '@intlify/shared': 9.14.5

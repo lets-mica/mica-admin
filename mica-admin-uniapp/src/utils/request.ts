@@ -61,12 +61,21 @@ function buildUrl(url: string, params?: Record<string, unknown>): string {
   return url.includes('?') ? `${url}&${query}` : `${url}?${query}`
 }
 
+function joinBaseUrl(base: string, path: string): string {
+  const cleanBase = base.replace(/\/+$/, '')
+  let p = path.startsWith('/') ? path : `/${path}`
+  if (cleanBase && p.startsWith(`${cleanBase}/`)) {
+    p = p.slice(cleanBase.length)
+  }
+  return `${cleanBase}${p}`
+}
+
 export function request<T = unknown>(options: RequestOptions): Promise<T> {
   const { url, method = 'GET', data, params, header = {}, hideError, hideAuth } = options
   return new Promise((resolve, reject) => {
     const fullUrl = url.startsWith('http')
       ? buildUrl(url, params)
-      : buildUrl(`${env.apiUrl}${url}`, params)
+      : buildUrl(joinBaseUrl(env.apiUrl, url), params)
 
     const reqHeader: Record<string, string> = { ...header }
     if (!hideAuth) {
