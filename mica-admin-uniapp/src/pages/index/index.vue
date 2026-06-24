@@ -1,17 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import { getNoticeFeed } from '@/api/notice'
-import { getUnreadMessages } from '@/api/message'
-import { formatDateTime } from '@/utils/format'
-import type { NoticeVo } from '@/api/notice'
-import type { UserMessage } from '@/api/message'
+import { getRegisteredCards } from '@/modules/extension/workbench/registry'
+import type { WorkbenchCard } from '@/modules/extension/workbench/registry'
 
 const auth = useAuthStore()
 
 const greeting = ref('')
-const sysUnread = ref<UserMessage[]>([])
-const notices = ref<NoticeVo[]>([])
 
 function updateGreeting() {
   const h = new Date().getHours()
@@ -22,30 +17,15 @@ function updateGreeting() {
   else greeting.value = '晚上好'
 }
 
-const quickEntries = [
-  { icon: '💬', name: '消息', path: '/pages/message/index' },
-  { icon: '👥', name: '通讯录', path: '/modules/contacts/pages/index' },
-  { icon: '📁', name: '文件', path: '/modules/file/pages/index' }
-]
-
-async function load() {
-  updateGreeting()
-  await Promise.all([
-    getUnreadMessages().then((r) => (sysUnread.value = r || [])).catch(() => {}),
-    getNoticeFeed({ current: 1, size: 3 }).then((p) => (notices.value = p.records || [])).catch(() => {})
-  ])
-}
-
-function go(path: string) {
-  uni.navigateTo({ url: path })
-}
+const cards = computed<WorkbenchCard[]>(() => getRegisteredCards())
+const hasCards = computed(() => cards.value.length > 0)
 
 onMounted(() => {
   if (!auth.isLoggedIn) {
     uni.reLaunch({ url: '/modules/auth/pages/login' })
     return
   }
-  load()
+  updateGreeting()
 })
 </script>
 
@@ -61,38 +41,17 @@ onMounted(() => {
       </view>
     </view>
 
-    <view class="card stat">
-      <view class="stat-item">
-        <text class="num">{{ sysUnread.length }}</text>
-        <text class="label">系统未读</text>
-      </view>
-      <view class="stat-item">
-        <text class="num">{{ notices.length }}</text>
-        <text class="label">最新公告</text>
-      </view>
+    <view class="cards">
+      <component
+        :is="card.component"
+        v-for="card in cards"
+        :key="card.id"
+      />
     </view>
 
-    <view class="card notices" v-if="notices.length">
-      <view class="card-header">
-        <text class="title">最新公告</text>
-        <text class="more" @tap="go('/pages/message/index')">更多 ›</text>
-      </view>
-      <view v-for="n in notices" :key="n.id" class="notice-row" @tap="go(`/modules/notice/pages/detail?id=${n.id}`)">
-        <text class="notice-title text-ellipsis">{{ n.title }}</text>
-        <text class="notice-time">{{ formatDateTime(n.createdAt, 'MM-DD') }}</text>
-      </view>
-    </view>
-
-    <view class="card">
-      <view class="card-header">
-        <text class="title">快捷入口</text>
-      </view>
-      <view class="quick-grid">
-        <view v-for="q in quickEntries" :key="q.name" class="quick-item" @tap="go(q.path)">
-          <text class="quick-icon">{{ q.icon }}</text>
-          <text class="quick-name">{{ q.name }}</text>
-        </view>
-      </view>
+    <view v-if="!hasCards" class="empty">
+      <text class="empty-title">暂无业务卡片</text>
+      <text class="empty-desc">前往 src/modules/extension/workbench/index.ts 注册卡片</text>
     </view>
   </view>
 </template>
@@ -131,86 +90,22 @@ onMounted(() => {
     margin-top: 4rpx;
   }
 }
-.card {
-  background: #fff;
-  border-radius: 16rpx;
-  padding: 30rpx;
-  margin-bottom: 20rpx;
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20rpx;
-    .title {
-      font-size: 30rpx;
-      font-weight: 600;
-    }
-    .more {
-      color: #8f959e;
-      font-size: 24rpx;
-    }
-  }
+.cards {
+  display: block;
 }
-.stat {
-  display: flex;
-  .stat-item {
-    flex: 1;
-    text-align: center;
-    .num {
-      display: block;
-      font-size: 44rpx;
-      font-weight: 600;
-      color: $uni-color-primary;
-    }
-    .label {
-      display: block;
-      color: #8f959e;
-      font-size: 24rpx;
-      margin-top: 4rpx;
-    }
+.empty {
+  margin-top: 80rpx;
+  text-align: center;
+  .empty-title {
+    display: block;
+    color: #8f959e;
+    font-size: 30rpx;
   }
-}
-.notices {
-  .notice-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 16rpx 0;
-    border-bottom: 1rpx solid #f0f0f0;
-    &:last-child {
-      border-bottom: none;
-    }
-    .notice-title {
-      flex: 1;
-      font-size: 28rpx;
-    }
-    .notice-time {
-      color: #8f959e;
-      font-size: 24rpx;
-      margin-left: 20rpx;
-    }
-  }
-}
-.quick-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30rpx 0;
-  .quick-item {
-    text-align: center;
-    position: relative;
-    .quick-icon {
-      display: block;
-      font-size: 48rpx;
-    }
-    .quick-name {
-      display: block;
-      font-size: 24rpx;
-      margin-top: 8rpx;
-      color: #1f2329;
-    }
-    .quick-badge {
-      position: absolute;
-      top: -8rpx;
-      right: 16rpx;
-    }
+  .empty-desc {
+    display: block;
+    color: #c0c4cc;
+    font-size: 24rpx;
+    margin-top: 12rpx;
   }
 }
 </style>

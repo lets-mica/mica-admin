@@ -17,7 +17,6 @@ mica-admin 是基于 [mica](https://gitee.com/596392912/mica) 工具集的低代
 
 > **`mica-admin-uniapp/` 不进 Maven**：它是独立的 npm/pnpm 工程，与 `mica-admin-web/` 平级。
 > 三者放在同一 git 仓库是为了 AI 编码时能"看见完整上下文",便于跨模块协作。
-> 设计文档参见 [`docs/app/`](./docs/app/README.md)(App 端)。
 
 ## 构建命令
 
@@ -110,10 +109,8 @@ pnpm api               # 从 http://127.0.0.1:8080/v3/api-docs 生成 swagger �
 
 ## 移动 App 架构（`mica-admin-uniapp/`）
 
-完整设计见 [`docs/app/`](./docs/app/README.md)。摘要要点:
-
-- **框架**：uniapp x(Vue 3 + Vite)+ TypeScript + Pinia + Vite。
-- **UI**：uni-ui 或 uView Plus(按需引入,跨端一致)。
+- **框架**:uniapp x(Vue 3 + Vite)+ TypeScript + Pinia + Vite。
+- **UI**:uni-ui 或 uView Plus(按需引入,跨端一致)。
 - **后端联调**:dev server 通过 `/api` 代理到 `http://localhost:8080`(同 Web 端)。
 - **认证**:复用 mica-admin-web 的 `auth-mica-admin.ts` 逻辑,密码走 RSA + 算术验证码。
 - **响应**:`code = 0` 表示成功(同 mica-admin-web)。
@@ -172,4 +169,3 @@ App:
 ### mica-admin-uniapp(App)
 
 - **二次开发只新增不修改**:`src/modules/extension/` 是二次开发预留目录,通用模块(`auth/`、`profile/` 等)**不要修改**。
-- **不要直接改 `docs/app/` 文档**:那是设计文档,改动会误导二次开发方。如需调整,先确认再改。

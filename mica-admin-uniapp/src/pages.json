@@ -14,13 +14,6 @@
       }
     },
     {
-      "path": "pages/message/index",
-      "style": {
-        "navigationBarTitleText": "消息",
-        "enablePullDownRefresh": true
-      }
-    },
-    {
       "path": "pages/profile/index",
       "style": {
         "navigationBarTitleText": "我的"
@@ -51,25 +44,6 @@
       }
     },
     {
-      "path": "modules/contacts/pages/dept-detail",
-      "style": {
-        "navigationBarTitleText": "部门成员"
-      }
-    },
-    {
-      "path": "modules/contacts/pages/user-detail",
-      "style": {
-        "navigationBarTitleText": "用户详情"
-      }
-    },
-    {
-      "path": "modules/contacts/pages/index",
-      "style": {
-        "navigationBarTitleText": "通讯录",
-        "enablePullDownRefresh": false
-      }
-    },
-    {
       "path": "modules/notice/pages/list",
       "style": {
         "navigationBarTitleText": "公告",
@@ -80,12 +54,6 @@
       "path": "modules/notice/pages/detail",
       "style": {
         "navigationBarTitleText": "公告详情"
-      }
-    },
-    {
-      "path": "modules/file/pages/index",
-      "style": {
-        "navigationBarTitleText": "文件中心"
       }
     },
     {
@@ -122,10 +90,6 @@
       {
         "pagePath": "pages/index/index",
         "text": "🏠 工作台"
-      },
-      {
-        "pagePath": "pages/message/index",
-        "text": "💬 消息"
       },
       {
         "pagePath": "pages/profile/index",

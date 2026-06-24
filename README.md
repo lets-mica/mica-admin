@@ -14,7 +14,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://github.com)
 
-[在线演示](https://admin.dreamlu.net) · [更新日志](#-更新日志) · [二次开发指南](docs/app/extension.md)
+[在线演示](https://admin.dreamlu.net) · [更新日志](#-更新日志)
 
 </div>
 
@@ -199,8 +199,6 @@ mvn clean package -Pprod -U -Dmaven.test.skip=true
 
 | 文档 | 适合谁 | 内容 |
 | :-- | :-- | :-- |
-| [docs/app/README.md](docs/app/README.md) | 移动端开发者 | App 端产品定位、IA、技术栈、模块清单 |
-| [docs/app/extension.md](docs/app/extension.md) | 二次开发方 | 哪些可复用、哪些需新增后端 |
 | [docs/database/mysql.sql](docs/database/mysql.sql) | 运维 | 数据库结构 |
 | [mica-admin-uniapp/AGENTS.md](mica-admin-uniapp/AGENTS.md) | App 二次开发 | 通用模块不修改原则 |
 | [AGENTS.md](AGENTS.md) | AI 编码助手 | 仓库级编码规范 |
