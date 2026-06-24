@@ -7,11 +7,11 @@ const username = ref('')
 const password = ref('')
 const captchaCode = ref('')
 const submitting = ref(false)
-const expression = ref('')
+const captchaImage = ref('')
 
 async function loadCaptcha() {
   const c = await auth.refreshCaptcha()
-  expression.value = c.expression
+  captchaImage.value = c.captchaImage
 }
 
 async function onSubmit() {
@@ -28,8 +28,8 @@ async function onSubmit() {
     await auth.doLogin({
       username: username.value,
       password: password.value,
-      captchaId: auth.captcha.captchaId,
-      captchaCode: captchaCode.value
+      validateCodeId: auth.captcha.captchaId,
+      validateCode: captchaCode.value
     })
     uni.showToast({ title: '登录成功', icon: 'success' })
     setTimeout(() => {
@@ -76,7 +76,13 @@ loadCaptcha()
           class="captcha-input"
         />
         <view class="captcha-img" @tap="loadCaptcha">
-          <text>{{ expression || '加载中…' }}</text>
+          <image
+            v-if="captchaImage"
+            :src="captchaImage"
+            mode="aspectFit"
+            class="captcha-image"
+          />
+          <text v-else>加载中…</text>
         </view>
       </view>
       <button class="submit" :loading="submitting" @tap="onSubmit">登录</button>
@@ -144,6 +150,11 @@ loadCaptcha()
     letter-spacing: 4rpx;
     color: #1f2329;
     font-weight: 600;
+    overflow: hidden;
+  }
+  .captcha-image {
+    width: 100%;
+    height: 100%;
   }
 }
 .submit {

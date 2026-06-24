@@ -30,9 +30,11 @@ export interface PendingMessage {
 
 export const useChatStore = defineStore('im-chat', () => {
   const auth = useAuthStore()
-  const convId = ref<number>(0)
+  // 后端雪花 id 为 String,前端保持 string
+  const convId = ref<string>('')
   const chatType = ref<ChatType>('P2P')
-  const peerId = ref<number>(0) // 单聊对方 / 群聊 groupId
+  /** 单聊为对端 userId;群聊为 groupId(都是 number/Long) */
+  const peerId = ref<number>(0)
   const groupMembers = ref<ImUserVo[]>([])
 
   const messages = ref<MessageVo[]>([])
@@ -49,10 +51,10 @@ export const useChatStore = defineStore('im-chat', () => {
     )
   })
 
-  async function open(type: ChatType, target: number, cId?: number) {
+  async function open(type: ChatType, target: number, cId?: string | number) {
     chatType.value = type
     peerId.value = target
-    convId.value = cId || 0
+    convId.value = cId ? String(cId) : ''
     messages.value = []
     pending.value = []
     hasMore.value = true
@@ -60,15 +62,16 @@ export const useChatStore = defineStore('im-chat', () => {
   }
 
   async function loadHistory() {
-    if (!convId.value || loading.value || !hasMore.value) return
+    if (!convId.value || loading.value) return
     loading.value = true
     try {
-      const page = await apiGetMessages(convId.value, { current: 1, size: 30 })
-      messages.value = page.records || []
-      hasMore.value = page.current < page.pages
+      // 后端返回裸数组(不分页),分页用 beforeId/size
+      const list = await apiGetMessages(convId.value, { size: 30 })
+      messages.value = list || []
+      hasMore.value = (list?.length ?? 0) >= 30
       // 进入即标记已读
       if (messages.value.length) {
-        await apiMarkRead(convId.value, { lastReadMessageId: messages.value[0].id })
+        await apiMarkRead(convId.value, messages.value[0].id)
       }
     } finally {
       loading.value = false
@@ -136,7 +139,7 @@ export const useChatStore = defineStore('im-chat', () => {
   }
 
   function reset() {
-    convId.value = 0
+    convId.value = ''
     peerId.value = 0
     chatType.value = 'P2P'
     messages.value = []

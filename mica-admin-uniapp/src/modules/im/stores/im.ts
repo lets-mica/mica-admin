@@ -35,8 +35,9 @@ export const useImStore = defineStore('im', () => {
   async function loadConversations() {
     loading.value = true
     try {
-      const page = await getConversations({ current: 1, size: 100 })
-      conversations.value = page.records || []
+      // 后端返回裸数组(不分页)
+      const list = await getConversations()
+      conversations.value = list || []
     } finally {
       loading.value = false
     }
@@ -50,7 +51,8 @@ export const useImStore = defineStore('im', () => {
 
   async function refreshUnread() {
     try {
-      unreadTotal.value = await getUnreadTotal()
+      // API 客户端已解构 {total} 为 number
+      unreadTotal.value = (await getUnreadTotal()) ?? 0
     } catch {
       // ignore
     }

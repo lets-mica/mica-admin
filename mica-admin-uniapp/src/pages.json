@@ -1,4 +1,10 @@
 {
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+    }
+  },
   "pages": [
     {
       "path": "pages/index/index",
@@ -170,27 +176,19 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "iconPath": "static/tabbar/workbench.png",
-        "selectedIconPath": "static/tabbar/workbench-active.png",
-        "text": "工作台"
+        "text": "🏠 工作台"
       },
       {
         "pagePath": "pages/message/index",
-        "iconPath": "static/tabbar/message.png",
-        "selectedIconPath": "static/tabbar/message-active.png",
-        "text": "消息"
+        "text": "💬 消息"
       },
       {
         "pagePath": "pages/menu/index",
-        "iconPath": "static/tabbar/menu.png",
-        "selectedIconPath": "static/tabbar/menu-active.png",
-        "text": "应用"
+        "text": "🧩 应用"
       },
       {
         "pagePath": "pages/profile/index",
-        "iconPath": "static/tabbar/profile.png",
-        "selectedIconPath": "static/tabbar/profile-active.png",
-        "text": "我的"
+        "text": "👤 我的"
       }
     ]
   }

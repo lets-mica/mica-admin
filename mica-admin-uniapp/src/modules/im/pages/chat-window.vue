@@ -9,14 +9,14 @@ const auth = useAuthStore()
 
 const chatType = ref<'p2p' | 'group'>('p2p')
 const peerId = ref(0)
-const convId = ref<number>(0)
+const convId = ref<string>('') // 后端雪花 id 为 String
 const input = ref('')
 const scrollTop = ref(0)
 
 onLoad(async (q) => {
   chatType.value = (q?.type as any) || 'p2p'
   peerId.value = Number(q?.peerId || q?.groupId || 0)
-  convId.value = q?.convId ? Number(q.convId) : 0
+  convId.value = q?.convId ? String(q.convId) : ''
   if (peerId.value) {
     await chat.open(chatType.value === 'p2p' ? 'P2P' : 'GROUP', peerId.value, convId.value)
     uni.setNavigationBarTitle({ title: chatType.value === 'p2p' ? '聊天' : '群聊' })

@@ -30,14 +30,13 @@ export const useAuthStore = defineStore(
       // 1. 取 RSA 公钥并加密密码
       const pubKey = await getPublicKey()
       const encrypted = encryptRSA(form.password, pubKey)
-      // 2. form-urlencoded 提交
-      const data = new URLSearchParams({
+      // 2. form-urlencoded 提交,字段名与后端 SecWebAuthenticationDetails 对齐
+      const { token: t } = await loginByPassword({
         username: form.username,
         password: encrypted,
-        captchaId: form.captchaId,
-        captchaCode: form.captchaCode
-      }).toString()
-      const { token: t } = await loginByPassword({ username: form.username, password: data, captchaId: form.captchaId, captchaCode: form.captchaCode } as unknown as LoginForm)
+        validateCodeId: form.validateCodeId,
+        validateCode: form.validateCode
+      })
       token.value = t
       setToken(t)
       // 3. 拉用户信息 + 菜单
