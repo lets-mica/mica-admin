@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { getUserDetail } from '@/api/user'
+import { getPostName } from '@/api/user'
 import { createP2pConversation } from '@/api/im/conversation'
 import type { UserVo } from '@/api/user'
 import { useAuthStore } from '@/stores/auth'
@@ -26,14 +27,15 @@ function callPhone() {
 
 async function sendMessage() {
   if (!user.value) return
-  if (user.value.userId === auth.user?.userId) {
+  const peerId = user.value.id
+  if (peerId === auth.user?.userId) {
     uni.showToast({ title: '不能给自己发消息', icon: 'none' })
     return
   }
   try {
-    const { conversation } = await createP2pConversation({ peerUserId: user.value.userId })
+    const { conversation } = await createP2pConversation({ peerUserId: peerId })
     uni.navigateTo({
-      url: `/modules/im/pages/chat-window?type=p2p&peerId=${user.value.userId}&convId=${conversation.id}`
+      url: `/modules/im/pages/chat-window?type=p2p&peerId=${peerId}&convId=${conversation.id}`
     })
   } catch (e: any) {
     uni.showToast({ title: e.message || '发起失败', icon: 'none' })
@@ -45,18 +47,18 @@ async function sendMessage() {
   <view class="page">
     <view class="card head">
       <image class="avatar" :src="user?.avatar || '/static/default-avatar.png'" />
-      <text class="name">{{ user?.nickname }}</text>
-      <text class="username">@{{ user?.username }}</text>
+      <text class="name">{{ user?.nickName }}</text>
+      <text class="username">@{{ user?.userName }}</text>
     </view>
 
     <view class="group">
       <view class="row">
         <text class="lbl">部门</text>
-        <text class="val">{{ user?.deptName || '-' }}</text>
+        <text class="val">{{ user?.dept?.name || '-' }}</text>
       </view>
       <view class="row">
         <text class="lbl">岗位</text>
-        <text class="val">{{ user?.postName || '-' }}</text>
+        <text class="val">{{ getPostName(user) || '-' }}</text>
       </view>
       <view class="row">
         <text class="lbl">手机</text>

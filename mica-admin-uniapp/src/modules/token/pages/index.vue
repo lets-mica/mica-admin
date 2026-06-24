@@ -20,11 +20,11 @@ async function load() {
 function onKick(t: TokenVo) {
   uni.showModal({
     title: '提示',
-    content: `强制下线 ${t.nickname || t.username}?`,
+    content: `强制下线 ${t.nickName || t.userName}?`,
     success: async (res) => {
       if (res.confirm) {
-        await deleteToken(t.id)
-        tokens.value = tokens.value.filter((x) => x.id !== t.id)
+        await deleteToken(t.key)
+        tokens.value = tokens.value.filter((x) => x.key !== t.key)
       }
     }
   })
@@ -38,16 +38,16 @@ onMounted(load)
     <view v-if="tokens.length === 0" class="empty">
       <text>无活跃 Token</text>
     </view>
-    <view v-for="t in tokens" :key="t.id" class="card">
+    <view v-for="t in tokens" :key="t.key" class="card">
       <view class="row">
-        <text class="name">{{ t.nickname || t.username }}</text>
-        <text class="username">@{{ t.username }}</text>
+        <text class="name">{{ t.nickName || t.userName }}</text>
+        <text class="username">@{{ t.userName }}</text>
       </view>
       <view class="meta">
-        <text>客户端: {{ t.clientId || '-' }}</text>
-        <text>IP: {{ t.ip || '-' }} · {{ t.location || '-' }}</text>
-        <text>登录: {{ formatDateTime(t.issuedAt) }}</text>
-        <text>到期: {{ formatDateTime(t.expiresAt) }}</text>
+        <text>部门: {{ t.dept || '-' }}</text>
+        <text>浏览器: {{ t.browser || '-' }}</text>
+        <text>IP: {{ t.ip || '-' }} · {{ t.address || '-' }}</text>
+        <text>登录: {{ formatDateTime(t.loginTime) }}</text>
       </view>
       <button size="mini" class="kick" @tap="onKick(t)">强制下线</button>
     </view>

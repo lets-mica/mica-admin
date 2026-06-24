@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { getDepts, getUsers } from '@/api/user'
+import { getDepts, getPostName, getUsers } from '@/api/user'
 import type { SysDept, UserVo } from '@/api/user'
 
 const keyword = ref('')
@@ -15,9 +15,16 @@ const isSearching = computed(() => !!keyword.value.trim())
 async function load() {
   loading.value = true
   try {
-    depts.value = await getDepts()
-    // 默认展开前两级
-    depts.value.forEach((d) => expanded.value.add(d.id))
+    const list = (await getDepts()) as unknown as
+      | SysDept[]
+      | { records?: SysDept[] }
+    // 后端 /api/system/dept 返回分页(Page),这里 list 是 records
+    depts.value =
+      (list as { records?: SysDept[] }).records || (list as SysDept[]) || []
+    // 默认展开第一级(无 parentId 的视为根)
+    depts.value.forEach((d) => {
+      if (!d.parentId) expanded.value.add(d.id)
+    })
   } finally {
     loading.value = false
   }
@@ -45,7 +52,11 @@ async function onSearch() {
 }
 
 function onUserTap(u: UserVo) {
-  uni.navigateTo({ url: `/modules/contacts/pages/user-detail?id=${u.userId}` })
+  uni.navigateTo({ url: `/modules/contacts/pages/user-detail?id=${u.id}` })
+}
+
+function onDeptTap(d: SysDept) {
+  uni.navigateTo({ url: `/modules/contacts/pages/dept-detail?deptId=${d.id}` })
 }
 
 onMounted(() => {
@@ -64,11 +75,11 @@ onMounted(() => {
       <view v-if="searchResults.length === 0" class="empty">
         <text>无匹配结果</text>
       </view>
-      <view v-for="u in searchResults" :key="u.userId" class="user-row" @tap="onUserTap(u)">
+      <view v-for="u in searchResults" :key="u.id" class="user-row" @tap="onUserTap(u)">
         <image class="avatar" :src="u.avatar || '/static/default-avatar.png'" />
         <view class="info">
-          <text class="name">{{ u.nickname }}</text>
-          <text class="dept">{{ u.deptName }} · {{ u.postName || '' }}</text>
+          <text class="name">{{ u.nickName }}</text>
+          <text class="dept">{{ u.dept?.name }} · {{ getPostName(u) || '' }}</text>
         </view>
         <text class="arrow">›</text>
       </view>
@@ -81,14 +92,20 @@ onMounted(() => {
           <text class="caret">{{ expanded.has(d.id) ? '▼' : '▶' }}</text>
           <text class="name">{{ d.name }}</text>
           <text v-if="membersByDept[d.id]" class="cnt">({{ membersByDept[d.id].length }})</text>
+          <text class="go" @tap.stop="onDeptTap(d)">成员 ›</text>
         </view>
         <view v-if="expanded.has(d.id)" class="members">
           <view v-if="!membersByDept[d.id]" class="loading">加载中…</view>
-          <view v-for="u in (membersByDept[d.id] || [])" :key="u.userId" class="user-row" @tap="onUserTap(u)">
+          <view
+            v-for="u in (membersByDept[d.id] || [])"
+            :key="u.id"
+            class="user-row"
+            @tap="onUserTap(u)"
+          >
             <image class="avatar" :src="u.avatar || '/static/default-avatar.png'" />
             <view class="info">
-              <text class="name">{{ u.nickname }}</text>
-              <text class="dept">{{ u.postName || '' }}</text>
+              <text class="name">{{ u.nickName }}</text>
+              <text class="dept">{{ getPostName(u) || '' }}</text>
             </view>
             <text class="arrow">›</text>
           </view>
@@ -167,6 +184,11 @@ onMounted(() => {
     .cnt {
       color: #8f959e;
       margin-left: 6rpx;
+      font-size: 24rpx;
+    }
+    .go {
+      margin-left: auto;
+      color: $uni-color-primary;
       font-size: 24rpx;
     }
   }

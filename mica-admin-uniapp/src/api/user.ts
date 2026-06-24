@@ -3,31 +3,74 @@
  */
 import { http } from '@/utils/request'
 
+/**
+ * 部门(对应后端 SysDept)
+ * @see net.dreamlu.mica.admin.project.system.entity.SysDept
+ */
 export interface SysDept {
   id: number
-  parentId: number
+  parentId?: number
   name: string
-  sort: number
+  /** 显示顺序(后端字段 seq) */
+  seq?: number
+  leader?: string
+  phone?: string
+  email?: string
+  enabled?: number | boolean
   children?: SysDept[]
 }
 
+/**
+ * 用户 VO(对应后端 UserVo)
+ * @see net.dreamlu.mica.admin.project.system.pojo.UserVo
+ *
+ * 注意:后端 UserVo 返回的是嵌套对象(dept)与数组(posts/roles),
+ * 业务页面常取的"部门名 / 岗位名"在前端按需取首个或拼接。
+ */
 export interface UserVo {
-  userId: number
-  username: string
-  nickname: string
-  avatar?: string
+  id: number
+  deptId?: number
+  dept?: { id: number; name: string }
+  posts?: { id: number; name: string; code?: string }[]
+  roles?: { id: number; name: string; level?: number; dataScope?: string | number }[]
+  userName: string
+  nickName: string
   email?: string
   phone?: string
-  deptId?: number
-  deptName?: string
-  postName?: string
+  gender?: number
+  avatar?: string
+  isAdmin?: boolean
+  enabled?: boolean
+  locked?: boolean
+  remark?: string
+}
+
+/**
+ * 取用户岗位名称(取第一个岗位)
+ */
+export function getPostName(u: UserVo | null | undefined): string {
+  if (!u?.posts?.length) return ''
+  return u.posts[0]?.name || ''
+}
+
+/**
+ * 取用户部门名称
+ */
+export function getDeptName(u: UserVo | null | undefined): string {
+  return u?.dept?.name || ''
 }
 
 export function getDepts() {
   return http.get<SysDept[]>('/api/system/dept')
 }
 
-export function getUsers(params: { current?: number; size?: number; blurry?: string; deptId?: number }) {
+export function getUsers(params: {
+  current?: number
+  size?: number
+  blurry?: string
+  deptId?: number
+  enabled?: boolean
+}) {
   return http.get<import('@/utils/request').PageResult<UserVo>>('/api/system/users', params)
 }
 

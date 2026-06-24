@@ -16,6 +16,8 @@ interface JwtUserRaw {
   phone?: string
   isAdmin?: boolean
   dept?: { id?: number; name?: string }
+  /** 岗位列表 [{ id, code, name }] */
+  posts?: { id?: number; code?: string; name?: string }[]
   roleList?: string[]
   permissions?: string[]
 }
@@ -82,6 +84,8 @@ export function getCurrentUser() {
     .then((res) => {
       // 后端 /api/auth/info 返回 { userInfo, publicKey }, 需解出 userInfo 并映射字段
       const raw = res?.userInfo || (res as unknown as JwtUserRaw) || {}
+      // 岗位名取首个岗位;无则为空
+      const postName = raw.posts?.find((p) => !!p?.name)?.name || ''
       return {
         userId: raw.id ?? 0,
         username: raw.userName || '',
@@ -91,7 +95,7 @@ export function getCurrentUser() {
         phone: raw.phone || '',
         deptId: raw.dept?.id,
         deptName: raw.dept?.name || '',
-        postName: '',
+        postName,
         roles: raw.roleList || [],
         permissions: raw.permissions || [],
         isAdmin: !!raw.isAdmin

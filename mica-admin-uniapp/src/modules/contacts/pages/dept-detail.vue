@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { getUsers } from '@/api/user'
+import { getPostName, getUsers } from '@/api/user'
 import type { UserVo } from '@/api/user'
 
 const users = ref<UserVo[]>([])
@@ -14,7 +14,7 @@ onLoad(async (q) => {
 })
 
 function onUserTap(u: UserVo) {
-  uni.navigateTo({ url: `/modules/contacts/pages/user-detail?id=${u.userId}` })
+  uni.navigateTo({ url: `/modules/contacts/pages/user-detail?id=${u.id}` })
 }
 </script>
 
@@ -23,11 +23,11 @@ function onUserTap(u: UserVo) {
     <view v-if="users.length === 0" class="empty">
       <text>暂无成员</text>
     </view>
-    <view v-for="u in users" :key="u.userId" class="row" @tap="onUserTap(u)">
+    <view v-for="u in users" :key="u.id" class="row" @tap="onUserTap(u)">
       <image class="avatar" :src="u.avatar || '/static/default-avatar.png'" />
       <view class="info">
-        <text class="name">{{ u.nickname }}</text>
-        <text class="post">{{ u.postName || '' }}</text>
+        <text class="name">{{ u.nickName }}</text>
+        <text class="post">{{ getPostName(u) || '' }}</text>
       </view>
       <text class="arrow">›</text>
     </view>

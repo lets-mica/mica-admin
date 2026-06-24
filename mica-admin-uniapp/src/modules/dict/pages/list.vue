@@ -1,23 +1,25 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { getDictItems, getDictTypes } from '@/api/dict'
-import type { DictType, DictItem } from '@/api/dict'
+import type { DictItem, DictType } from '@/api/dict'
 
 const types = ref<DictType[]>([])
 const items = ref<DictItem[]>([])
 const currentType = ref<string>('')
 
 async function loadTypes() {
-  types.value = await getDictTypes()
+  const p = await getDictTypes({ current: 1, size: 9999 })
+  types.value = p.records || []
   if (types.value.length > 0) {
-    currentType.value = types.value[0].type
+    currentType.value = types.value[0].name
     loadItems()
   }
 }
 
 async function loadItems() {
   if (!currentType.value) return
-  items.value = await getDictItems(currentType.value)
+  const p = await getDictItems(currentType.value)
+  items.value = p.records || []
 }
 
 onMounted(loadTypes)
@@ -29,12 +31,12 @@ onMounted(loadTypes)
       <scroll-view scroll-x class="scroll">
         <view
           v-for="t in types"
-          :key="t.type"
+          :key="t.id"
           class="tag"
-          :class="{ active: currentType === t.type }"
-          @tap="currentType = t.type; loadItems()"
+          :class="{ active: currentType === t.name }"
+          @tap="currentType = t.name; loadItems()"
         >
-          {{ t.type }}
+          {{ t.name }}
         </view>
       </scroll-view>
     </view>
@@ -43,6 +45,9 @@ onMounted(loadTypes)
       <view v-for="i in items" :key="i.id" class="row">
         <text class="label">{{ i.label }}</text>
         <text class="value">{{ i.value }}</text>
+      </view>
+      <view v-if="items.length === 0" class="empty">
+        <text>暂无数据</text>
       </view>
     </view>
   </view>
@@ -88,6 +93,11 @@ onMounted(loadTypes)
     color: #1f2329;
   }
   .value {
+    color: #8f959e;
+  }
+  .empty {
+    padding: 60rpx 0;
+    text-align: center;
     color: #8f959e;
   }
 }
