@@ -45,7 +45,7 @@
 
 - 应用中心(动态菜单)
 - 我的(个人中心)
-- 通讯录、通知、文件、Token、监控、字典
+- 通讯录、通知、文件
 
 ### 后端依赖
 
@@ -95,9 +95,6 @@
 | 6 | 通讯录 | `/api/system/users` + `/api/system/dept` |
 | 7 | 通知公告 | `/api/system/notice/feed` |
 | 8 | 文件中心 | `/api/upload/**` |
-| 9 | Token 管理 | `/api/auth/token` |
-| 10 | 监控 | `/api/system/monitor/server` |
-| 11 | 字典查询 | `/api/system/dict*` |
 
 ### 关键能力
 
@@ -139,9 +136,6 @@ src/
 │   ├── contacts/              # 通讯录
 │   ├── notice/                # 通知公告
 │   ├── file/                  # 文件中心
-│   ├── token/                 # Token 管理(管理员)
-│   ├── monitor/               # 监控(管理员)
-│   ├── dict/                  # 字典查询(管理员)
 │   └── extension/             # ⭐ 二次开发预留
 │       ├── README.md
 │       ├── approval/          # 审批(等 sys_approval)— 二次开发
@@ -174,7 +168,6 @@ src/
 - **消息中心 → 已读/未读 Tab 切换**
 - **通讯录 → 按部门/按职位分组**
 - **通知公告 → 关键字搜索**
-- **Token 管理 → 风险检测**(长时间未活跃提醒)
 
 #### 1.1.2 二次开发扩展(选做)
 

@@ -89,25 +89,6 @@
       }
     },
     {
-      "path": "modules/token/pages/index",
-      "style": {
-        "navigationBarTitleText": "Token 管理",
-        "enablePullDownRefresh": true
-      }
-    },
-    {
-      "path": "modules/monitor/pages/server",
-      "style": {
-        "navigationBarTitleText": "服务监控"
-      }
-    },
-    {
-      "path": "modules/dict/pages/list",
-      "style": {
-        "navigationBarTitleText": "字典查询"
-      }
-    },
-    {
       "path": "modules/extension/pages/approval",
       "style": {
         "navigationBarTitleText": "审批中心"

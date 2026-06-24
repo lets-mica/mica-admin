@@ -121,7 +121,7 @@ pnpm build:mp-weixin # 产出 unpackage/dist/dev/mp-weixin
 VITE_GLOB_API_URL=/api
 ```
 
-## 11 个模块一览
+## 7 个模块一览
 
 | # | 模块 | 入口 | 后端依赖 |
 |---|---|---|---|
@@ -132,10 +132,6 @@ VITE_GLOB_API_URL=/api
 | 5 | 通讯录 | [modules/contacts/pages/](src/modules/contacts/pages/index.vue) | `/api/system/*` |
 | 6 | 通知公告 | [modules/notice/pages/list.vue](src/modules/notice/pages/list.vue) | `/api/system/notice/feed` |
 | 7 | 文件中心 | [modules/file/pages/index.vue](src/modules/file/pages/index.vue) | `/api/upload/**` |
-| 8 | Token 管理 | [modules/token/pages/index.vue](src/modules/token/pages/index.vue) | `/api/auth/token` |
-| 9 | 监控 | [modules/monitor/pages/server.vue](src/modules/monitor/pages/server.vue) | `/api/system/monitor/*` |
-| 10 | 字典查询 | [modules/dict/pages/list.vue](src/modules/dict/pages/list.vue) | `/api/system/dict*` |
-| 11 | 我的(占位) | [pages/profile/index.vue](src/pages/profile/index.vue) | `/api/system/users/*` |
 
 ## 二次开发
 

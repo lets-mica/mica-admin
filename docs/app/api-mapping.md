@@ -382,61 +382,12 @@ uploadTask.onProgressUpdate((res) => {
 
 ---
 
-## 模块 9:Token 管理(管理员)
+## 模块 9:字典查询
 
 | # | Method | Path | 入参 | 出参 | 权限 |
 |---|---|---|---|---|---|
-| 9.1 | GET | `/api/auth/token` | `current`, `size`, `filter?` | `Page<TokenVo>` | 已登录 |
-| 9.2 | DELETE | `/api/auth/token` | body: `string[]` (token keys) | - | `@sec.isAdmin()` |
-
-### 关键实体
-
-```typescript
-// TokenVo - 认证 token
-interface TokenVo {
-  key: string              // token 唯一标识(用于踢出)
-  username: string
-  ip: string
-  browser?: string
-  os?: string
-  loginTime: string
-  lastActiveTime: string
-  status: 'online' | 'offline'
-}
-```
-
----
-
-## 模块 10:监控(简化版)
-
-| # | Method | Path | 出参 | 权限 |
-|---|---|---|---|---|
-| 10.1 | GET | `/api/system/monitor/server` | `Map<String, Object>` | `system:monitor:servers` |
-| 10.2 | GET | `/api/system/monitor/sql` | `Map[]` | `system:monitor:sql` |
-| 10.3 | GET | `/api/system/monitor/redis` | `Map<String, Object>` | `system:monitor:redis` |
-
-### 服务监控返回结构(简化示例)
-
-```typescript
-{
-  cpu: { usage: 35, cores: 8 },
-  memory: { total: 16777216, used: 10485760, free: 6291456 },
-  jvm: { heapUsed: 536870912, heapMax: 1073741824, uptime: 1312000 },
-  disk: { total: 500, used: 120 },
-  system: { os: 'Linux 5.x', hostname: '...' }
-}
-```
-
-> App 1.0 仅取 `server`,SQL/Redis 监控因数据量大、阅读体验差,暂不展示。
-
----
-
-## 模块 11:字典查询
-
-| # | Method | Path | 入参 | 出参 | 权限 |
-|---|---|---|---|---|---|
-| 11.1 | GET | `/api/system/dict` | `current`, `size` | `Page<SysDict>` | 已登录 |
-| 11.2 | GET | `/api/system/dict-info` | `current`, `size`, `type?` | `Page<SysDictInfo>` | 已登录 |
+| 9.1 | GET | `/api/system/dict` | `current`, `size` | `Page<SysDict>` | 已登录 |
+| 9.2 | GET | `/api/system/dict-info` | `current`, `size`, `type?` | `Page<SysDictInfo>` | 已登录 |
 
 ### 关键实体
 

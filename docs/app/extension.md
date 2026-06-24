@@ -119,9 +119,6 @@ export const nativeRouteMap: Record<string, string> = {
   '/system/user': '/pages-native/system/user-list',
   '/system/role': '/pages-native/system/role-list',
   '/system/dept': '/pages-native/system/dept-tree',
-  '/system/dict': '/pages-native/system/dict-list',
-  '/monitor/server': '/pages-native/monitor/server',
-  '/monitor/log': '/pages-native/monitor/log',
   // ...按需扩展
 }
 ```
@@ -567,7 +564,7 @@ src/modules/extension/payslip/
 
 | 投入 | 能拿到 |
 |---|---|
-| 0 后端改造 | App **11** 个开箱即用模块(公告/系统消息/通讯录/文件/Token/监控等) |
+| 0 后端改造 | App **8** 个开箱即用模块(公告/系统消息/通讯录/文件/通知公告等) |
 | 0.5 天 | 消息跳业务单据 / 系统级推送通道 |
 | 1 天 | 通讯录"打电话"(原生拨号) |
 | 1 周 | 工资条类小功能 + 数据看板 |

@@ -28,12 +28,6 @@ const quickEntries = [
   { icon: '📁', name: '文件', path: '/modules/file/pages/index' }
 ]
 
-const adminEntries = [
-  { icon: '🔑', name: 'Token', path: '/modules/token/pages/index' },
-  { icon: '📊', name: '监控', path: '/modules/monitor/pages/server' },
-  { icon: '📖', name: '字典', path: '/modules/dict/pages/list' }
-]
-
 async function load() {
   updateGreeting()
   await Promise.all([
@@ -95,18 +89,6 @@ onMounted(() => {
       </view>
       <view class="quick-grid">
         <view v-for="q in quickEntries" :key="q.name" class="quick-item" @tap="go(q.path)">
-          <text class="quick-icon">{{ q.icon }}</text>
-          <text class="quick-name">{{ q.name }}</text>
-        </view>
-      </view>
-    </view>
-
-    <view class="card" v-if="auth.isAdmin">
-      <view class="card-header">
-        <text class="title">管理员入口</text>
-      </view>
-      <view class="quick-grid">
-        <view v-for="q in adminEntries" :key="q.name" class="quick-item" @tap="go(q.path)">
           <text class="quick-icon">{{ q.icon }}</text>
           <text class="quick-name">{{ q.name }}</text>
         </view>

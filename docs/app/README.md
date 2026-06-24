@@ -118,15 +118,12 @@
 | 6 | 通讯录(读) | ✅ | `/api/system/users` + `/api/system/dept` | 拨打 |
 | 7 | 通知公告(读) | ✅ | `/api/system/notice/feed` | 评论 |
 | 8 | 文件上传/预览 | ✅ | `/api/upload/**` | 协作 |
-| 9 | Token 管理(管理员) | ✅ | `/api/auth/token` | - |
-| 10 | 监控(简化版) | ✅ | `/api/system/monitor/server` | 告警推送 |
-| 11 | 字典查询 | ✅ | `/api/system/dict` + `/api/system/dict-info` | - |
 | - | 工作流/审批 | ❌ | - | 需新增 `sys_approval` 表 |
 | - | 考勤打卡 | ❌ | - | 需新增 `sys_attendance` 表 |
 | - | 视频会议 | ❌ | - | 需对接第三方 SDK |
 | - | 即时通讯(IM) | ❌ | - | 需引入第三方 IM SDK 或自建 |
 
-> 总计 **11 个开箱即用模块**,**对应 mica-admin 现有控制器**(system: 16 + auth-token: 1)。
+> 总计 **8 个开箱即用模块**,**对应 mica-admin 现有控制器**(system: 16 + auth-token: 1)。
 
 ## 二次开发友好性
 
