@@ -21,6 +21,13 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true
         }
       }
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          silenceDeprecations: ['global-builtin', 'import', 'color-functions', 'slash-div', 'legacy-js-api']
+        }
+      }
     }
   }
 })
