@@ -33,6 +33,10 @@
 
 ---
 
+[✨✨✨推广：**BladeX 物联网平台**✨✨✨iot.bladex.cn](https://iot.bladex.cn?from=mica-mqtt)
+
+---
+
 ## 🖼️ 在线演示
 
 👉 **<https://admin.dreamlu.net>**
