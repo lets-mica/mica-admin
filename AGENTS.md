@@ -18,6 +18,13 @@ mica-admin 是基于 [mica](https://gitee.com/596392912/mica) 工具集的低代
 > **`mica-admin-uniapp/` 不进 Maven**：它是独立的 npm/pnpm 工程，与 `mica-admin-web/` 平级。
 > 三者放在同一 git 仓库是为了 AI 编码时能"看见完整上下文",便于跨模块协作。
 
+## 工作准则(必读)
+
+- **❌ 禁止擅自 `git commit` / `git push`**。所有变更默认保持 `M` / `A` 状态,等用户明确说"提交"、"commit"、"push" 时再执行。需要提交时,先把 `git status` 摘要给用户看一眼。
+- **❌ 禁止擅自重命名既有字段**。即使觉得"更合理"也不动,字段名/列名属于业务决策,改之前必须先和用户确认。
+- **✅ 改动默认只改类型,不改命名**(除非用户明确要求)。
+- 命名 / 删文件 / 改 schema 之前,**先用 `AskUserQuestion` 确认**,不要先斩后奏。
+
 ## 构建命令
 
 ### 后端 (`mica-admin-server`)
