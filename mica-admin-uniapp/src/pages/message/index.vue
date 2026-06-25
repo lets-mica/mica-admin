@@ -45,9 +45,6 @@ async function onTapMessage(m: UserMessage) {
     await markRead(m.id)
     m.read = true
   }
-  if (m.bizType && m.bizId) {
-    uni.showToast({ title: `${m.bizType}#${m.bizId} 跳转待开发`, icon: 'none' })
-  }
 }
 
 async function onMarkAll() {
