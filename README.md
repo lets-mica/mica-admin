@@ -6,11 +6,11 @@
 
 **后端 · Web 管理端 · 移动 App**
 
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.18-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
-[![Java](https://img.shields.io/badge/Java-8%2B-ED8B00?logo=openjdk&logoColor=white)](https://www.java.com)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.0-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Java](https://img.shields.io/badge/Java-17%2B-ED8B00?logo=openjdk&logoColor=white)](https://www.java.com)
 [![Vue](https://img.shields.io/badge/Vue-3.5-4FC08D?logo=vue.js&logoColor=white)](https://vuejs.org)
 [![uniapp](https://img.shields.io/badge/uniapp-x-2B9939?logo=wechat&logoColor=white)](https://uniapp.dcloud.net.cn)
-[![Mica](https://img.shields.io/badge/Mica-2.7.18.7-blue)](https://gitee.com/596392912/mica)
+[![Mica](https://img.shields.io/badge/Mica-4.1.0-blue)](https://gitee.com/596392912/mica)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://github.com)
 
@@ -52,7 +52,7 @@
 
 ```
 mica-admin/                                  # mono-repo (单 git 仓库)
-├── mica-admin-server/                       # Spring Boot 后端 (Java 8+)
+├── mica-admin-server/                       # Spring Boot 后端 (Java 17+)
 │   └── net.dreamlu.mica.admin
 │       ├── common/      公共常量 (ApiCode 等)
 │       ├── framework/   框架核心 (Security / MyBatis / AOP / JWT)
@@ -88,8 +88,8 @@ mica-admin/                                  # mono-repo (单 git 仓库)
   <tr>
     <td align="center"><b>后端</b></td>
     <td>
-      Spring Boot 2.7 · Spring Security · MyBatis-Plus 3.5 · Druid · Redis · JWT · RSA
-      <br/>Undertow · Log4j2 · mica-captcha · mica-openapi · dromara x-file-storage
+      Spring Boot 4.1 · Spring Security · MyBatis-Plus 3.5.16 · Druid 1.2.28 · Redis · JWT · RSA
+      <br/>Tomcat · Log4j2 · mica-captcha · mica-openapi · dromara x-file-storage
     </td>
   </tr>
   <tr>
@@ -102,7 +102,7 @@ mica-admin/                                  # mono-repo (单 git 仓库)
   <tr>
     <td align="center"><b>App</b></td>
     <td>
-      uniapp x · Vue 3.4 + TypeScript 5 + Pinia 2 + Vite 5
+      uniapp x · Vue 3.5 + TypeScript 5.4 + Pinia 2 + Vite 6
       <br/>uni-ui · dayjs · pinia-plugin-persistedstate
     </td>
   </tr>
@@ -153,7 +153,7 @@ strategyConfig.addInclude("sys_user", "sys_role");
 
 | 依赖 | 版本 | 备注 |
 | :-- | :--: | :-- |
-| JDK | 8+ | 后端编译/运行 |
+| JDK | 17+ | 后端编译/运行 |
 | Maven | 3.6+ | 后端构建 |
 | Node.js | 18+ | 前端 + App |
 | pnpm | 9+ | 前端 + App |

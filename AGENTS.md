@@ -4,13 +4,13 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## 项目概述
 
-mica-admin 是基于 [mica](https://gitee.com/596392912/mica) 工具集的低代码权限管理平台，使用 Maven、Spring Boot 2.7、Spring Security、MyBatis-Plus（后端）+ Vben Admin 5.x（前端）+ uniapp x（移动 App）。
+mica-admin 是基于 [mica](https://gitee.com/596392912/mica) 工具集的低代码权限管理平台，使用 Maven、Spring Boot 4.1、Spring Security、MyBatis-Plus（后端）+ Vben Admin 5.x（前端）+ uniapp x（移动 App）。
 
 仓库根目录结构（mono-repo，单 git 仓库）：
 
 | 目录 | 说明 | 技术栈 |
 |---|---|---|
-| `mica-admin-server/` | Spring Boot 后端（Java 8+） | Maven 模块 |
+| `mica-admin-server/` | Spring Boot 后端（Java 17+） | Maven 模块 |
 | `mica-admin-web/` | Web 管理端（Vben Admin 5.x 本地化） | Vite + Vue 3 + Naive UI |
 | `mica-admin-uniapp/` | **移动 App（uniapp x）** | uniapp x + Vue 3 + TypeScript + Pinia |
 | `docs/` | 设计文档 | - |
@@ -72,7 +72,7 @@ pnpm api               # 从 http://127.0.0.1:8080/v3/api-docs 生成 swagger �
 
 ### 关键框架细节
 
-- **容器**：Undertow（非 Tomcat），日志 Log4j2（非 Logback）。
+- **容器**：Tomcat（Spring Boot 4.1 已移除 Undertow 适配），日志 Log4j2（非 Logback）。
 - **ORM**：MyBatis-Plus 3.5 + Druid。实体扫描 `net.dreamlu.mica.admin.**.entity`；Mapper XML 位于 `classpath:net/dreamlu/mica/admin/**/mapper/*Mapper.xml`。
 - **存储**：MySQL（schema 见 `docs/database/mysql.sql`）+ Redis（localhost:6379）。
 - **安全**：Spring Security + JWT（HMAC，密钥在 `mica.security.jwt-token.secret`）+ RSA 公钥加密登录密码 + 算术图形验证码。配置见 `framework.config.MicaAdminSecurityConfig`。
@@ -151,7 +151,7 @@ App:
 
 - MySQL：导入 `docs/database/mysql.sql`。
 - Redis：localhost:6379。
-- Java 8+（后端）。
+- Java 17+（后端）。
 - Node.js 18+ + pnpm（前端 + App）。
 - Linux 部署需 jdk8（脚本按序探测 `/www/server/jdk8/`、`/usr/local/jdk`、`/data/jdk`）。
 
