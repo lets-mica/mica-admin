@@ -41,7 +41,7 @@ function mapToNotification(item: UserMessageItem): NotificationItem {
     id: item.id,
     avatar: getCategoryIcon(item.category),
     date: formatDateTime(item.createdAt),
-    isRead: item.readFlag === '1',
+    isRead: item.isRead,
     title: item.title,
     message: (item.content || '').substring(0, 80),
     link: '/user/message',

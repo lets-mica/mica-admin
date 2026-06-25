@@ -11,7 +11,7 @@
         <result column="updated_at" property="updatedAt" />
         <result column="message_id" property="messageId" />
         <result column="user_id" property="userId" />
-        <result column="read_flag" property="readFlag" />
+        <result column="is_read" property="isRead" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -21,14 +21,14 @@
         created_at,
         updated_by,
         updated_at,
-        message_id, user_id, read_flag
+        message_id, user_id, is_read
     </sql>
 
     <!-- 查询用户未读消息 -->
     <select id="selectUnreadByUserId" resultType="net.dreamlu.mica.admin.project.system.pojo.UserMessageVo">
         SELECT um.id,
                um.message_id   AS messageId,
-               um.read_flag    AS readFlag,
+               um.is_read      AS isRead,
                um.created_at   AS createdAt,
                m.title,
                m.category,
@@ -36,7 +36,7 @@
         FROM sys_user_message um
                  INNER JOIN sys_message m ON um.message_id = m.id
         WHERE um.user_id = #{userId}
-          AND um.read_flag = '0'
+          AND um.is_read = 0
           AND m.enabled = 1
         ORDER BY m.seq DESC, um.created_at DESC
     </select>
@@ -45,7 +45,7 @@
     <select id="selectByUserId" resultType="net.dreamlu.mica.admin.project.system.pojo.UserMessageVo">
         SELECT um.id,
                um.message_id   AS messageId,
-               um.read_flag    AS readFlag,
+               um.is_read      AS isRead,
                um.created_at   AS createdAt,
                m.title,
                m.category,

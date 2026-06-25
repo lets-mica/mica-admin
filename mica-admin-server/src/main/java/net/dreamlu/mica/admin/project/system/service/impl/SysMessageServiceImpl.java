@@ -120,7 +120,7 @@ public class SysMessageServiceImpl extends ServiceImpl<SysMessageMapper, SysMess
 			SysUserMessage um = new SysUserMessage();
 			um.setMessageId(messageId);
 			um.setUserId(userId);
-			um.setReadFlag("0");
+			um.setIsRead(Boolean.FALSE);
 			return um;
 		}).collect(Collectors.toList());
 		userMessageService.saveBatch(userMessages, 500);

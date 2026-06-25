@@ -1,8 +1,5 @@
 /**
  * 系统消息 API
- *
- * 后端 mica-admin-server 返回的字段是 `readFlag: '0' | '1'`(字符串),
- * 本层在 API 边界统一映射为 `read: boolean`,消费方不再关心字段名。
  */
 import { http, type PageResult } from '@/utils/request'
 
@@ -13,17 +10,16 @@ interface UserMessageRaw {
   title: string
   content: string
   category?: string
-  readFlag: '0' | '1'
+  isRead: boolean
   createdAt: string
 }
 
-/** 前端消费结构(已标准化) */
+/** 前端消费结构 */
 export interface UserMessage {
   id: number
   title: string
   content: string
   category?: string
-  /** 已标准化为布尔 */
   read: boolean
   createdAt: string
 }
@@ -34,7 +30,7 @@ function normalize(r: UserMessageRaw): UserMessage {
     title: r.title,
     content: r.content,
     category: r.category,
-    read: r.readFlag === '1',
+    read: r.isRead,
     createdAt: r.createdAt
   }
 }
