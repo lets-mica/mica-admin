@@ -13,6 +13,8 @@ import net.dreamlu.mica.admin.project.system.service.ISysMessageService;
 import net.dreamlu.mica.admin.project.system.service.ISysUserMessageService;
 import net.dreamlu.mica.admin.project.system.service.ISysUserService;
 import net.dreamlu.mica.core.utils.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SysMessageServiceImpl extends ServiceImpl<SysMessageMapper, SysMessage> implements ISysMessageService {
+	private static final Logger log = LoggerFactory.getLogger(SysMessageServiceImpl.class);
 	private final ISysUserService userService;
 	private final ISysUserMessageService userMessageService;
 
@@ -117,10 +120,11 @@ public class SysMessageServiceImpl extends ServiceImpl<SysMessageMapper, SysMess
 			SysUserMessage um = new SysUserMessage();
 			um.setMessageId(messageId);
 			um.setUserId(userId);
-			um.setReadFlag("0");
+			um.setReadFlag(Boolean.FALSE);
 			return um;
 		}).collect(Collectors.toList());
 		userMessageService.saveBatch(userMessages, 500);
+		log.info("SysMessage publish: messageId={}, targets={}", messageId, finalUserIds.size());
 	}
 
 }

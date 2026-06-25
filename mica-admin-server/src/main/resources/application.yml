@@ -87,11 +87,6 @@ mybatis-plus:
       insert-strategy: not_empty
       update-strategy: not_null
       table-underline: true
-# oss 存储配置
-oss:
-  http:
-    enable: true
-    prefix: "/api"
 # mica 组件配置
 mica:
   captcha:

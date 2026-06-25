@@ -350,6 +350,47 @@ INSERT INTO `sys_menu` VALUES (1047, 109, '批量强退', 'TokenBatchLogout', 2,
 INSERT INTO `sys_menu` VALUES (1048, 109, '单条强退', 'TokenForceLogout', 3, '#', 'monitor:online:forceLogout', '', '#', 0, 2, 0, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '');
 
 -- ----------------------------
+-- Table structure for sys_message
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_message`;
+CREATE TABLE `sys_message`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '消息ID',
+  `category` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'system' COMMENT '分类（字典 sys_message_category）',
+  `title` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '消息标题',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '消息内容',
+  `send_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '是否推送（0否 1是）',
+  `seq` int(11) NULL DEFAULT 0 COMMENT '排序（越大越在前）',
+  `enabled` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态（0停用 1正常）',
+  `created_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `created_at` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `updated_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_category`(`category`) USING BTREE,
+  INDEX `idx_enabled`(`enabled`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统消息表' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for sys_user_message
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user_message`;
+CREATE TABLE `sys_user_message`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '推送记录ID',
+  `message_id` bigint(20) UNSIGNED NOT NULL COMMENT '消息ID（关联 sys_message.id）',
+  `user_id` bigint(20) UNSIGNED NOT NULL COMMENT '接收用户ID（关联 sys_user.id）',
+  `read_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '已读（0否 1是）',
+  `created_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `created_at` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `updated_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_user_id`(`user_id`) USING BTREE,
+  INDEX `idx_message_id`(`message_id`) USING BTREE,
+  INDEX `idx_user_unread`(`user_id`, `read_flag`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户消息推送记录表' ROW_FORMAT = Compact;
+
+-- ----------------------------
 -- Table structure for sys_notice
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_notice`;
@@ -675,3 +716,8 @@ CREATE TABLE `sys_job`  (
 -- 演示任务：与 DemoSysJob 配套
 INSERT INTO `sys_job` (`job_key`, `job_name`, `cron_expression`, `enabled`, `param_schema`, `description`) VALUES
 ('demoTask', '演示任务', '0/30 * * * * ?', 0, '{"bizDate":"DATE","force":"BOOLEAN"}', '演示任务：定时打印业务日期；支持补数（bizDate / force）');
+
+-- ============================================================================
+-- IM 模块已下线（自 v1.0 起 mica-admin 定位为通用后台系统，不再内置 IM）
+-- 如需历史数据迁移，参考 docs/database/migration-im-drop.sql（待发布）
+-- ============================================================================

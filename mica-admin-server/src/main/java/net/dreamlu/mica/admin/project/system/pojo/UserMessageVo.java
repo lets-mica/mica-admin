@@ -33,9 +33,9 @@ public class UserMessageVo {
 	 */
 	private String content;
 	/**
-	 * 已读标识（0未读 1已读）
+	 * 已读(0否 1是)
 	 */
-	private String readFlag;
+	private Boolean readFlag;
 	/**
 	 * 创建时间
 	 */

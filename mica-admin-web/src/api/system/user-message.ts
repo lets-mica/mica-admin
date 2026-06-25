@@ -9,7 +9,7 @@ export interface UserMessageItem {
   title: string;
   category?: string;
   content?: string;
-  readFlag: string;
+  readFlag: boolean;
   createdAt: string;
 }
 

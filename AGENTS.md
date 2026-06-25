@@ -4,12 +4,26 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## 项目概述
 
-mica-admin 是基于 [mica](https://gitee.com/596392912/mica) 工具集的低代码权限管理平台，使用 Maven、Spring Boot 2.7、Spring Security、MyBatis-Plus（后端）+ Vben Admin 5.x（前端）。
+mica-admin 是基于 [mica](https://gitee.com/596392912/mica) 工具集的低代码权限管理平台，使用 Maven、Spring Boot 2.7、Spring Security、MyBatis-Plus（后端）+ Vben Admin 5.x（前端）+ uniapp x（移动 App）。
 
-Maven multi-module 结构：
+仓库根目录结构（mono-repo，单 git 仓库）：
 
-- `mica-admin-server/` — Spring Boot 后端（Java 8+）
-- `mica-admin-web/` — 前端工程（Vite + Vue 3 + Naive UI）。这是 Vben Admin 5.x 的**本地化**版本，源码提取到 `mica-admin-web/vben/`，由 pnpm workspace 协议引用。完整前端说明见 `mica-admin-web/AGENTS.md`。
+| 目录 | 说明 | 技术栈 |
+|---|---|---|
+| `mica-admin-server/` | Spring Boot 后端（Java 8+） | Maven 模块 |
+| `mica-admin-web/` | Web 管理端（Vben Admin 5.x 本地化） | Vite + Vue 3 + Naive UI |
+| `mica-admin-uniapp/` | **移动 App（uniapp x）** | uniapp x + Vue 3 + TypeScript + Pinia |
+| `docs/` | 设计文档 | - |
+
+> **`mica-admin-uniapp/` 不进 Maven**：它是独立的 npm/pnpm 工程，与 `mica-admin-web/` 平级。
+> 三者放在同一 git 仓库是为了 AI 编码时能"看见完整上下文",便于跨模块协作。
+
+## 工作准则(必读)
+
+- **❌ 禁止擅自 `git commit` / `git push`**。所有变更默认保持 `M` / `A` 状态,等用户明确说"提交"、"commit"、"push" 时再执行。需要提交时,先把 `git status` 摘要给用户看一眼。
+- **❌ 禁止擅自重命名既有字段**。即使觉得"更合理"也不动,字段名/列名属于业务决策,改之前必须先和用户确认。
+- **✅ 改动默认只改类型,不改命名**(除非用户明确要求)。
+- 命名 / 删文件 / 改 schema 之前,**先用 `AskUserQuestion` 确认**,不要先斩后奏。
 
 ## 构建命令
 
@@ -100,6 +114,18 @@ pnpm api               # 从 http://127.0.0.1:8080/v3/api-docs 生成 swagger �
 - **i18n**：`src/locales/langs/{zh-CN,en-US}/`，通过 `vue-i18n` 引用。
 - **API 自动生成**：`pnpm api` 读取后端 swagger (`http://127.0.0.1:8080/v3/api-docs`)，输出到 `src/api/Api.ts`。
 
+## 移动 App 架构（`mica-admin-uniapp/`）
+
+- **框架**:uniapp x(Vue 3 + Vite)+ TypeScript + Pinia + Vite。
+- **UI**:uni-ui 或 uView Plus(按需引入,跨端一致)。
+- **后端联调**:dev server 通过 `/api` 代理到 `http://localhost:8080`(同 Web 端)。
+- **认证**:复用 mica-admin-web 的 `auth-mica-admin.ts` 逻辑,密码走 RSA + 算术验证码。
+- **响应**:`code = 0` 表示成功(同 mica-admin-web)。
+- **目录规范**:
+  - `src/modules/auth/` — 登录(通用,不修改)
+  - `src/modules/{业务}/` — 业务模块
+  - `src/modules/extension/` — **二次开发预留**,只新增不修改
+
 ## 配置文件
 
 后端：
@@ -112,17 +138,21 @@ pnpm api               # 从 http://127.0.0.1:8080/v3/api-docs 生成 swagger �
 前端：
 - `mica-admin-web/.env.development` / `.env.production` — `VITE_GLOB_API_URL`（默认 `/api`）、`VITE_PORT`（dev=5888）、`VITE_ROUTER_HISTORY`（dev=`web`、prod=`hash`）、`VITE_APP_NAMESPACE`、`VITE_APP_STORE_SECURE_KEY`。
 
+App:
+- `mica-admin-uniapp/.env.development` / `.env.production` — 同 mica-admin-web 的环境变量。
+
 ## 部署
 
 - **Linux systemd 脚本**：`script/start.sh`。服务目录约定 `/www/server/${SERVER_NAME}/${SERVER_NAME}.jar`，命令 `start.sh 服务名 {startd|restartd|stopd}`。脚本会自动写入 `/etc/systemd/system/${SERVER_NAME}.service` 并 `enable`。
 - **一键发布**：仓库根 `deploy.sh`（`mvn clean package -Pprod -U -Dmaven.test.skip=true` → scp jar 与 `start.sh` 到远端 host `tx` → 远端执行 `restartd` → 清理本地 prod 包）。
+- **App 发布**:`mica-admin-uniapp/` 走各平台商店上架流程(不在 deploy.sh 范围内)。可在 `.github/workflows/uniapp-build.yml` 配置独立 CI。
 
 ## 前置依赖
 
 - MySQL：导入 `docs/database/mysql.sql`。
 - Redis：localhost:6379。
 - Java 8+（后端）。
-- Node.js 18+ + pnpm（前端）。
+- Node.js 18+ + pnpm（前端 + App）。
 - Linux 部署需 jdk8（脚本按序探测 `/www/server/jdk8/`、`/usr/local/jdk`、`/data/jdk`）。
 
 ## 编辑器约定（`.editorconfig`）
@@ -142,3 +172,7 @@ pnpm api               # 从 http://127.0.0.1:8080/v3/api-docs 生成 swagger �
 - 业务侧 RBAC：路由/菜单/按钮权限通过后端 `sys_menu` + `sys_role_menu` 控制，前端通过 `v-permission` 自定义指令与动态路由消费。
 - README 中 TODO 列表（数据权限）尚未实现，新增需求前先确认是否落在该 TODO。
 - 后端成功响应 `code = 0`（非 200），前端拦截器已适配；新写接口时保持一致。
+
+### mica-admin-uniapp(App)
+
+- **二次开发只新增不修改**:`src/modules/extension/` 是二次开发预留目录,通用模块(`auth/`、`profile/` 等)**不要修改**。

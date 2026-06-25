@@ -48,8 +48,8 @@ const columns: DataTableColumns<UserMessageItem> = [
     width: 80,
     align: 'center',
     render: (row) =>
-      h(NTag, { type: (row as any).readFlag === '1' ? 'success' : 'warning', size: 'small', bordered: false }, () =>
-        (row as any).readFlag === '1' ? '已读' : '未读',
+      h(NTag, { type: (row as any).readFlag ? 'success' : 'warning', size: 'small', bordered: false }, () =>
+        (row as any).readFlag ? '已读' : '未读',
       ),
   },
   {
@@ -111,10 +111,10 @@ async function handleViewDetail(row: UserMessageItem) {
   detailData.value = row;
   detailModalApi.setState({ title: row.title }).open();
   // 如果是未读，标记为已读
-  if (row.readFlag === '0') {
+  if (!row.readFlag) {
     try {
       await markAsRead(row.id);
-      row.readFlag = '1';
+      row.readFlag = true;
     } catch (e: any) {
       console.error('Failed to mark read:', e);
     }
@@ -201,8 +201,8 @@ onMounted(() => loadData());
         <div class="flex items-center gap-3 text-sm text-gray-500">
           <NTag size="small" :bordered="false">{{ detailData.category || '-' }}</NTag>
           <span>{{ formatDateTime(detailData.createdAt) }}</span>
-          <NTag :type="detailData.readFlag === '1' ? 'success' : 'warning'" size="small" :bordered="false">
-            {{ detailData.readFlag === '1' ? '已读' : '未读' }}
+          <NTag :type="detailData.readFlag ? 'success' : 'warning'" size="small" :bordered="false">
+            {{ detailData.readFlag ? '已读' : '未读' }}
           </NTag>
         </div>
         <div class="whitespace-pre-wrap text-sm leading-6">{{ detailData.content || '暂无内容' }}</div>

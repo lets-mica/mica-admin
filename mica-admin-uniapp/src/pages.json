@@ -1,0 +1,110 @@
+{
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+    }
+  },
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "工作台",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/message/index",
+      "style": {
+        "navigationBarTitleText": "消息中心"
+      }
+    },
+    {
+      "path": "pages/profile/index",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    },
+    {
+      "path": "modules/auth/pages/login",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
+      "path": "modules/profile/pages/update-pass",
+      "style": {
+        "navigationBarTitleText": "修改密码"
+      }
+    },
+    {
+      "path": "modules/profile/pages/update-email",
+      "style": {
+        "navigationBarTitleText": "修改邮箱"
+      }
+    },
+    {
+      "path": "modules/profile/pages/about",
+      "style": {
+        "navigationBarTitleText": "关于"
+      }
+    },
+    {
+      "path": "modules/notice/pages/list",
+      "style": {
+        "navigationBarTitleText": "公告",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "modules/notice/pages/detail",
+      "style": {
+        "navigationBarTitleText": "公告详情"
+      }
+    },
+    {
+      "path": "modules/extension/pages/approval",
+      "style": {
+        "navigationBarTitleText": "审批中心"
+      }
+    },
+    {
+      "path": "modules/extension/pages/attendance",
+      "style": {
+        "navigationBarTitleText": "考勤打卡"
+      }
+    },
+    {
+      "path": "pages/profile/edit",
+      "style": {
+        "navigationBarTitleText": "个人信息"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "MICA Work",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#F5F6F8"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#18A37E",
+    "borderStyle": "black",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "🏠 工作台"
+      },
+      {
+        "pagePath": "pages/message/index",
+        "text": "💬 消息"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "👤 我的"
+      }
+    ]
+  }
+}

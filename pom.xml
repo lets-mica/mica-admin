@@ -26,6 +26,7 @@
         <oshi.version>7.3.1</oshi.version>
         <excel-spring-boot-starter.version>4.0.0</excel-spring-boot-starter.version>
         <x-file-storage.version>2.3.0</x-file-storage.version>
+        
     </properties>
 
     <parent>

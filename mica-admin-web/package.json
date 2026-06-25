@@ -3,7 +3,7 @@
   "version": "0.0.1-SNAPSHOT",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@9.15.4",
+  "packageManager": "pnpm@11.8.0",
   "engines": {
     "node": ">=20.11.0",
     "pnpm": ">=9.15.0"
@@ -21,6 +21,7 @@
   "dependencies": {
     "@ctrl/tinycolor": "catalog:",
     "@iconify/vue": "catalog:",
+    "@lucide/vue": "catalog:",
     "@tanstack/vue-store": "catalog:",
     "@vee-validate/zod": "catalog:",
     "@vue/shared": "catalog:",
@@ -39,7 +40,6 @@
     "json-bigint": "catalog:",
     "lodash-es": "catalog:",
     "lodash.clonedeep": "catalog:",
-    "@lucide/vue": "catalog:",
     "naive-ui": "catalog:",
     "nprogress": "catalog:",
     "pinia": "catalog:",
