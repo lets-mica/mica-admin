@@ -209,21 +209,6 @@ mvn clean package -Pprod -U -Dmaven.test.skip=true
 
 ---
 
-## 🗺️ 路线图
-
-- [x] 用户/角色/菜单/部门/字典/文件/监控/通知(系统模块)
-- [x] RBAC + 按钮级权限 (`v-permission` 指令)
-- [x] 代码生成器(MyBatis-Plus + Freemarker)
-- [x] Web 端 Vben Admin 5.x 升级(Vue 3 + Naive UI)
-- [x] App 端 11 个基础模块
-- [x] Magic-API 低代码(`/magic/web`)
-- [x] **IM 模块下线**(v1.0 起 mica-admin 回归通用后台定位)
-- [ ] 数据权限(行级过滤)
-- [ ] 第三方推送(uniPush)
-- [ ] 工作流/审批(二次开发扩展点)
-
----
-
 ## 🤝 贡献
 
 PR 永远欢迎 🙏
