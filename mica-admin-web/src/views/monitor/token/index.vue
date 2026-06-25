@@ -23,12 +23,12 @@ const selectedRowKeys = ref<string[]>([]);
 const columns: DataTableColumns<TokenItem> = [
   { type: 'selection', width: 50 },
   { title: 'Token', key: 'summary', ellipsis: { tooltip: true } },
-  { title: '用户名', key: 'userName', width: 100 },
-  { title: '昵称', key: 'nickName', width: 100 },
-  { title: '部门', key: 'dept', width: 120 },
-  { title: '登录IP', key: 'ip', width: 130 },
+  { title: '用户名', key: 'userName', width: 120 },
+  { title: '昵称', key: 'nickName', width: 180 },
+  { title: '部门', key: 'dept', width: 140 },
+  { title: '登录IP', key: 'ip', width: 180 },
   { title: '登录地点', key: 'address', ellipsis: { tooltip: true } },
-  { title: '浏览器', key: 'browser', width: 100 },
+  { title: '浏览器', key: 'browser', width: 160 },
   {
       title: '创建时间',
       key: 'loginTime',
