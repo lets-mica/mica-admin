@@ -25,8 +25,8 @@ public class SysUserMessage extends BaseModel {
 	 */
 	private Long userId;
 	/**
-	 * 是否已读（0否 1是）
+	 * 已读（0否 1是）
 	 */
-	private Boolean isRead;
+	private Boolean readFlag;
 
 }

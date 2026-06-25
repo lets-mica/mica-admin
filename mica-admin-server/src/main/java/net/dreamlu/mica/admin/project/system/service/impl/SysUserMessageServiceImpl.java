@@ -33,15 +33,15 @@ public class SysUserMessageServiceImpl extends ServiceImpl<SysUserMessageMapper,
 		update(new LambdaUpdateWrapper<SysUserMessage>()
 			.eq(SysUserMessage::getId, id)
 			.eq(SysUserMessage::getUserId, userId)
-			.set(SysUserMessage::getIsRead, Boolean.TRUE));
+			.set(SysUserMessage::getReadFlag, Boolean.TRUE));
 	}
 
 	@Override
 	public void markAllRead(Long userId) {
 		update(new LambdaUpdateWrapper<SysUserMessage>()
 			.eq(SysUserMessage::getUserId, userId)
-			.eq(SysUserMessage::getIsRead, Boolean.FALSE)
-			.set(SysUserMessage::getIsRead, Boolean.TRUE));
+			.eq(SysUserMessage::getReadFlag, Boolean.FALSE)
+			.set(SysUserMessage::getReadFlag, Boolean.TRUE));
 	}
 
 	@Override

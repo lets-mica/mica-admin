@@ -31,7 +31,7 @@ VALUES
 -- 3. 用户消息推送记录 sys_user_message（推送给 admin，user_id=1）
 --    message_id=6 是草稿，不推送
 -- ----------------------------
-INSERT INTO `sys_user_message` (`id`, `message_id`, `user_id`, `is_read`, `created_by`, `created_at`, `updated_by`, `updated_at`)
+INSERT INTO `sys_user_message` (`id`, `message_id`, `user_id`, `read_flag`, `created_by`, `created_at`, `updated_by`, `updated_at`)
 VALUES
 (1, 1, 1, 0, 'admin', '2026-06-10 09:00:05', 'admin', '2026-06-10 09:00:05'),
 (2, 2, 1, 0, 'admin', '2026-06-09 14:30:05', 'admin', '2026-06-09 14:30:05'),

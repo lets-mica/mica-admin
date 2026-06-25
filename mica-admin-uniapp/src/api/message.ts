@@ -1,16 +1,24 @@
 /**
  * 系统消息 API
+ *
+ * 后端 mica-admin-server: java 字段 `Boolean readFlag` → JSON `readFlag: boolean`
+ * (改造前为 `'0' | '1'` 字符串,本层做兼容)
  */
 import { http, type PageResult } from '@/utils/request'
 
-/** 后端原始结构 */
+/** 后端原始结构(兼容新旧两套值类型) */
 interface UserMessageRaw {
   id: number
   messageId?: number
   title: string
   content: string
   category?: string
-  isRead: boolean
+  /**
+   * 已读状态
+   * - 新版后端:boolean(true/false)
+   * - 旧版后端:字符串 '0' / '1'(兼容期)
+   */
+  readFlag?: boolean | '0' | '1' | string
   createdAt: string
 }
 
@@ -24,13 +32,21 @@ export interface UserMessage {
   createdAt: string
 }
 
+/** 把后端值归一为 boolean */
+function computeRead(raw: UserMessageRaw['readFlag']): boolean {
+  if (typeof raw === 'boolean') return raw
+  if (typeof raw === 'string') return raw === '1'
+  if (typeof raw === 'number') return raw === 1
+  return false
+}
+
 function normalize(r: UserMessageRaw): UserMessage {
   return {
     id: r.id,
     title: r.title,
     content: r.content,
     category: r.category,
-    read: r.isRead,
+    read: computeRead(r.readFlag),
     createdAt: r.createdAt
   }
 }
