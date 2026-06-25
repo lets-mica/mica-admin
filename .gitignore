@@ -41,6 +41,7 @@ target/
 *.tar.gz
 
 ### npm ###
+.vite
 node_modules/
 
 # logs #
