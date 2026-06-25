@@ -111,14 +111,15 @@ pnpm build:mp-weixin # 产出 unpackage/dist/dev/mp-weixin
 VITE_GLOB_API_URL=/api
 ```
 
-## 4 个通用模块
+## 5 个通用模块
 
 | # | 模块 | 入口 | 后端依赖 |
 |---|---|---|---|
 | 1 | 登录 | [modules/auth/pages/login.vue](src/modules/auth/pages/login.vue) | `/api/auth/*` + `/api/session` |
 | 2 | 工作台(骨架) | [pages/index/index.vue](src/pages/index/index.vue) | `/api/auth/info`(顶部用户信息) |
-| 3 | 我的 | [pages/profile/index.vue](src/pages/profile/index.vue) | `/api/system/users/*` |
-| 4 | 通知公告 | [modules/notice/pages/list.vue](src/modules/notice/pages/list.vue) | `/api/system/notice/feed` |
+| 3 | 消息中心 | [pages/message/index.vue](src/pages/message/index.vue) | `/api/system/user/message/*` + `/api/system/notice/feed` |
+| 4 | 我的 | [pages/profile/index.vue](src/pages/profile/index.vue) | `/api/system/users/*` |
+| 5 | 通知公告 | [modules/notice/pages/list.vue](src/modules/notice/pages/list.vue) | `/api/system/notice/feed` |
 
 > **工作台**只展示用户信息 + 时段问候,**业务卡片**由二次开发方在
 > `modules/extension/workbench/` 注册。详见下文「二次开发」。

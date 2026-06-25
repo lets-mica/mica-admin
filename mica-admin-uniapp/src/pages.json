@@ -14,6 +14,12 @@
       }
     },
     {
+      "path": "pages/message/index",
+      "style": {
+        "navigationBarTitleText": "消息中心"
+      }
+    },
+    {
       "path": "pages/profile/index",
       "style": {
         "navigationBarTitleText": "我的"
@@ -90,6 +96,10 @@
       {
         "pagePath": "pages/index/index",
         "text": "🏠 工作台"
+      },
+      {
+        "pagePath": "pages/message/index",
+        "text": "💬 消息"
       },
       {
         "pagePath": "pages/profile/index",
