@@ -645,7 +645,7 @@ CREATE TABLE `sys_user`  (
 -- Records of sys_user
 -- ----------------------------
 INSERT INTO `sys_user` VALUES (1, 103, 'admin', 'mica-admin', '596392912@qq.com', '15888888888', 1, '', '$2a$04$J973m0QcnU7s.AHpR1Gvq.5M7N7y8KqiT8TeZqJjfBMd9Ng8kVCrG', 1, 1, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2020-05-21 22:22:46', '超级管理员');
-INSERT INTO `sys_user` VALUES (2, 105, 'mica', 'mica-admin', '596392912@qq.com', '15666666666', 1, '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', 1, 1, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '测试员');
+INSERT INTO `sys_user` VALUES (2, 105, 'mica', 'mica', '596392912@qq.com', '15666666666', 1, '', '$2a$04$J973m0QcnU7s.AHpR1Gvq.5M7N7y8KqiT8TeZqJjfBMd9Ng8kVCrG', 1, 1, 0, 0, 'admin', '2018-03-16 11:33:00', 'admin', '2018-03-16 11:33:00', '测试员');
 
 -- ----------------------------
 -- Table structure for sys_user_post
