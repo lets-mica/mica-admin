@@ -16,7 +16,8 @@
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit --skipLibCheck",
     "lint": "eslint . --ext .vue,.js,.jsx,.ts,.tsx --fix",
-    "dedupe:check": "pnpm dedupe --check"
+    "dedupe:check": "pnpm dedupe --check",
+    "update": "pnpm dlx vp-update"
   },
   "dependencies": {
     "@ctrl/tinycolor": "catalog:",
