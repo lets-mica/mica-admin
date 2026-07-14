@@ -50,8 +50,8 @@ catalog:
   vue-json-pretty: ^2.6.0
   vue-router: 4.5.0
   vue-tippy: ^6.7.1
-  vxe-pc-ui: ^4.16.6
-  vxe-table: ^4.20.0
+  vxe-pc-ui: ^4.16.7
+  vxe-table: ^4.20.1
   watermark-js-plus: ^1.6.5
   zod: 3.25.76
   zod-defaults: 0.1.3
