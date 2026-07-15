@@ -85,7 +85,6 @@ pnpm api               # 从 http://127.0.0.1:8080/v3/api-docs 生成 swagger �
 - **系统日志**：`@ApiLog` 注解 + AOP 切面（`framework.syslog.SysLogAspect`）→ 事件 → `SysLogListener` 异步落库。
 - **API 文档**：`mica-openapi`（Swagger/Knife4j），访问 `/doc.html`。
 - **文件存储**：`dromara.x-file-storage`（本地 + OSS 抽象），控制器 `SysFileStorageController`。
-- **低代码**：Magic-API 通过 DB 存储（表 `magic_api_file`），web UI 在 `/magic/web`。
 
 ### 代码生成
 
