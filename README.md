@@ -2,7 +2,7 @@
 
 # ✨ mica-admin
 
-### 一套代码，三个端，开箱即用的低代码权限管理平台
+### 一套代码，三个端，开箱即用的模块化单体权限管理平台
 
 **后端 · Web 管理端 · 移动 App**
 
@@ -33,6 +33,27 @@
 
 ---
 
+## 🌿 分支说明
+
+项目针对不同 Java 与 Spring Boot 版本提供两条长期维护分支，请根据运行环境选择：
+
+| 分支 | Java 版本 |   Spring Boot 版本   | 说明 |
+| :-- | :--: |:------------------:| :-- |
+| [`main`](../../tree/main) | Java 17 |  Spring Boot 4.x   | 主分支，推荐新项目使用 |
+| [`java8`](../../tree/java8) | Java 8 | Spring Boot 2.7.18 | 兼容分支，适合仍需运行在 Java 8 环境的项目 |
+
+```bash
+# 推荐：Java 17 + Spring Boot 4.x
+git switch main
+
+# 兼容：Java 8 + Spring Boot 2.7.x
+git switch java8
+```
+
+> 两个分支的构建与启动方式一致；开始开发前，请确认本地 JDK 版本与所选分支匹配。
+
+---
+
 [✨✨✨推广：**BladeX 物联网平台**✨✨✨iot.bladex.cn](https://iot.bladex.cn?from=mica-mqtt)
 
 ---
@@ -52,7 +73,7 @@
 
 ```
 mica-admin/                                  # mono-repo (单 git 仓库)
-├── mica-admin-server/                       # Spring Boot 后端 (Java 17+)
+├── mica-admin-server/                       # Spring Boot 后端 (Java 版本见分支说明)
 │   └── net.dreamlu.mica.admin
 │       ├── common/      公共常量 (ApiCode 等)
 │       ├── framework/   框架核心 (Security / MyBatis / AOP / JWT)
@@ -88,7 +109,7 @@ mica-admin/                                  # mono-repo (单 git 仓库)
   <tr>
     <td align="center"><b>后端</b></td>
     <td>
-      Spring Boot 4.1 · Spring Security · MyBatis-Plus 3.5.16 · Druid 1.2.28 · Redis · JWT · RSA
+      Spring Boot 4.x（main）/ 2.7.x（java8）· Spring Security · MyBatis-Plus · Druid · Redis · JWT · RSA
       <br/>Tomcat · Log4j2 · mica-captcha · mica-openapi · dromara x-file-storage
     </td>
   </tr>
@@ -153,7 +174,7 @@ strategyConfig.addInclude("sys_user", "sys_role");
 
 | 依赖 | 版本 | 备注 |
 | :-- | :--: | :-- |
-| JDK | 17+ | 后端编译/运行 |
+| JDK | 17 / 8 | `main` 使用 Java 17；`java8` 使用 Java 8 |
 | Maven | 3.6+ | 后端构建 |
 | Node.js | 18+ | 前端 + App |
 | pnpm | 9+ | 前端 + App |
