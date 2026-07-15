@@ -7,10 +7,13 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
+import net.dreamlu.mica.core.utils.DatePattern;
 import net.dreamlu.mica.core.validation.CreateGroup;
 import net.dreamlu.mica.core.validation.UpdateGroup;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -42,6 +45,8 @@ public class BaseModel implements Serializable {
 	 */
 	@TableField(value = "created_at", fill = FieldFill.INSERT)
 	@ExcelIgnore
+	@JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN, timezone = "GMT+8")
+	@DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
 	private LocalDateTime createdAt;
 	/**
 	 * 更新者
@@ -54,5 +59,7 @@ public class BaseModel implements Serializable {
 	 */
 	@TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
 	@ExcelIgnore
+	@JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN, timezone = "GMT+8")
+	@DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
 	private LocalDateTime updatedAt;
 }
