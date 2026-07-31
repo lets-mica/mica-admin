@@ -59,7 +59,6 @@ pnpm lint              # eslint --fix
 pnpm build             # 类型检查 + 生产构建
 pnpm build:prod        # 仅打包，跳过类型检查（Maven prod profile 调的就是这个）
 pnpm build:analyze     # 构建并分析包体积
-pnpm api               # 从 http://127.0.0.1:8080/v3/api-docs 生成 swagger 客户端到 src/api/
 ```
 
 ## 后端架构 (`mica-admin-server`)
@@ -111,7 +110,7 @@ pnpm api               # 从 http://127.0.0.1:8080/v3/api-docs 生成 swagger �
 - **响应处理**：`src/api/request.ts` 中 `defaultResponseInterceptor({ successCode: 0, codeField: 'code', dataField: 'data' })` —— **注意：mica-admin 成功 code = 0**，与一般 Vben 模板不同。
 - **模块路由**：`src/router/routes/modules/`（dashboard、system、monitor、tools、components）。动态路由由 `src/router/access.ts` 的 `generateAccessible()` 基于后端菜单生成，配合 `import.meta.glob('../views/**/*.vue')` 自动匹配页面组件。
 - **i18n**：`src/locales/langs/{zh-CN,en-US}/`，通过 `vue-i18n` 引用。
-- **API 自动生成**：`pnpm api` 读取后端 swagger (`http://127.0.0.1:8080/v3/api-docs`)，输出到 `src/api/Api.ts`。
+- **API 接口层**：手写维护在 `src/api/<module>/<res>.ts`（类型 `interface` + 请求函数）。**无 swagger 代码生成**，后端改字段需手工同步；可用 `/doc.html` 核对。
 
 ## 移动 App 架构（`mica-admin-uniapp/`）
 

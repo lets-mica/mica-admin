@@ -26,9 +26,6 @@ pnpm preview                   # 预览构建产物
 pnpm typecheck                 # vue-tsc --noEmit --skipLibCheck
 pnpm lint                      # eslint --fix
 
-# API 生成
-pnpm api                       # 从 http://127.0.0.1:8080/v3/api-docs 自动生成 API 客户端到 src/api/
-
 # Maven 集成（Java 后端构建）
 mvn package -Pprod             # 自动执行 pnpm install + pnpm build:prod，将 dist 打入 META-INF/resources
 ```
@@ -59,8 +56,7 @@ new-ui/
 │   │   ├── system/              # 系统管理 API
 │   │   ├── monitor/             # 系统监控 API
 │   │   ├── oss/                 # OSS 存储 API
-│   │   ├── index.ts             # 统一导出
-│   │   └── Api.ts               # swagger 自动生成
+│   │   └── index.ts             # 统一导出
 │   ├── layouts/                 # 布局组件
 │   ├── locales/                 # i18n
 │   ├── router/                  # 路由
@@ -217,9 +213,9 @@ API 文件应统一处理分页响应（参考 `src/api/system/user.ts` 的 `get
 
 **不要**改 `src/api/core/auth.ts`（Vben 默认）。mica-admin 相关修改在 `src/api/core/auth-mica-admin.ts`。
 
-### 类型生成
+### 接口类型
 
-运行 `pnpm api` 自动从后端 swagger 生成类型到 `src/api/Api.ts`。
+**无 swagger 代码生成**（`pnpm api` 脚本与 `src/api/Api.ts` 已移除）。新接口在 `src/api/<module>/<res>.ts` 手写 `interface` + 请求函数，字段以后端实体/VO 为准，需要核对时看后端源码或 `/doc.html`。后端改字段后要手工同步前端类型。
 
 ## 已知问题与历史
 

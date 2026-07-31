@@ -29,7 +29,7 @@ nbdist/
 ### AI Code ###
 .agents
 .codegraph
-.claude
+.claude/settings.local.json
 .opencode
 -p
 

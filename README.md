@@ -85,6 +85,11 @@ mica-admin/                                  # mono-repo (单 git 仓库)
 │       ├── modules/auth        登录 (通用)
 │       └── modules/extension   二次开发只新增
 │
+├── .claude/skills/                          # AI 编码 Skills (三端各一份)
+│   ├── mica-admin-backend/    后端 CRUD 模块套路
+│   ├── mica-admin-web/        Web 端页面套路
+│   └── mica-admin-uniapp/     App 端页面套路
+│
 ├── docs/                  设计文档 (App / 数据库)
 ├── deploy.sh              一键部署脚本
 ├── script/                systemd 服务脚本
@@ -163,6 +168,12 @@ strategyConfig.addInclude("sys_user", "sys_role");
 **通用模块不修改,二次开发只新增**。App 端把扩展点统一放在 `modules/extension/`,
 后端按业务新建包即可,完全不碰 `framework/`。
 
+### 5. 🤖 内置 AI 编码 Skills
+
+`.claude/skills/` 下沉淀了**三端各一份**的编码套路,AI 会按任务自动加载对应 skill,
+写出来的代码直接符合本项目约定(分层、权限码、分页、菜单挂载),不用每次重复交代。
+详见 [AI 辅助开发 Skills](#-ai-辅助开发-skills)。
+
 ---
 
 ## 📦 快速开始
@@ -217,6 +228,85 @@ mvn clean package -Pprod -U -Dmaven.test.skip=true
 
 ---
 
+## 🤖 AI 辅助开发 Skills
+
+项目把三端的开发套路沉淀成了 [Claude Code Skills](https://docs.claude.com/en/docs/claude-code/skills),
+放在 `.claude/skills/`,**随仓库一起提交**,团队共享。
+
+### 有哪些
+
+| Skill | 覆盖范围 | 什么时候会自动触发 |
+| :-- | :-- | :-- |
+| `mica-admin-backend` | `mica-admin-server/` | 加/改后端接口、实体、Service、权限码、菜单 SQL |
+| `mica-admin-web` | `mica-admin-web/` | 加/改 Web 页面、API 层、路由、权限按钮 |
+| `mica-admin-uniapp` | `mica-admin-uniapp/` | 加/改 App 页面、模块、`pages.json`、工作台卡片 |
+
+每个 skill 都是「**约定 + 模板**」两层:
+
+```
+mica-admin-backend/
+├── SKILL.md                    # 硬性约定、禁区、checklist、命令
+└── references/crud-module.md   # 可直接复制的完整代码模板
+```
+
+### 怎么用
+
+**不需要手动指定**。Skill 的 `description` 里写明了适用场景,AI 会根据你的任务自动加载:
+
+```
+> 帮我加一个轮播图管理功能，后端 + Web 端都要
+```
+
+AI 会自动读取 `mica-admin-backend` + `mica-admin-web` 两个 skill,然后按项目既有套路产出:
+
+- 后端 6 个文件(entity / query / mapper / service / impl / controller)+ `sys_menu` 菜单与按钮权限 SQL
+- Web 端 `src/api/system/banner.ts` + `src/views/system/banner/index.vue`
+- 权限码统一 `system:banner:list|query|add|edit|del|export`
+
+也可以显式点名,让它先讲思路:
+
+```
+> 用 mica-admin-uniapp skill 说明下 App 端新增一个模块要改哪些文件
+```
+
+### Skill 里固化了哪些"坑"
+
+这些都是从现有代码里逆推出来的、AI 不看约定就一定会写错的地方:
+
+- 后端**成功响应 `code = 0`**(不是 200),写操作返回 `void`,不要手工包 `R.success()`
+- Web 端分页要用 `parsePage()` 把 `IPage` 的 `records` 归一成 `list`;App 端**直接消费 `records`**(没有 `parsePage`)
+- Web 端别名是 `#/`,App 端是 `@/`
+- 表格多选用 `:checked-row-keys`,**不是** `:selection`
+- **前端不写静态路由**,新页面靠后端 `sys_menu` 下发
+- 全局拦截器已弹错误提示,业务 `catch` 里不要重复 toast
+- 不改 `vben/` 内的导入路径、不在 `vben/` 内用 `@apply`、不改 `src/api/core/auth.ts`
+
+### 扩展自己的 Skill
+
+新建 `.claude/skills/<你的skill名>/SKILL.md`,frontmatter 写清 `name` 和 `description`
+(description 要说明**什么时候该用**,这决定了能否被自动召回):
+
+```markdown
+---
+name: my-module
+description: Use when ... 覆盖 xxx 场景
+---
+
+# 标题
+约定、禁区、checklist...
+```
+
+内容多的话拆到 `references/` 下,`SKILL.md` 里链接过去,避免一次性灌太多上下文。
+
+### 用别的 AI 工具？
+
+Skill 是 Claude Code 的机制。其他工具请读这两份等价规则:
+
+- [AGENTS.md](AGENTS.md) —— 仓库级编码规范(Codex / Cursor 等通用格式)
+- [CLAUDE.md](CLAUDE.md) —— 架构说明与全局约定
+
+---
+
 ## 📚 文档导航
 
 | 文档 | 适合谁 | 内容 |
@@ -224,6 +314,8 @@ mvn clean package -Pprod -U -Dmaven.test.skip=true
 | [docs/database/mysql.sql](docs/database/mysql.sql) | 运维 | 数据库结构 |
 | [mica-admin-uniapp/AGENTS.md](mica-admin-uniapp/AGENTS.md) | App 二次开发 | 通用模块不修改原则 |
 | [AGENTS.md](AGENTS.md) | AI 编码助手 | 仓库级编码规范 |
+| [CLAUDE.md](CLAUDE.md) | AI 编码助手 | 架构说明与全局约定 |
+| [.claude/skills/](.claude/skills/) | AI 编码助手 | 三端编码套路 + 可复制模板 |
 
 ---
 
@@ -234,6 +326,7 @@ PR 永远欢迎 🙏
 1. Fork → 2. Feature Branch → 3. Commit → 4. PR
 2. 后端改动请补单测 (`mvn test -Dtest=ClassName#methodName`)
 3. 前端改动请跑 `pnpm typecheck` + `pnpm lint`
+4. 若引入了新的编码套路或改了既有约定,请同步更新 `.claude/skills/` 下对应的 skill
 
 ## 📜 开源协议
 
