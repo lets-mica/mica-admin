@@ -96,9 +96,15 @@ mica:
   # 不再使用 mica 自带的 upload，permit-all 中的 /api/upload/** 仍需保留以放行 x-file-storage 的本地文件直读路由
   security:
     permit-all:
+      - /
+      - /index.html
       - /favicon.ico
-      - /error
+      - /logo.svg
+      - /logo-dark.svg
+      - /logo.png
+      - /avatar.svg
       - /static/**
+      - /assets/**
       - /webjars*
       - /webjars/**
       - /api/auth/captcha
