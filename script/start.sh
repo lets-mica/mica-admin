@@ -67,6 +67,8 @@ ExecStart=/www/server/script/start.sh ${SERVER_NAME} start
 ExecReload=/www/server/script/start.sh ${SERVER_NAME} restart
 ExecStop=/www/server/script/start.sh ${SERVER_NAME} stop
 PrivateTmp=true
+Restart=on-failure
+RestartSec=15s
 
 [Install]
 WantedBy=multi-user.target
