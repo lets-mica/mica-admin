@@ -9,7 +9,7 @@ catalog:
   '@ctrl/tinycolor': ^4.2.0
   '@iconify/tailwind4': ^1.2.3
   '@iconify/vue': ^5.0.1
-  '@intlify/core-base': ^9.14.5
+  '@intlify/core-base': ^11.0.0
   '@lucide/vue': ^1.24.0
   '@tanstack/vue-store': ^0.11.0
   '@tailwindcss/typography': ^0.5.15

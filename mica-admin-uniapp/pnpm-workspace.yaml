@@ -9,5 +9,5 @@ minimumReleaseAgeExclude:
   - vite@8.1.0
 
 overrides:
-  '@intlify/core-base': 9.14.5
+  '@intlify/core-base': 11.4.14
   '@intlify/shared': 9.14.5
